@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>test</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .demo {
+            padding: 2em;
+        }
+
+        #panel {
+            overflow: hidden;
+            background-color: antiquewhite;
+        }
+
+        #holder {
+            background-color: aqua;
+
+            transform: translateY(0);
+            
+            transition-property: transform;
+            transition-duration: 0.3s;
+        }
+
+        #holder.close {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo" style="width:100%; height:300px; position: relative;">
+        <h1>demo</h1>
+        <div id="panel">
+            <div id="holder">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                    laborum.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                    laborum.
+                </p>
+            </div>
+        </div>
+        demo
+    </div>
+    <script>
+        var panel = null
+        var holder = null
+
+        document.body.onload = function() {
+            panel = document.getElementById('panel')
+            holder = document.getElementById('holder')
+        }
+        var handleCloseTransitionEnd = function() {
+            panel.style.height = '0px'
+            panel.removeEventListener('transitionend', handleCloseTransitionEnd, false)
+        }
+
+        document.onclick = function () {
+            if(panel.classList.contains('close')) { // to open
+                panel.style.height = ''
+            } else { // to close
+              panel.addEventListener('transitionend', handleCloseTransitionEnd, false)
+            }
+
+            panel.classList.toggle('close')
+            holder.classList.toggle('close')
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+@import "../theme.scss";
+
+w-toolbar,
+[data-is="w-toolbar"] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: $height-toolbar;
+    padding: 0.25rem;
+
+    color: $color-text-main-white;
+    background-color: $color-500;
+
+    box-shadow: $box-shadow-bottom;
+  
+
+    w-icon, [data-is="w-icon"] {
+        padding: 1rem;
+        font-size: 1.5rem;
+    }
+
+    w-title, [data-is="w-title"] {
+        display: inline-block;
+        margin: 1.25rem 1rem;
+        font-size: 1rem;
+        line-height: 1rem;
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "w-riot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-css": "node-sass --include-path scss docs/tags/index.scss docs/css/w-riot.css",
+    "build-riot": "riot -m docs/tags docs/js/w-tags.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "riot": "^3.8.1"
+  }
+}

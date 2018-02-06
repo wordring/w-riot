@@ -1,0 +1,45 @@
+w-panel,
+[data-is="w-panel"] {
+    display: block;
+    position: relative;
+
+    overflow: hidden;
+
+    [ref="holder"] {
+        transform: translateY(0);
+        transform: translateX(0);
+
+        transition-property: transform;
+        transition-duration: 0.3s;
+    }
+
+    &.anchor-left {
+        &.close {
+            [ref="holder"] {
+                transform: translateX(-100%);
+            }
+        }
+    }
+    &.anchor-right {
+        &.close {
+            [ref="holder"] {
+                transform: translateX(100%);
+            }
+        }
+    }
+    &.anchor-top {
+        &.close {
+            [ref="holder"] {
+                transform: translateY(-100%);
+            }
+        }
+
+    }
+    &.anchor-bottom {
+        &.close {
+            [ref="holder"] {
+                transform: translateY(100%);
+            }
+        }
+    }
+}

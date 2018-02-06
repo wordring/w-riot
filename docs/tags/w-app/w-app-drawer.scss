@@ -1,0 +1,80 @@
+@import "../theme.scss";
+
+w-app-drawer,
+[data-is="w-app-drawer"] {
+    background-color: $color-100;
+
+    //display: none;
+    position: relative;
+
+    height: 100%;
+
+    width: 320px;
+    min-width: 300px;
+    max-width: 400px;
+
+    &.left {
+        order: -1;
+        left: 0; // for ie11.
+    }
+    &.right {
+        order: 1;
+        right: 0;
+    }
+
+    &.temporary {
+        position: fixed;
+    }
+
+    &.persistent {
+        [ref="panel"] {
+            position: fixed;
+        }
+    }
+
+    &.close {
+        width: 0;
+        min-width: 0;
+        max-width: 0;
+    }
+
+    w-header,
+    [data-is="w-header"] {
+        display: flex;
+
+        background-color: $color-300;
+
+        height: $height-toolbar;
+
+        w-icon,
+        [data-is="w-icon"] {
+            padding: 1rem;
+            font-size: 1.5rem;
+        }
+    }
+
+    &.left {
+        w-header,
+        [data-is="w-header"] {
+            justify-content: space-between;
+        }
+    }
+    &.right {
+        w-header,
+        [data-is="w-header"] {
+            w-title,
+            [data-is="w-title"] {
+                padding: 0;
+            }
+        }
+    }
+
+    w-pane,
+    [data-is="w-pane"] {
+        overflow-y: auto;
+        -ms-overflow-style: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}

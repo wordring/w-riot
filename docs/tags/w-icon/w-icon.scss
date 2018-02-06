@@ -1,0 +1,22 @@
+w-icon,
+[data-is="w-icon"] {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.5rem;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+
+    vertical-align: middle;
+
+    &:hover{
+        cursor: pointer;
+    }
+}
+

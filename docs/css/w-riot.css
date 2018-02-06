@@ -1,0 +1,220 @@
+@charset "UTF-8";
+w-app,
+[data-is="w-app"] {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
+w-app-drawer,
+[data-is="w-app-drawer"] {
+  background-color: #CFD8DC;
+  position: relative;
+  height: 100%;
+  width: 320px;
+  min-width: 300px;
+  max-width: 400px; }
+  w-app-drawer.left,
+  [data-is="w-app-drawer"].left {
+    order: -1;
+    left: 0; }
+  w-app-drawer.right,
+  [data-is="w-app-drawer"].right {
+    order: 1;
+    right: 0; }
+  w-app-drawer.temporary,
+  [data-is="w-app-drawer"].temporary {
+    position: fixed; }
+  w-app-drawer.persistent [ref="panel"],
+  [data-is="w-app-drawer"].persistent [ref="panel"] {
+    position: fixed; }
+  w-app-drawer.close,
+  [data-is="w-app-drawer"].close {
+    width: 0;
+    min-width: 0;
+    max-width: 0; }
+  w-app-drawer w-header,
+  w-app-drawer [data-is="w-header"],
+  [data-is="w-app-drawer"] w-header,
+  [data-is="w-app-drawer"] [data-is="w-header"] {
+    display: flex;
+    background-color: #90A4AE;
+    height: 3.5rem; }
+    w-app-drawer w-header w-icon,
+    w-app-drawer w-header [data-is="w-icon"],
+    w-app-drawer [data-is="w-header"] w-icon,
+    w-app-drawer [data-is="w-header"] [data-is="w-icon"],
+    [data-is="w-app-drawer"] w-header w-icon,
+    [data-is="w-app-drawer"] w-header [data-is="w-icon"],
+    [data-is="w-app-drawer"] [data-is="w-header"] w-icon,
+    [data-is="w-app-drawer"] [data-is="w-header"] [data-is="w-icon"] {
+      padding: 1rem;
+      font-size: 1.5rem; }
+  w-app-drawer.left w-header,
+  w-app-drawer.left [data-is="w-header"],
+  [data-is="w-app-drawer"].left w-header,
+  [data-is="w-app-drawer"].left [data-is="w-header"] {
+    justify-content: space-between; }
+  w-app-drawer.right w-header w-title,
+  w-app-drawer.right w-header [data-is="w-title"],
+  w-app-drawer.right [data-is="w-header"] w-title,
+  w-app-drawer.right [data-is="w-header"] [data-is="w-title"],
+  [data-is="w-app-drawer"].right w-header w-title,
+  [data-is="w-app-drawer"].right w-header [data-is="w-title"],
+  [data-is="w-app-drawer"].right [data-is="w-header"] w-title,
+  [data-is="w-app-drawer"].right [data-is="w-header"] [data-is="w-title"] {
+    padding: 0; }
+  w-app-drawer w-pane,
+  w-app-drawer [data-is="w-pane"],
+  [data-is="w-app-drawer"] w-pane,
+  [data-is="w-app-drawer"] [data-is="w-pane"] {
+    overflow-y: auto;
+    -ms-overflow-style: none; }
+    w-app-drawer w-pane::-webkit-scrollbar,
+    w-app-drawer [data-is="w-pane"]::-webkit-scrollbar,
+    [data-is="w-app-drawer"] w-pane::-webkit-scrollbar,
+    [data-is="w-app-drawer"] [data-is="w-pane"]::-webkit-scrollbar {
+      display: none; }
+
+w-app-pane,
+[data-is="w-app-pane"] {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
+w-header,
+[data-is="w-header"] {
+  display: block;
+  width: 100%; }
+
+w-icon,
+[data-is="w-icon"] {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  vertical-align: middle; }
+  w-icon:hover,
+  [data-is="w-icon"]:hover {
+    cursor: pointer; }
+
+w-ripple,
+[data-is="w-ripple"] {
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  w-ripple [ref="effect"],
+  [data-is="w-ripple"] [ref="effect"] {
+    display: inline-block;
+    width: 200%;
+    height: 200%;
+    position: absolute;
+    border-radius: 100%;
+    pointer-events: none;
+    transform: scale(0);
+    opacity: 0;
+    background: #f1c40f; }
+    w-ripple [ref="effect"].active,
+    [data-is="w-ripple"] [ref="effect"].active {
+      animation: w-ripple-animation 0.5s ease-out; }
+
+@keyframes w-ripple-animation {
+  from {
+    opacity: 0.5; }
+  to {
+    transform: scale(2);
+    opacity: 0; } }
+
+w-pane,
+[data-is="w-pane"] {
+  display: block; }
+  w-pane:hover,
+  [data-is="w-pane"]:hover {
+    overflow-y: auto; }
+
+w-panel,
+[data-is="w-panel"] {
+  display: block;
+  position: relative;
+  overflow: hidden; }
+  w-panel [ref="holder"],
+  [data-is="w-panel"] [ref="holder"] {
+    transform: translateY(0);
+    transform: translateX(0);
+    transition-property: transform;
+    transition-duration: 0.3s; }
+  w-panel.anchor-left.close [ref="holder"],
+  [data-is="w-panel"].anchor-left.close [ref="holder"] {
+    transform: translateX(-100%); }
+  w-panel.anchor-right.close [ref="holder"],
+  [data-is="w-panel"].anchor-right.close [ref="holder"] {
+    transform: translateX(100%); }
+  w-panel.anchor-top.close [ref="holder"],
+  [data-is="w-panel"].anchor-top.close [ref="holder"] {
+    transform: translateY(-100%); }
+  w-panel.anchor-bottom.close [ref="holder"],
+  [data-is="w-panel"].anchor-bottom.close [ref="holder"] {
+    transform: translateY(100%); }
+
+w-title,
+[data-is="w-title"] {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: bold; }
+
+w-toolbar,
+[data-is="w-toolbar"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 3.5rem;
+  padding: 0.25rem;
+  color: white;
+  background-color: #607D8B;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2); }
+  w-toolbar w-icon, w-toolbar [data-is="w-icon"],
+  [data-is="w-toolbar"] w-icon,
+  [data-is="w-toolbar"] [data-is="w-icon"] {
+    padding: 1rem;
+    font-size: 1.5rem; }
+  w-toolbar w-title, w-toolbar [data-is="w-title"],
+  [data-is="w-toolbar"] w-title,
+  [data-is="w-toolbar"] [data-is="w-title"] {
+    display: inline-block;
+    margin: 1.25rem 1rem;
+    font-size: 1rem;
+    line-height: 1rem; }
+
+* {
+  box-sizing: border-box;
+  border: none; }
+
+html,
+body {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif, "Helvetica Neue", Helvetica, Arial, Verdana, "游ゴシック", "Yu Gothic", "游ゴシック体", "YuGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Meiryo UI", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic";
+  background-color: #ECEFF1;
+  color: rgba(0, 0, 0, 0.87); }
+
+h1 {
+  margin: 0; }

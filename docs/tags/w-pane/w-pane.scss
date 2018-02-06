@@ -1,0 +1,9 @@
+@import "../theme.scss";
+
+w-pane,
+[data-is="w-pane"] {
+    display: block;
+    &:hover {
+        overflow-y: auto;
+    }
+}

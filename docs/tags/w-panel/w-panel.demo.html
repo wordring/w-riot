@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>w-app</title>
+    <link rel="stylesheet" href="../../css/w-riot.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .demo {
+            display: block;
+            position: relative;
+            width: 100%;
+            padding: 2em;
+        }
+
+        w-ripple {
+            padding: 4px;
+        }
+
+        w-icon {
+            font-size: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <article class="demo">
+        <h1>w-panel</h1>
+        <div data-is="w-panel" data-on="demo1-toggle:toggle demo1-anchor:anchor" style="">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; width: 90%; padding: 16px 0;">
+            Dock:
+            <w-ripple>
+                <w-icon data-trigger="click:demo1-click-left">chevron_left</w-icon>
+            </w-ripple>
+            <w-ripple>
+                <w-icon data-trigger="click:demo1-click-right">chevron_right</w-icon>
+            </w-ripple>
+            <w-ripple>
+                <w-icon data-trigger="click:demo1-click-less">expand_less</w-icon>
+            </w-ripple>
+            <w-ripple>
+                <w-icon data-trigger="click:demo1-click-more">expand_more</w-icon>
+            </w-ripple>
+        </div>
+        <div style="display: flex; align-items: center; width: 90%; padding: 16px 0;">
+            Toggle:
+            <w-ripple>
+                <w-icon data-trigger="click:demo1-click-toggle">sync</w-icon>
+            </w-ripple>
+        </div>
+    </article>
+
+    <script type="riot/tag" src="w-panel.tag"></script>
+
+    <script type="riot/tag" src="../w-ripple/w-ripple.tag"></script>
+    <script type="riot/tag" src="../w-icon/w-icon.tag"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
+
+    <script src="../w-riot.js"></script>
+
+    <script>
+        function MyObserver() {
+            riot.observable(this)
+            var self = this
+
+            this.on('demo1-click-left', function () {
+                self.trigger('demo1-anchor', 'left')
+            })
+            this.on('demo1-click-right', function () {
+                self.trigger('demo1-anchor', 'right')
+            })
+            this.on('demo1-click-less', function () {
+                self.trigger('demo1-anchor', 'top')
+            })
+            this.on('demo1-click-more', function () {
+                self.trigger('demo1-anchor', 'bottom')
+            })
+            this.on('demo1-click-toggle', function () {
+                self.trigger('demo1-toggle')
+            })
+        }
+
+        var ob = new MyObserver
+        riot.mixin({ observer: ob })
+
+        riot.mixin('Component', wordring.Component)
+        riot.mixin('Container', wordring.Container)
+
+        riot.compile(function () {
+            var tags = riot.mount('w-panel, w-ripple, w-icon')
+        })
+
+        //debugger
+    </script>
+</body>
+
+</html>
