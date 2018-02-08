@@ -6,14 +6,22 @@
 @import "w-header/w-header.scss";
 
 @import "w-icon/w-icon.scss";
-@import "w-ripple/w-ripple.scss";
-@import "w-switch/w-switch.scss";
+
+@import "w-list/w-list.scss";
+@import "w-list/w-list-item.scss";
 
 @import "w-pane/w-pane.scss";
 @import "w-panel/w-panel.scss";
 
+@import "w-ripple/w-ripple.scss";
+
+@import "w-switch/w-switch.scss";
+
 @import "w-title/w-title.scss";
+
 @import "w-toolbar/w-toolbar.scss";
+
+@import "w-typography/w-typography.scss";
 
 * {
     box-sizing: border-box;

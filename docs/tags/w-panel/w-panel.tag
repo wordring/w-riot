@@ -19,7 +19,7 @@
         var ary = ['left', 'right', 'top', 'bottom']
         for(var i = 0; i < ary.length; i++) {
             var atom = 'anchor-' + ary[i]
-            if(to) $.removeClass(el,atom)
+            if(to) $.removeClass(el, atom)
             else if($.hasClass(el, atom)) return ary[i]
         }
         if(to) $.addClass(el, 'anchor-' + to)
@@ -33,11 +33,14 @@
         if(transition || !tag.isOpen()) return
         transition = true
         $.addClass(el, 'close')
-        $.handleTransitionEnd(holder, function() {
+
+        function fn() {
             transition = false
             holder.style.position = 'absolute'
             tag.trigger('closed')
-        })
+        }
+        if($.hasClass(holder, 'animation')) $.handleTransitionEnd(holder, fn)
+        else fn()
     }
 
     height(val) {
@@ -52,10 +55,13 @@
         transition = true
         holder.style.position = ''
         $.removeClass(el, 'close')
-        $.handleTransitionEnd(holder, function() {
+
+        function fn() {
             transition = false
             tag.trigger('opened')
-        })
+        }
+        if($.hasClass(holder, 'animation')) $.handleTransitionEnd(holder, fn)
+        else fn()
     }
 
     toggle() {
@@ -65,8 +71,12 @@
 
     onMount() {
         holder = tag.refs.holder
+        if(el.style.display == 'none') {
+            tag.close()
+            el.style.display = ''
+        }
+        $.addClass(holder, 'animation')
     }
-
 
     tag.on('close', tag.close)
     tag.on('anchor', tag.anchor)

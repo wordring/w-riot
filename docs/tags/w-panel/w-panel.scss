@@ -3,14 +3,19 @@ w-panel,
     display: block;
     position: relative;
 
+    margin: 0;
+    padding: 0;
+
     overflow: hidden;
 
     [ref="holder"] {
         transform: translateY(0);
         transform: translateX(0);
 
-        transition-property: transform;
-        transition-duration: 0.3s;
+        &.animation {
+            transition-property: transform;
+            transition-duration: 0.3s;
+        }
     }
 
     &.anchor-left {

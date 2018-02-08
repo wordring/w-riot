@@ -13,37 +13,41 @@
     var el = tag.root
     var panel = null
 
-    var pane = null
-    var header = null
-
     close() {
+        el.style.display = 'block'
         panel.close()
+        $.removeClass(el, 'open')
     }
 
-    header(val) {
-        if(val) header = val
-        return header
+    handleResize() {
+        var header = tag.header()
+        var pane = tag.pane()
+
+        if(header && pane) {
+            $.height(pane.root, $.height(el) - $.height(header.root))
+        }
+    }
+
+    header() {
+        return panel.tags['w-header']
     }
 
     isLeft() { return $.hasClass(el, 'left') }
 
-    isTemporary_() { return $.hasClass(el, 'temporary') }
-
     isOpen() { return !$.hasClass(el, 'close') }
 
     open() {
+        tag.handleResize()
+        //el.style.display = 'block'
         panel.open()
         $.removeClass(el, 'close')
     }
 
-    pane(val) {
-        if(val) pane = val
-        return pane
+    pane() {
+        return panel.tags['w-pane']
     }
 
     temporary(flg) {
-        if(typeof flg == 'undefined') return $.hasClass(el, 'temporary')
-
         if(flg) { // temporary
             $.addClass(el, 'temporary')
             $.removeClass(el, 'persistent')
@@ -55,45 +59,13 @@
 
     toggle() { tag.isOpen() ? tag.close() : tag.open() }
 
-    onPanelClosed() {
-        tag.onResize()
-        $.addClass(el, 'close')
-        tag.trigger('closed', tag)
-    }
-
-    onPanelMount() {
-        var bgColor = window.getComputedStyle(el, '').backgroundColor
-        el.style.backgroundColor = 'transparent'
-        el.style.display = 'block'
-
-        panel.backgroundColor(bgColor)
-        panel.height('100%')
-        if(!$.hasClass(el, 'right')) panel.anchor('left')
-        else panel.anchor('right')
-
-        tag.onResize()
-    }
-
-    onPanelOpend() {
-        tag.onResize()
-        tag.trigger('opened', tag)
-    }
-
-    onResize() {
-        var headerHeight = header ? $.height(header.root) : 0
-        if(pane) {
-            $.height(pane.root, $.height(el) - headerHeight)
-        }
-    }
-
-    tag.on('close', tag.close)
-    tag.on('open', tag.open)
-    tag.on('toggle', tag.toggle)
-    tag.on('temporary', tag.temporary)
-    tag.on('resize', tag.onResize)
-
-    tag.on('mount', function() {
+    onMount() {
         panel = tag.refs.panel
+
+        if(el.style.display == 'none') $.addClass(el, 'close')
+        else $.addClass(el, 'open')
+        panel.root.style.display = el.style.display
+        el.style.display = ''
 
         panel.on('closed', tag.onPanelClosed)
         panel.on('mount', tag.onPanelMount)
@@ -101,7 +73,36 @@
 
         if(!$.hasClass(el, 'right')) $.addClass(el, 'left')
         if(!$.hasClass(el, 'temporary')) $.addClass(el, 'persistent')
-    })
+
+        tag.handleResize()
+    }
+
+    onPanelClosed() {
+        $.addClass(el, 'close')
+        tag.trigger('closed', tag)
+    }
+
+    onPanelMount() {
+        var bgColor = window.getComputedStyle(el, '').backgroundColor
+        el.style.backgroundColor = 'transparent'
+
+        panel.backgroundColor(bgColor)
+        panel.height('100%')
+        if(!$.hasClass(el, 'right')) panel.anchor('left')
+        else panel.anchor('right')
+    }
+
+    onPanelOpend() {
+        $.addClass(el, 'open')
+        tag.trigger('opened', tag)
+    }
+
+    tag.on('close', tag.close)
+    tag.on('mount', tag.onMount)
+    tag.on('open', tag.open)
+    tag.on('resize', tag.handleResize)
+    tag.on('temporary', tag.temporary)
+    tag.on('toggle', tag.toggle)
 
     $.handleResize(tag)
 

@@ -3,5 +3,37 @@
 w-header,
 [data-is="w-header"] {
     display: block;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
     width: 100%;
+    height: 3.5*$rem;
+
+    font-size: 0;
+    text-align: center;
+
+    * {
+        font-size: $rem;
+        line-height: 3.5*$rem;
+        padding: 0 $rem;
+        margin: 0;
+    }
+
+    .left {
+        float: left;
+    }
+    .right {
+        float: right;
+    }
+    .center {
+        display: inline-block;
+    }
+
+    w-icon,
+    [data-is="w-icon"] {
+        font-size: 1.5*$rem;
+    }
 }

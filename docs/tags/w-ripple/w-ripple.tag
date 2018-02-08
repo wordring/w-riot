@@ -7,23 +7,21 @@
     this.mixin('Component')
 
     var $ = this.wordring
-    var el = this.root
-    var effect = null
 
     var tag = this
 
-    tag.color = tag.opts.dataColor || ''
+    var el = tag.root
+    var effect = null
 
     onMousedown(ev) {
-        // chromeにおいてeffectの大きさが取得できなかったため、
-        // w-rippleの大きさで代用した。
-        // 現在の値はeffectの大きさがw-rippleの二倍であることを
-        // 前提としている。
-        // cssを変更する場合、セットでこの部分も変更する必要がある。
-        // 例）effect.style.left = (ev.offsetX - $.width(effect) / 2) + 'px'
-        // なぜ取得できないのか調査中。（アニメーションなのかcssを%指定しているからか）
-        effect.style.left = (ev.offsetX - $.width(el)) + 'px'
-        effect.style.top = (ev.offsetY - $.height(el)) + 'px'
+        var dx = Math.max($.width(el), $.height(el)) * 2
+        $.width(effect, dx)
+        $.height(effect, dx)
+        var rect = ev.currentTarget.getBoundingClientRect()
+        var x = ev.clientX - rect.left
+        var y = ev.clientY - rect.top
+        effect.style.left = (x - dx / 2) + 'px'
+        effect.style.top = (y - dx / 2) + 'px'
 
         if(!$.hasClass(effect, 'active')) {
             $.addClass(effect, 'active')
@@ -38,7 +36,10 @@
     tag.on('mount', function() {
         effect = tag.refs.effect
 
-        effect.style.background = tag.opts.dataColor || ''
+        var style = window.getComputedStyle(el, '')
+        effect.style.backgroundColor = style.backgroundColor
+        el.style.backgroundColor = 'transparent'
+
         el.addEventListener('mousedown', tag.onMousedown)
 
         if(window.AnimationEvent) {

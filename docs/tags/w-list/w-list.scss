@@ -1,0 +1,13 @@
+@import "../theme.scss";
+
+w-list,
+[data-is="w-list"] {
+    display: block;
+
+    margin: 0; // ulの場合必要。
+    padding: 0 $rem; // ulの場合必要。
+
+    list-style-type: none;
+
+    ;
+}

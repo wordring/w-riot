@@ -4,18 +4,17 @@ w-ripple,
 [data-is="w-ripple"] {
     overflow: hidden;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    .circle {
+        border-radius: 50%;
+    }
 
     [ref="effect"] {
         display: inline-block;
-
-        // chrome においてeffectの大きさをgetBoundingClientRectで
-        // 取得できなかったため、w-rippleの二倍に決め打ちした。
-        // この値を変更する場合、スクリプトも修正する必要がある。
-        width: 200%;
-        height: 200%;
 
         position: absolute;
         border-radius: 100%;
@@ -26,7 +25,7 @@ w-ripple,
         background: #f1c40f;
 
         &.active {
-            animation: w-ripple-animation 0.5s ease-out;
+            animation: w-ripple-animation 0.6s ease-out;
         }
     }
 }

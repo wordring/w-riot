@@ -5,6 +5,9 @@ w-app,
   position: relative;
   width: 100%;
   height: 100%; }
+  w-app > *,
+  [data-is="w-app"] > * {
+    height: 100%; }
 
 w-app-drawer,
 [data-is="w-app-drawer"] {
@@ -24,7 +27,11 @@ w-app-drawer,
     right: 0; }
   w-app-drawer.temporary,
   [data-is="w-app-drawer"].temporary {
-    position: fixed; }
+    position: fixed;
+    z-index: 160; }
+    w-app-drawer.temporary.open,
+    [data-is="w-app-drawer"].temporary.open {
+      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2); }
   w-app-drawer.persistent [ref="panel"],
   [data-is="w-app-drawer"].persistent [ref="panel"] {
     position: fixed; }
@@ -33,41 +40,11 @@ w-app-drawer,
     width: 0;
     min-width: 0;
     max-width: 0; }
-  w-app-drawer w-header,
-  w-app-drawer [data-is="w-header"],
-  [data-is="w-app-drawer"] w-header,
-  [data-is="w-app-drawer"] [data-is="w-header"] {
-    display: flex;
-    background-color: #90A4AE;
-    height: 3.5rem; }
-    w-app-drawer w-header w-icon,
-    w-app-drawer w-header [data-is="w-icon"],
-    w-app-drawer [data-is="w-header"] w-icon,
-    w-app-drawer [data-is="w-header"] [data-is="w-icon"],
-    [data-is="w-app-drawer"] w-header w-icon,
-    [data-is="w-app-drawer"] w-header [data-is="w-icon"],
-    [data-is="w-app-drawer"] [data-is="w-header"] w-icon,
-    [data-is="w-app-drawer"] [data-is="w-header"] [data-is="w-icon"] {
-      padding: 1rem;
-      font-size: 1.5rem; }
-  w-app-drawer.left w-header,
-  w-app-drawer.left [data-is="w-header"],
-  [data-is="w-app-drawer"].left w-header,
-  [data-is="w-app-drawer"].left [data-is="w-header"] {
-    justify-content: space-between; }
-  w-app-drawer.right w-header w-title,
-  w-app-drawer.right w-header [data-is="w-title"],
-  w-app-drawer.right [data-is="w-header"] w-title,
-  w-app-drawer.right [data-is="w-header"] [data-is="w-title"],
-  [data-is="w-app-drawer"].right w-header w-title,
-  [data-is="w-app-drawer"].right w-header [data-is="w-title"],
-  [data-is="w-app-drawer"].right [data-is="w-header"] w-title,
-  [data-is="w-app-drawer"].right [data-is="w-header"] [data-is="w-title"] {
-    padding: 0; }
   w-app-drawer w-pane,
   w-app-drawer [data-is="w-pane"],
   [data-is="w-app-drawer"] w-pane,
   [data-is="w-app-drawer"] [data-is="w-pane"] {
+    height: 100%;
     overflow-y: auto;
     -ms-overflow-style: none; }
     w-app-drawer w-pane::-webkit-scrollbar,
@@ -86,59 +63,63 @@ w-app-pane,
 w-header,
 [data-is="w-header"] {
   display: block;
-  width: 100%; }
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 56px;
+  font-size: 0;
+  text-align: center; }
+  w-header *,
+  [data-is="w-header"] * {
+    font-size: 16px;
+    line-height: 56px;
+    padding: 0 16px;
+    margin: 0; }
+  w-header .left,
+  [data-is="w-header"] .left {
+    float: left; }
+  w-header .right,
+  [data-is="w-header"] .right {
+    float: right; }
+  w-header .center,
+  [data-is="w-header"] .center {
+    display: inline-block; }
+  w-header w-icon,
+  w-header [data-is="w-icon"],
+  [data-is="w-header"] w-icon,
+  [data-is="w-header"] [data-is="w-icon"] {
+    font-size: 24px; }
 
 w-icon,
 [data-is="w-icon"] {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 1.5rem;
-  line-height: 1;
+  font-size: 24px;
   letter-spacing: normal;
   text-transform: none;
   display: inline-block;
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  font-feature-settings: 'liga';
-  vertical-align: middle; }
+  font-feature-settings: 'liga'; }
   w-icon:hover,
   [data-is="w-icon"]:hover {
     cursor: pointer; }
 
-w-ripple,
-[data-is="w-ripple"] {
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center; }
-  w-ripple [ref="effect"],
-  [data-is="w-ripple"] [ref="effect"] {
-    display: inline-block;
-    width: 200%;
-    height: 200%;
-    position: absolute;
-    border-radius: 100%;
-    pointer-events: none;
-    transform: scale(0);
-    opacity: 0;
-    background: #f1c40f; }
-    w-ripple [ref="effect"].active,
-    [data-is="w-ripple"] [ref="effect"].active {
-      animation: w-ripple-animation 0.5s ease-out; }
-
-@keyframes w-ripple-animation {
-  from {
-    opacity: 0.5; }
-  to {
-    transform: scale(2);
-    opacity: 0; } }
+w-list,
+[data-is="w-list"] {
+  display: block;
+  margin: 0;
+  padding: 0 16px;
+  list-style-type: none; }
 
 w-pane,
 [data-is="w-pane"] {
-  display: block; }
+  display: block;
+  width: 100%;
+  margin: 0; }
   w-pane:hover,
   [data-is="w-pane"]:hover {
     overflow-y: auto; }
@@ -147,13 +128,17 @@ w-panel,
 [data-is="w-panel"] {
   display: block;
   position: relative;
+  margin: 0;
+  padding: 0;
   overflow: hidden; }
   w-panel [ref="holder"],
   [data-is="w-panel"] [ref="holder"] {
     transform: translateY(0);
-    transform: translateX(0);
-    transition-property: transform;
-    transition-duration: 0.3s; }
+    transform: translateX(0); }
+    w-panel [ref="holder"].animation,
+    [data-is="w-panel"] [ref="holder"].animation {
+      transition-property: transform;
+      transition-duration: 0.3s; }
   w-panel.anchor-left.close [ref="holder"],
   [data-is="w-panel"].anchor-left.close [ref="holder"] {
     transform: translateX(-100%); }
@@ -166,6 +151,36 @@ w-panel,
   w-panel.anchor-bottom.close [ref="holder"],
   [data-is="w-panel"].anchor-bottom.close [ref="holder"] {
     transform: translateY(100%); }
+
+w-ripple,
+[data-is="w-ripple"] {
+  overflow: hidden;
+  position: relative;
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important; }
+  w-ripple .circle,
+  [data-is="w-ripple"] .circle {
+    border-radius: 50%; }
+  w-ripple [ref="effect"],
+  [data-is="w-ripple"] [ref="effect"] {
+    display: inline-block;
+    position: absolute;
+    border-radius: 100%;
+    pointer-events: none;
+    transform: scale(0);
+    opacity: 0;
+    background: #f1c40f; }
+    w-ripple [ref="effect"].active,
+    [data-is="w-ripple"] [ref="effect"].active {
+      animation: w-ripple-animation 0.6s ease-out; }
+
+@keyframes w-ripple-animation {
+  from {
+    opacity: 0.5; }
+  to {
+    transform: scale(2);
+    opacity: 0; } }
 
 w-title,
 [data-is="w-title"] {
@@ -198,6 +213,12 @@ w-toolbar,
     margin: 1.25rem 1rem;
     font-size: 1rem;
     line-height: 1rem; }
+
+w-typography,
+[data-is="w-typography"] {
+  margin: 0;
+  padding: 0;
+  font-size: 16px; }
 
 * {
   box-sizing: border-box;

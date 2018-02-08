@@ -36,10 +36,10 @@
         ;
     }
 
-    tag.on('drawer-close', tag.onDrawerClose)
-    tag.on('drawer-mount', tag.onDrawerMount)
-    tag.on('drawer-open', tag.onDrawerOpen)
-    tag.on('pane-mount', tag.onPaneMount)
+    //tag.on('drawer-close', tag.onDrawerClose)
+    //tag.on('drawer-mount', tag.onDrawerMount)
+    //tag.on('drawer-open', tag.onDrawerOpen)
+    //tag.on('pane-mount', tag.onPaneMount)
 
     tag.on('mount', tag.onMount)
 </script>

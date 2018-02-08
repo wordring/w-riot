@@ -34,19 +34,12 @@
             }
             return to
         },
-        debounce: function (wait, callback) {
-
-        },
         device: function () {
             var width = $.width(document.documentElement)
             if (width < 480) return 'phone'
             if (width < 840) return 'tablet'
             if (width <= 1024) return 'desktop'
             return ''
-        },
-        findAncestorByComponentName: function (tag, name) {
-            while ((tag = tag.parent) && tag.component != name);
-            return tag
         },
         /* CSSアニメーションの終了を監視し、callbackを呼び出す。 */
         handleAnimationEnd: function (el, callback) {
