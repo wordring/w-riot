@@ -11,30 +11,37 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 1em;
         }
     </style>
 </head>
 
 <body>
+        <h1>w-switch</h1>
 
-    <div style="width: 320px; height: 48px;">
-        <w-switch>w-switch</w-switch>
-    </div>
+        <h2>Default</h2>
+        <div data-is="w-switch"></div>
 
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <h2>On</h2>
+        <div data-is="w-switch" class="on"></div>
+
+        <h2>Color</h2>
+        <div data-is="w-switch" style="color:blue;"></div>
+
+        <h2>Disabled</h2>
+        <div data-is="w-switch" class="disabled"></div>
+        
+        <h2>Disabled and on</h2>
+        <div data-is="w-switch" class="disabled on"></div>
 
     <script type="riot/tag" src="w-switch.tag"></script>
+    <script type="riot/tag" src="../w-ripple/w-ripple.tag"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
     <script src="../w-riot.js"></script>
 
     <script>
-        riot.mixin('Component', wRiot.Component)
-        riot.mixin('Container', wRiot.Container)
+        riot.mixin('Component', wordring.Component)
 
         riot.compile(function () {
             var tags = riot.mount('w-switch')

@@ -1,0 +1,87 @@
+@import "../theme.scss";
+
+w-switch,
+[data-is="w-switch"] {
+    display: block;
+    position: relative;
+    height: 3*$rem;
+    width: 4*$rem;
+
+    color: $color-2-500;
+
+    >[ref="track"] {
+        position: absolute;
+
+        height: 0.75*$rem;
+        width: 2*$rem;
+
+        top: 1.125*$rem;
+        left: $rem;
+
+        border-radius: 0.375*$rem;
+    }
+
+    >[ref="container"] {
+        position: relative;
+        
+        height: 3*$rem;
+        width: 3*$rem;
+        
+        cursor: pointer;
+    }
+
+    [ref="thumb"] {
+        position: relative;
+        height: $rem;
+        width: $rem;
+
+        left: $rem;
+        top: $rem;
+
+        pointer-events: none;
+        border-radius: 50%;
+        box-shadow: $box-shadow;
+    }
+
+    &.on {
+        >[ref="track"] {
+            opacity: 0.5;
+        }
+        >[ref="container"] {
+            left: 16px;
+        }
+    }
+
+    &.off {
+        >[ref="track"] {
+            background-color: #000;
+            opacity: 0.38;
+        }
+        >[ref="container"] {
+            left: 0;
+        }
+        [ref="thumb"] {
+            background-color: $color-gray-50;
+        }
+    }
+
+    &.disabled {
+        >[ref="track"] {
+            background-color: #000;
+            opacity: 0.12;
+        }
+        w-ripple {
+            color: $color-gray-900;
+        }
+        [ref="thumb"] {
+            background-color: $color-gray-400;
+            box-shadow: none;
+        }
+    }
+
+    &.animation>[ref="container"] {
+        transition-property: left;
+        transition-duration: 0.3s;
+    }
+}
+

@@ -13,5 +13,12 @@
   "dependencies": {
     "express": "^4.16.2",
     "riot": "^3.8.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-riot": "^1.1.4",
+    "gulp-uglify": "^3.0.0",
+    "run-sequence": "^2.2.1"
   }
 }

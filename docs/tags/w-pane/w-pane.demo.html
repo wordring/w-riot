@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>w-pane</title>
+    <link rel="stylesheet" href="../../css/w-riot.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            padding: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>w-pane</h1>
+
+    <h2>Left Fill Right</h2>
+    <div data-is="w-pane">
+        <span class="left" style="background-color:#F06292;">1 Left</span>
+        <span class="fill" style="background-color: #81C784;">2 Fill</span>
+        <span class="right" style="background-color: #7986CB;">3 Right</span>
+    </div>
+
+    <h2>Left Left Left</h2>
+    <div data-is="w-pane">
+        <span class="left" style="background-color:#F06292;">1 Left</span>
+        <span class="left" style="background-color: #81C784;">2 Left</span>
+        <span class="left" style="background-color: #7986CB;">3 Left</span>
+    </div>
+
+    <h2>Fill Left</h2>
+    <div data-is="w-pane">
+        <span class="fill" style="background-color:#F06292;">1 Fill</span>
+        <span class="left" style="background-color: #81C784;">2 Left</span>
+    </div>
+
+    <h2>Vertical</h2>
+    <div data-is="w-pane" class="vertical">
+        <span style="background-color:#F06292;">1</span>
+        <span style="background-color: #81C784;">2</span>
+        <span style="background-color: #7986CB;">3</span>
+    </div>
+
+    <script type="riot/tag" src="w-pane.tag"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
+    <script src="../w-riot.js"></script>
+
+    <script>
+        riot.mixin('Component', wordring.Component)
+
+        riot.compile(function () {
+            var tags = riot.mount('w-pane')
+        })
+    </script>
+</body>
+
+</html>

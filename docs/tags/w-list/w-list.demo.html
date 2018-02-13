@@ -10,44 +10,46 @@
     <link rel="stylesheet" href="../../css/w-riot.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        .demo {
-            width: 40%;
+        body {
+            padding: 1em;
         }
 
         w-list,
         [data-is="w-list"] {
             background-color: darkgrey;
-            margin: 0;
-            padding: 0;
         }
     </style>
 </head>
 
 <body>
-    <div style="width:320px;">
-        <div data-is="w-header">
-            <div data-is="w-ripple" style="background-color:white;">
-                <span>test</span>
-                <w-icon class="right">keyboard_arrow_down</w-icon>
-            </div>
-        </div>
-        <ul data-is="w-list">
-            <li data-is="w-list-item">
-                アイテム
-            </li>
-        </ul>
-    </div>
+    <h1>w-list</h1>
+
+    <h2>Default</h2>
+    <ul data-is="w-list">
+        <li data-is="w-item">
+            <span class="fill">Fill</span>
+        </li>
+        <li data-is="w-item">
+            <w-button><w-icon>menu</w-icon></w-button>
+            <span class="fill">Fill</span>
+            <w-button><w-icon>menu</w-icon></w-button>
+        </li>
+        <li data-is="w-item">
+            <span class="right">Right</span>
+            <span class="fill">Fill</span>
+            <span class="left">Left</span>
+        </li>
+        <li data-is="w-item">
+            <span class="fill left">Fill + left</span>
+            <span class="right">Right</span>
+            <span class="left">Left</span>
+        </li>
+    </ul>
     <script type="riot/tag" src="w-list.tag"></script>
+    <script type="riot/tag" src="../w-item/w-item.tag"></script>
 
-    <script type="riot/tag" src="../w-header/w-header.tag"></script>
-
-    <script type="riot/tag" src="../w-pane/w-pane.tag"></script>
-    <script type="riot/tag" src="../w-panel/w-panel.tag"></script>
-
+    <script type="riot/tag" src="../w-button/w-button.tag"></script>
     <script type="riot/tag" src="../w-ripple/w-ripple.tag"></script>
-    <script type="riot/tag" src="../w-icon/w-icon.tag"></script>
-
-    <script type="riot/tag" src="../w-typography/w-typography.tag"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
 
@@ -66,7 +68,7 @@
 
 
         riot.compile(function () {
-            var tags = riot.mount('*')
+            var tags = riot.mount('w-list')
         })
 
         //debugger

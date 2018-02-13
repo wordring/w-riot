@@ -2,38 +2,40 @@
 
 w-header,
 [data-is="w-header"] {
-    display: block;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
 
-    margin: 0;
-    padding: 0;
-
-    overflow: hidden;
-
-    width: 100%;
     height: 3.5*$rem;
 
     font-size: 0;
-    text-align: center;
-
     * {
         font-size: $rem;
-        line-height: 3.5*$rem;
-        padding: 0 $rem;
-        margin: 0;
     }
 
     .left {
-        float: left;
+        order: -1;
     }
     .right {
-        float: right;
+        order: 1;
     }
-    .center {
-        display: inline-block;
+    .fill {
+        flex-grow: 1;
     }
 
+    w-button,
+    [data-is="w-button"] {
+        margin: 4px;
+        height: 3*$rem;
+        width: 3*$rem;
+    }
     w-icon,
     [data-is="w-icon"] {
         font-size: 1.5*$rem;
+    }
+
+    span {
+        padding: 0 $rem;
     }
 }

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>w-header</title>
+    <title>w-button</title>
     <link rel="stylesheet" href="../../css/w-riot.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
@@ -17,16 +17,30 @@
 </head>
 
 <body>
-        <h1>w-header</h1>
+        <h1>w-button</h1>
 
         <h2>Default</h2>
-        <div data-is="w-header" style="background-color:#D1C4E9;">
-            <div class="left" style="background-color:#F8BBD0;">Left</div>
-            <div class ="fill" style="background-color:#C8E6C9">Fill</div>
-            <div class="right" style="background-color:#B3E5FC;">Right</div>
+        <div data-is="w-button">
+            Button
         </div>
 
-    <script type="riot/tag" src="w-header.tag"></script>
+        <h2>Ripple color</h2>
+        <div data-is="w-button" data-ripple-color="red" style="background-color:white;">
+            Button
+        </div>
+
+        <h2>Width Height</h2>
+        <div data-is="w-button" style="width:100px;height:100px;background-color:white;">
+            Button
+        </div>
+        
+        <h2>Padding</h2>
+        <div data-is="w-button" style="padding:1em; background-color:white;">
+            Button
+        </div>
+
+        <script type="riot/tag" src="w-button.tag"></script>
+        <script type="riot/tag" src="../w-ripple/w-ripple.tag"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
     <script src="../w-riot.js"></script>
@@ -35,7 +49,7 @@
         riot.mixin('Component', wordring.Component)
 
         riot.compile(function () {
-            var tags = riot.mount('w-header')
+            var tags = riot.mount('w-button')
         })
     </script>
 </body>

@@ -1,6 +1,5 @@
 <w-ripple>
     <span ref="effect"></span>
-    <yield/>
 <script>
     this.component = 'ripple'
 
@@ -11,6 +10,7 @@
     var tag = this
 
     var el = tag.root
+    var parent = null
     var effect = null
 
     onMousedown(ev) {
@@ -23,28 +23,38 @@
         effect.style.left = (x - dx / 2) + 'px'
         effect.style.top = (y - dx / 2) + 'px'
 
-        if(!$.hasClass(effect, 'active')) {
-            $.addClass(effect, 'active')
+        if(!$.hasClass(el, 'active') && !$.hasClass(el, 'disabled')) {
+            $.addClass(el, 'active')
             if(!window.AnimationEvent) setTimeout(tag.onAnimationEnd, 500)
         }
     }
 
     onAnimationEnd(ev) { 
-        $.removeClass(effect, 'active')
+        $.removeClass(el, 'active')
     }
-    
-    tag.on('mount', function() {
+
+    onMount() {
         effect = tag.refs.effect
 
-        var style = window.getComputedStyle(el, '')
-        effect.style.backgroundColor = style.backgroundColor
-        el.style.backgroundColor = 'transparent'
-
-        el.addEventListener('mousedown', tag.onMousedown)
-
+        el.addEventListener('click', tag.onMousedown)
         if(window.AnimationEvent) {
-            tag.refs.effect.addEventListener('animationend', tag.onAnimationEnd, false)
+            effect.addEventListener('animationend', tag.onAnimationEnd, false)
         }
-    })
+        tag.onUpdate()
+    }
+
+    onUpdate() {
+        parent = el.parentElement
+
+        $.height(el, $.height(parent))
+        $.width(el, $.width(parent))
+
+        var style = window.getComputedStyle(el, '')
+        effect.style.backgroundColor = style.color
+    }
+    
+    tag.on('mount', tag.onMount)
+    tag.on('update', tag.onUpdate)
+
 </script>
 </w-ripple>

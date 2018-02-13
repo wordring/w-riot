@@ -1,4 +1,4 @@
-<w-icon onclick={ onClick }>
+<w-icon>
     <yield/>
 <script>
     this.component = 'icon'
@@ -8,8 +8,6 @@
     var tag = this
 
     var el = tag.root
-
-    onClick() { tag.trigger('click') }
 
     tag.on('hide', function() {
         el.style.display = 'none'

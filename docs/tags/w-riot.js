@@ -34,6 +34,12 @@
             }
             return to
         },
+        defineProperty: function(tag, name, getter, setter) {
+            Object.defineProperty(tag, name, {
+                get: function() { return getter ? getter() : null },
+                set: function(val) { if(setter) setter(val) },
+            })
+        },
         device: function () {
             var width = $.width(document.documentElement)
             if (width < 480) return 'phone'
@@ -73,7 +79,7 @@
         },
         /* CSSTransitionの終了を監視し、callbackを呼び出す。 */
         handleTransitionEnd: function (el, callback) {
-            if (el.style.transition != 'undefined') {
+            if (typeof el.style.transition != 'undefined') {
                 var fn = function () {
                     callback()
                     el.removeEventListener('transitionend', fn, false)
@@ -235,15 +241,10 @@
     */
     wordring.Component = {
         init: function () {
-            this.prop = this.prop || {}
-            this.style = this.style || {}
-
-            this.state = this.state || {}
-
             var self = this
 
-            this.on('mount', function () { self.trigger('create', self) })
-            this.on('unmount', function () { self.trigger('delete', self) })
+            this.on('mount', function () { self.trigger('created', self) })
+            this.on('unmount', function () { self.trigger('deleted', self) })
 
             initDataTrigger(this)
             initDataOn(this)

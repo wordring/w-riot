@@ -6,49 +6,48 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>w-ripple</title>
+    <title>w-item</title>
     <link rel="stylesheet" href="../../css/w-riot.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
             padding: 1em;
         }
-        
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            width: 100px;
-            height: 100px;
-            background-color:cadetblue;
+
+        [data-is="w-item"] {
+            background-color: #F48FB1;
         }
+
     </style>
 </head>
 
 <body>
-    <h1>w-ripple</h1>
-    <h2>Color</h2>
-    <div class="container">
-        <div data-is="w-ripple" style="color:white;"></div>
-        Ripple
+    <h1>w-item</h1>
+
+    <h2>Default</h2>
+    <div data-is="w-item">
+        Item
     </div>
 
-    <h2>Circle</h2>
-    <div class="container">
-        <div data-is="w-ripple" class="circle"></div>
-        Ripple
-    </div>
+    <script type="riot/tag" src="w-item.tag"></script>
 
-    <script type="riot/tag" src="../w-ripple/w-ripple.tag"></script>
     <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
+
     <script src="../w-riot.js"></script>
 
     <script>
+        function MyObserver() {
+            riot.observable(this)
+            var self = this
+        }
+
+        var ob = new MyObserver
+        riot.mixin({ observer: ob })
         riot.mixin('Component', wordring.Component)
 
+
         riot.compile(function () {
-            var tags = riot.mount('w-ripple')
+            var tags = riot.mount('w-item')
         })
 
         //debugger

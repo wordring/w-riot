@@ -3,20 +3,31 @@
         <yield/>
     </div>
 <script>
+/*
+    trigger
+        closed(tag)
+        opened(tag)
+*/
     this.component = 'panel'
 
     this.mixin('Component')
 
     var tag = this
+
     var $ = tag.wordring
-
     var el = tag.root
-    var holder = null
 
+    var anchor = ''
     var transition = false
 
-    anchor(to) {
+    // anchor.
+    getAnchor() { return anchor }
+    setAnchor(to) {
         var ary = ['left', 'right', 'top', 'bottom']
+        if(ary.indexOf(to) == -1) throw TypeError
+        
+        anchor = to
+
         for(var i = 0; i < ary.length; i++) {
             var atom = 'anchor-' + ary[i]
             if(to) $.removeClass(el, atom)
@@ -24,65 +35,78 @@
         }
         if(to) $.addClass(el, 'anchor-' + to)
     }
+    $.defineProperty(tag, 'anchor', tag.getAnchor, tag.setAnchor)
 
-    backgroundColor(color) {
-        holder.style.backgroundColor = color
+    // bacgroundColor.
+    getBackgroundColor() { return tag.refs.holder.style.backgroundColor }
+    setBackgroundColor(color) {
+        tag.refs.holder.style.backgroundColor = color
     }
+    $.defineProperty(tag, 'backgroundColor', tag.getBackgroundColor, tag.setBackgroundColor)
+
+    // height.
+    getHeight() { return $.height(tag.refs.holder) }
+    setHeight(val) {
+        $.height(tag.refs.holder, val)
+    }
+    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
+
+    // visible.
+    getVisible() { return !$.hasClass(el, 'close') }
+    setVisible(val) {
+        if(val) tag.open()
+        else tag.close()
+    }
+    $.defineProperty(tag, 'visible', tag.getVisible, tag.setVisible)
+
+    // width.
+    getWidth() { return $.width(tag.refs.holder) }
+    setWidth(val) {
+        $.width(tag.refs.holder, val)
+    }
+    $.defineProperty(tag, 'width', tag.getWidth, tag.setWidth)
 
     close() {
-        if(transition || !tag.isOpen()) return
+        if(transition || !tag.visible) return
         transition = true
         $.addClass(el, 'close')
 
         function fn() {
             transition = false
-            holder.style.position = 'absolute'
-            tag.trigger('closed')
+            tag.refs.holder.style.position = 'absolute'
+            tag.trigger('closed', tag)
         }
-        if($.hasClass(holder, 'animation')) $.handleTransitionEnd(holder, fn)
+        if($.hasClass(tag.refs.holder, 'animation')) $.handleTransitionEnd(tag.refs.holder, fn)
         else fn()
     }
 
-    height(val) {
-        $.height(holder, val)
-        return $.height(el, val)
-    }
-
-    isOpen() { return !$.hasClass(el, 'close') }
-
     open() {
-        if(transition || tag.isOpen()) return
+        if(transition || tag.visible) return
         transition = true
-        holder.style.position = ''
+        tag.refs.holder.style.position = ''
         $.removeClass(el, 'close')
 
         function fn() {
             transition = false
-            tag.trigger('opened')
+            tag.trigger('opened', tag)
         }
-        if($.hasClass(holder, 'animation')) $.handleTransitionEnd(holder, fn)
+        if($.hasClass(tag.refs.holder, 'animation')) $.handleTransitionEnd(tag.refs.holder, fn)
         else fn()
     }
 
     toggle() {
-        if($.hasClass(el, 'close')) tag.open()
-        else tag.close()
+        tag.visible = !tag.visible
     }
 
     onMount() {
-        holder = tag.refs.holder
         if(el.style.display == 'none') {
             tag.close()
             el.style.display = ''
         }
-        $.addClass(holder, 'animation')
+        $.addClass(tag.refs.holder, 'animation')
     }
 
-    tag.on('close', tag.close)
-    tag.on('anchor', tag.anchor)
     tag.on('mount', tag.onMount)
-    tag.on('open', tag.open)
-    tag.on('toggle', tag.toggle)
 
 </script>
 </w-panel>

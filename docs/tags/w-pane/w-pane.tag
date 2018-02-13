@@ -9,11 +9,10 @@
     var $ = tag.wordring
     var el = tag.root
 
-    var container = null
+    // height.
+    getHeight() { return $.height(el) }
+    setHeight(val) { $.height(el, val) }
+    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
 
-    onMount() {
-    }
-
-    tag.on('mount', tag.onMount)
 </script>
 </w-pane>

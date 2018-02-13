@@ -1,9 +1,9 @@
 @import "../theme.scss";
 
-w-app-drawer,
-[data-is="w-app-drawer"] {
+w-drawer,
+[data-is="w-drawer"] {
     background-color: $color-100;
-
+    display: block;
     position: relative;
 
     height: 100%;
