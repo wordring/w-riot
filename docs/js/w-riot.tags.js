@@ -1,3 +1,14 @@
+riot.tag2('w-app', '<yield></yield>', '', '', function(opts) {
+    this.component = 'app'
+
+    this.mixin('Component')
+
+    var tag = this
+    var $ = tag.wordring
+    var el = tag.root
+
+});
+
 riot.tag2('w-button', '<w-ripple ref="ripple" class="center middle"></w-ripple> <yield></yield>', '', 'onclick="{onClick}"', function(opts) {
     this.component = 'button'
 
@@ -26,17 +37,6 @@ riot.tag2('w-button', '<w-ripple ref="ripple" class="center middle"></w-ripple> 
     tag.on('update', tag.onUpdate)
 
 });
-riot.tag2('w-app', '<yield></yield>', '', '', function(opts) {
-    this.component = 'app'
-
-    this.mixin('Component')
-
-    var tag = this
-    var $ = tag.wordring
-    var el = tag.root
-
-});
-
 riot.tag2('w-drawer', '<w-panel ref="panel"> <yield></yield> </w-panel>', '', '', function(opts) {
     this.component = 'drawer'
 

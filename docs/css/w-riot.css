@@ -1,10 +1,46 @@
+
 @charset "UTF-8";
+* {
+  box-sizing: border-box;
+  border: none; }
+
+html,
+body {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif, "Helvetica Neue", Helvetica, Arial, Verdana, "游ゴシック", "Yu Gothic", "游ゴシック体", "YuGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Meiryo UI", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic";
+  background-color: #ECEFF1;
+  color: rgba(0, 0, 0, 0.87); }
+
 w-app,
 [data-is="w-app"] {
   display: flex;
   position: relative;
   width: 100%;
   height: 100%; }
+
+w-button,
+[data-is="w-button"] {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  flex-grow: 0;
+  position: relative;
+  margin: 4px; }
+  w-button:hover,
+  [data-is="w-button"]:hover {
+    cursor: pointer; }
+  w-button w-icon,
+  w-button [data-is="w-icon"],
+  [data-is="w-button"] w-icon,
+  [data-is="w-button"] [data-is="w-icon"] {
+    padding: 12px; }
 
 w-drawer,
 [data-is="w-drawer"] {
@@ -50,24 +86,6 @@ w-drawer,
     [data-is="w-drawer"] w-pane::-webkit-scrollbar,
     [data-is="w-drawer"] [data-is="w-pane"]::-webkit-scrollbar {
       display: none; }
-
-w-button,
-[data-is="w-button"] {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  flex-grow: 0;
-  position: relative;
-  margin: 4px; }
-  w-button:hover,
-  [data-is="w-button"]:hover {
-    cursor: pointer; }
-  w-button w-icon,
-  w-button [data-is="w-icon"],
-  [data-is="w-button"] w-icon,
-  [data-is="w-button"] [data-is="w-icon"] {
-    padding: 12px; }
 
 w-header,
 [data-is="w-header"] {
@@ -289,19 +307,21 @@ w-switch,
     transition-property: left;
     transition-duration: 0.3s; }
 
-* {
-  box-sizing: border-box;
-  border: none; }
-
-html,
-body {
-  display: block;
-  position: relative;
-  width: 100%;
-  height: 100%;
+w-text,
+[data-is="w-text"] {
+  display: inline-block;
   margin: 0;
-  padding: 0;
-  font-size: 16px;
-  font-family: "Roboto", sans-serif, "Helvetica Neue", Helvetica, Arial, Verdana, "游ゴシック", "Yu Gothic", "游ゴシック体", "YuGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Meiryo UI", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic";
-  background-color: #ECEFF1;
-  color: rgba(0, 0, 0, 0.87); }
+  padding: 0 16px;
+  list-style-type: none; }
+  w-text w-item w-button:first-child,
+  w-text w-item [data-is="w-button"]:first-child,
+  w-text [data-is="w-item"] w-button:first-child,
+  w-text [data-is="w-item"] [data-is="w-button"]:first-child,
+  [data-is="w-text"] w-item w-button:first-child,
+  [data-is="w-text"] w-item [data-is="w-button"]:first-child,
+  [data-is="w-text"] [data-is="w-item"] w-button:first-child,
+  [data-is="w-text"] [data-is="w-item"] [data-is="w-button"]:first-child {
+    color: red; }
+  w-text :nth-child(1),
+  [data-is="w-text"] :nth-child(1) {
+    color: green; }
