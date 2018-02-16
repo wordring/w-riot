@@ -43,8 +43,6 @@
 
         var ob = new MyObserver
         riot.mixin({ observer: ob })
-        riot.mixin('Component', wordring.Component)
-
 
         riot.compile(function () {
             var tags = riot.mount('w-item')

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>w-drawer</title>
+    <link rel="stylesheet" href="../css/w-riot.min.css" />
+    <link rel="stylesheet" href="../css/w-riot.demo.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="../js/w-riot+riot+route.min.js"></script>
+
+    <style>
+        p {
+            margin: 1em;
+        }
+        h1 {
+            margin: 1rem;
+        }
+        .app-container {
+            display: flex;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .drawer-header {
+            background-color: #B0BEC5;
+        }
+        .app-header {
+            color: rgba(255, 255, 255, 0.7);
+            background-color: #607D8B;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <nav data-is="w-drawer" class="persistent" data-trigger="created:left-drawer-created" style="display: block;">
+            <div data-is="w-header" class="drawer-header">
+                <span class="fill"></span>
+                <w-button class="right icon" data-trigger="created:left-drawer-button-created">
+                    <w-icon>chevron_left</w-icon>
+                </w-button>
+            </div>
+            <div data-is="w-pane" class="vertical">
+                <ul data-is="w-list">
+                    <li data-is="w-item">
+                        <span class="fill">Temporary:</span>
+                        <w-switch class="right" data-trigger="created:left-temporary-button-created"></w-switch>
+                    </li>
+                    <li data-is="w-item">
+                        <div>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                            ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                            sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div data-is="w-pane" class="vertical">
+            <header data-is="w-header" class="app-header">
+                <div data-is="w-button" class="icon" data-trigger="created:header-left-button-created">
+                    <i data-is="w-icon">menu</i>
+                </div>
+                <h1 class="fill">w-drawer</h1>
+                <w-button class="right icon" data-ripple-color="white" data-trigger="created:header-right-button-created">
+                    <div data-is="w-icon">more_vert</div>
+                </w-button>
+            </header>
+            <main>
+                <h1>Title</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+                    anim id est laborum.
+                </p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+                    anim id est laborum.
+                </p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+                    anim id est laborum.
+                </p>
+            </main>
+            <aside></aside>
+            <footer></footer>
+        </div>
+
+        <w-drawer class="right" data-trigger="created:right-drawer-created" style="display: none;">
+            <div data-is="w-header" class="drawer-header">
+                <w-button class="icon" data-ripple-color="white" data-trigger="created:right-drawer-button-created">
+                    <w-icon>chevron_right</w-icon>
+                </w-button>
+            </div>
+            <div data-is="w-pane" class="vertical">
+                <ul data-is="w-list">
+                    <li data-is="w-item">
+                        <span class="fill">Temporary:</span>
+                        <w-switch class="right checked" data-trigger="created:right-temporary-button-created"></w-switch>
+                    </li>
+                    <li data-is="w-item">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                            ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                            sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                    <li data-is="w-item">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                            ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                            sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </w-drawer>
+    </div>
+
+    <script>
+        function MyObserver() {
+            riot.observable(this)
+            var self = this
+
+            this.leftDrawer = null
+            this.rightDrawer = null
+
+            this.leftTemporaryButton = null
+
+            this.on('header-left-button-created', function (button) {
+                button.on('clicked', function () { self.leftDrawer.toggle() })
+            })
+            this.on('left-drawer-created', function (drawer) {
+                self.leftDrawer = drawer
+            })
+            this.on('left-drawer-button-created', function (button) {
+                button.on('clicked', function () { self.leftDrawer.toggle() })
+            })
+            this.on('left-temporary-button-created', function (button) {
+                button.on('clicked', function () {
+                    self.leftDrawer.variant = self.leftDrawer.variant == 'temporary' ? 'persistent' : 'temporary'
+                })
+            })
+
+            this.on('header-right-button-created', function (button) {
+                button.on('clicked', function () { self.rightDrawer.toggle() })
+            })
+            this.on('right-drawer-created', function (drawer) {
+                self.rightDrawer = drawer
+            })
+            this.on('right-drawer-button-created', function (button) {
+                button.on('clicked', function () { self.rightDrawer.toggle() })
+            })
+            this.on('right-temporary-button-created', function (button) {
+                button.on('clicked', function () {
+                    self.rightDrawer.variant = self.rightDrawer.variant == 'temporary' ? 'persistent' : 'temporary'
+                })
+            })
+        }
+
+        riot.mixin({ observer: new MyObserver })
+        riot.mount('w-pane, w-drawer')
+    </script>
+</body>
+
+</html>

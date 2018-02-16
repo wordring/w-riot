@@ -13,11 +13,6 @@
         body {
             padding: 1em;
         }
-
-        w-list,
-        [data-is="w-list"] {
-            background-color: darkgrey;
-        }
     </style>
 </head>
 
@@ -30,9 +25,9 @@
             <span class="fill">Fill</span>
         </li>
         <li data-is="w-item">
-            <w-button><w-icon>menu</w-icon></w-button>
+            <w-button class="icon"><w-icon>menu</w-icon></w-button>
             <span class="fill">Fill</span>
-            <w-button><w-icon>menu</w-icon></w-button>
+            <w-button class="icon"><w-icon>menu</w-icon></w-button>
         </li>
         <li data-is="w-item">
             <span class="right">Right</span>
@@ -45,7 +40,6 @@
             <span class="left">Left</span>
         </li>
     </ul>
-    <!-- script type="riot/tag" src="w-list.tag"></script -->
     <script type="riot/tag" src="../w-item/w-item.tag"></script>
 
     <script type="riot/tag" src="../w-button/w-button.tag"></script>
@@ -63,7 +57,6 @@
 
         var ob = new MyObserver
         riot.mixin({ observer: ob })
-
 
         riot.compile(function () {
             var tags = riot.mount('w-item')
