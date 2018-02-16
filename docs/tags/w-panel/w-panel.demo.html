@@ -9,98 +9,93 @@
     <title>w-panel</title>
     <link rel="stylesheet" href="../../css/w-riot.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script type="riot/tag" src="w-panel.tag"></script>
+    <script type="riot/tag" src="../w-button/w-button.tag"></script>
+    <script type="riot/tag" src="../w-icon/w-icon.tag"></script>
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
+    <script src="../w-riot.js"></script>
+
     <style>
         body {
             padding: 1em;
-        }
-
-        .pane {
-            display: flex;
-            align-items: center;
-            padding: 4px;
         }
     </style>
 </head>
 
 <body>
     <h1>w-panel</h1>
-    <div data-is="w-panel" data-trigger="created:demo1-panel-created">
+    <div data-is="w-panel" data-trigger="created:panel-created">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
             aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
             sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
+        <w-panel>test</w-panel>
     </div>
-    <div class="pane">
-        Anchor:
-        <w-button data-trigger="created:demo1-left-button-created">
-            <w-icon>chevron_left</w-icon>
-        </w-button>
-        <w-button data-trigger="created:demo1-right-button-created">
-            <w-icon>chevron_right</w-icon>
-        </w-button>
-        <w-button data-trigger="created:demo1-top-button-created">
-            <w-icon>expand_less</w-icon>
-        </w-button>
-        <w-button data-trigger="created:demo1-bottom-button-created">
-            <w-icon>expand_more</w-icon>
-        </w-button>
-    </div>
-    <div class="pane">
-        Toggle:
-        <w-button data-trigger="clicked:demo1-toggle-button-clicked">
-            <w-icon>sync</w-icon>
-        </w-button>
-    </div>
-
-    <script type="riot/tag" src="w-panel.tag"></script>
-
-    <script type="riot/tag" src="../w-button/w-button.tag"></script>
-    <script type="riot/tag" src="../w-ripple/w-ripple.tag"></script>
-    <script type="riot/tag" src="../w-icon/w-icon.tag"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
-
-    <script src="../w-riot.js"></script>
+    <table>
+        <tr>
+            <td>Anchor:</td>
+            <td>
+                <button data-is="w-button" data-trigger="created:left-button-created">
+                    <w-icon>chevron_left</w-icon>
+                </button>
+            </td>
+            <td>
+                <button data-is="w-button" data-trigger="created:right-button-created">
+                    <w-icon>chevron_right</w-icon>
+                </button>
+            </td>
+            <td>
+                <button data-is="w-button" data-trigger="created:top-button-created">
+                    <w-icon>expand_less</w-icon>
+                </button>
+            </td>
+            <td>
+                <button data-is="w-button" data-trigger="created:bottom-button-created">
+                    <w-icon>expand_more</w-icon>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>Toggle:</td>
+            <td>
+                <button data-is="w-button" data-trigger="clicked:toggle-button-clicked">
+                    <w-icon>sync</w-icon>
+                </button>
+            </td>
+        </tr>
+    </table>
 
     <script>
         function MyObserver() {
             riot.observable(this)
+
             var self = this
+            var panel = null
 
-            self.demo1 = {}
-            self.demo1.panel = null
-
-            this.on('demo1-panel-created', function (panel) {
-                self.demo1.panel = panel
+            this.on('panel-created', function (tag) {
+                panel = tag
             })
-            this.on('demo1-left-button-created', function (button) {
-                button.on('clicked', function() { self.demo1.panel.anchor = 'left' })
+            this.on('left-button-created', function (button) {
+                button.on('clicked', function () { panel.anchor = 'left' })
             })
-            this.on('demo1-right-button-created', function (button) {
-                button.on('clicked', function() { self.demo1.panel.anchor = 'right' })
+            this.on('right-button-created', function (button) {
+                button.on('clicked', function () { panel.anchor = 'right' })
             })
-            this.on('demo1-top-button-created', function (button) {
-                button.on('clicked', function() { self.demo1.panel.anchor = 'top' })
+            this.on('top-button-created', function (button) {
+                button.on('clicked', function () { panel.anchor = 'top' })
             })
-            this.on('demo1-bottom-button-created', function (button) {
-                button.on('clicked', function() { self.demo1.panel.anchor = 'bottom' })
+            this.on('bottom-button-created', function (button) {
+                button.on('clicked', function () { panel.anchor = 'bottom' })
             })
-            this.on('demo1-toggle-button-clicked', function () {
-                self.demo1.panel.toggle()
+            this.on('toggle-button-clicked', function () {
+                panel.toggle()
             })
         }
 
-        var ob = new MyObserver
-        riot.mixin({ observer: ob })
-
-        riot.mixin('Component', wordring.Component)
-
-        riot.compile(function () {
-            var tags = riot.mount('w-panel, w-button, w-icon')
-        })
-
-        //debugger
+        riot.mixin({ observer: new MyObserver })
+        riot.mount('w-panel, w-button, w-icon')
     </script>
 </body>
 

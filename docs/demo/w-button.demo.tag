@@ -1,34 +1,10 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>w-button</title>
-    <link rel="stylesheet" href="../../css/w-riot.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <script type="riot/tag" src="w-button.tag"></script>
-    <script type="riot/tag" src="../w-icon/w-icon.tag"></script>
-    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
-    <script src="../w-riot.js"></script>
-
-    <style>
-        body {
-            padding: 1em;
-        }
-    </style>
-</head>
-
-<body>
+<w-button-demo>
     <h1>w-button</h1>
 
     <h2>Flat Button</h2>
 
     <h3>Default</h3>
-    <div data-is="w-button" data-trigger="clicked:clicked">
+    <div data-is="w-button">
         Button
     </div>
 
@@ -89,16 +65,9 @@
         <w-icon>menu</w-icon>
     </button>
 
-    <script>
-        window.onload = function () {
-            function Observer() {
-                riot.observable(this)
-                this.on('clicked', function () { alert('Clicked.') })
-            }
-            riot.mixin({ observer: new Observer })
-            riot.mount('w-button')
-        }
-    </script>
-</body>
-
-</html>
+<style>
+    :scope {
+        padding: 1em;
+    }
+</style>
+</w-button-demo>

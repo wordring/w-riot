@@ -1,19 +1,26 @@
 <w-icon>
     <yield/>
 <script>
-    this.component = 'icon'
-
-    this.mixin('Component')
+    this.mixin('component')
     
     var tag = this
 
-    var el = tag.root
+    var $ = tag.$
+    var el = $.element(tag.root)
 
-    tag.on('hide', function() {
-        el.style.display = 'none'
-    })
-    tag.on('show', function() {
-        el.style.display = ''
-    })
+    tag.property(
+        'value',
+        function() { return tag.root.innerText },
+        function(val) { tag.root.innerText = val }
+    )
+    
+    tag.property(
+        'visible',
+        function() { return el.styles.display != 'none' },
+        function(val) { el.styles.display = val ? '' : 'none' }
+    )
+    
+
+    function init() {}
 </script>
 </w-icon>

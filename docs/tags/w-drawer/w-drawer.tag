@@ -1,177 +1,144 @@
 <w-drawer>
-    <w-panel ref="panel">
+    <w-panel observer={this} data-trigger="created:panel-created">
         <yield/>
     </w-panel>
 <script>
-    this.component = 'drawer'
-
-    this.mixin('Component')
-
+    this.mixin('component')
+    
     var tag = this
+
     var panel = null
 
-    var $ = tag.wordring
-    var el = tag.root
+    var $ = tag.$
+    var doc = $.element(document.body)
+    var el = $.element(tag.root)
 
-    document.body.style.overflowX = 'hidden'
+    var variants = ['temporary', 'persistent']
+    var anchors = ['left', 'right']
+
+    doc.styles.overflowX = 'hidden'
+    doc.styles.height = '100%'
 
     // anchor.
-    getAnchor() {
-        if($.hasClass(el, 'left')) return 'left'
-        if($.hasClass(el, 'right')) return 'right'
-        return null
-    }
-    setAnchor(to) {
-        var ary = ['left', 'right']
-        if(ary.indexOf(to) == -1) throw TypeError
-        $.removeClass(el, to=='left' ? 'left' : 'right')
-        $.addClass(el, to)
-    }
-    $.defineProperty(tag, 'anchor', tag.getAnchor, tag.setAnchor)
+    tag.property(
+        'anchor',
+        function() { return el.classes.find(anchors) },
+        function(val) {
+            el.classes.remove(anchors).add(val)
+            panel.anchor = val
+        }
+    )
 
     // contentPane.
-    getContentPane() { return panel.tags['w-pane'] }
-    setContentPane(opts) {
-        var root = null
-        if(tag.contentPane) {
-            root = tag.contentPane.root
-            tag.contentPane.unmount(true)
-        }
-        if(!root) {
-            root = document.createElement('div')
-            el.appendChild(root)
-        }
-        riot.mount(root, 'w-pane', opts)
-    }
-    $.defineProperty(tag, 'contentPane', tag.getContentPane, tag.setContentPane)
+    tag.property(
+        'contentPane',
+        function() { return panel.tags['w-pane'] },
+        function(opts) {
+    })
 
     // header.
-    getHeader() { return panel.tags['w-header'] }
-    setHeader(opts) {
-        var root = null
-        if(tag.header) {
-            root = tag.header.root
-            tag.header.unmount(true)
-        }
-        if(!root) {
-            root = document.createElement('div')
-            if(el.firstChild) el.insertBefore(root, el.firstChild)
-            else el.appendChild(root)
-        }
-        riot.mount(root, 'w-header', opts)
-    }
-    $.defineProperty(tag, 'header', tag.getHeader, tag.setHeader)
+    tag.property(
+        'header',
+        function() { return panel.tags['w-header'] },
+        function(opts) {
+    })
 
     // height.
-    getHeight() { return $.height(el) }
-    setHeight(val) {
-        $.height(el, val)
-        panel.height = val
-    }
-    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
+    tag.property(
+        'height',
+        function() { return el.height },
+        function(val) {
+            el.height = val
+            panel.height = val
+        }
+    )
 
-    // temporary.
-    getTemporary() { return $.hasClass(el, 'temporary') }
-    setTemporary(val) {
-        $.removeClass(el, val ? 'persistent' :  'temporary')
-        $.addClass(el, val ? 'temporary' : 'persistent')
-    }
-    $.defineProperty(tag, 'temporary', tag.getTemporary, tag.setTemporary)
+    // variant.
+    tag.property(
+        'variant',
+        function() { return el.classes.find(variants) },
+        function(val) {
+            el.classes.remove(variants).add(val)
+            el.styles.minWidth = tag.width || ''
+        }
+    )
 
     // visible.
-    getVisible() { return !$.hasClass(el, 'close') }
-    setVisible(val) {
-        if(val) tag.open()
-        else tag.close()
-    }
-    $.defineProperty(tag, 'visible', tag.getVisible, tag.setVisible)
+    tag.property(
+        'visible',
+        function() { return !el.classes.contains('close') },
+        function(val) {
+            val ? tag.open() : tag.close()
+            el.classes.add(val ? 'open' : 'close')
+        }
+    )
 
     // width.
-    getWidth() { return panel.width }
-    setWidth(val) { panel.width = val }
-    $.defineProperty(tag, 'width', tag.getWidth, tag.setWidth)
+    tag.property(
+        'width',
+        function() { return panel.width },
+        function(val) {
+            el.styles.width = el.styles.minWidth = el.maxWidth = panel.width = val }
+    )
 
     close() {
-        el.style.display = 'block'
         panel.close()
-        $.removeClass(el, 'open')
+        el.styles.minWidth = ''
+        el.classes.remove('open')
     }
 
     open() {
         panel.open()
-        $.removeClass(el, 'close')
+        el.classes.remove('close')
     }
 
-    toggle() { tag.visible = !tag.visible }
+    toggle() { tag.visible ? tag.close() : tag.open() }
 
-    handleResize() {
-        var header = tag.header
-        var contentPane = tag.contentPane
-
-        var height = tag.height
-        var headerHeight = header ? header.height : 0
-        var contentPaneHeight = height - headerHeight
-
-        if(contentPane) contentPane.height = contentPaneHeight
-    }
-
-    onMount() {
-        panel = tag.refs.panel
-        panel.on('closed', tag.onPanelClosed)
-        panel.on('created', tag.onPanelCreated)
-        panel.on('opened', tag.onPanelOpend)
+    init() {
+        return true
     }
 
     onPanelClosed() {
-        $.addClass(el, 'close')
-        el.style.minWidth = ''
+        el.classes.add('close')
         tag.trigger('closed', tag)
-    }
-
-    onPanelCreated() {
-        tag.anchor = tag.anchor || 'left'
-        if(!$.hasClass(el, 'persistent')) tag.temporary = 'temporary'
-
-        var display = el.style.display
-        el.style.display = 'block'
-
-        var style = window.getComputedStyle(el, '')
-        panel.backgroundColor = style.backgroundColor
-        el.style.backgroundColor = 'transparent'
-
-        panel.width = style.width
-        el.style.width = style.width
-
-        if(display == 'none') {
-            tag.close()
-            $.addClass(el, 'close')
-        } else {
-            tag.open()
-            $.addClass(el, 'open')
-        }
-
-
-        if(!$.hasClass(el, 'right')) panel.anchor = 'left'
-        else panel.anchor = 'right'
-
         tag.handleResize()
     }
 
     onPanelOpend() {
-        $.addClass(el, 'open')
-        el.style.minWidth = tag.width + 'px'
+        el.classes.add('open')
+        el.styles.minWidth = tag.width + 'px'
         tag.trigger('opened', tag)
         tag.handleResize()
     }
 
-    tag.on('close', tag.close)
-    tag.on('mount', tag.onMount)
-    tag.on('open', tag.open)
-    tag.on('resize', tag.handleResize)
-    tag.on('temporary', tag.temporary)
-    tag.on('toggle', tag.toggle)
+    handleResize() {
+        var header = tag.header
+        var contentPane = tag.contentPane
+        if(contentPane) contentPane.height = doc.height - (header ? header.height : 0)
+    }
+    el.handleResize(tag.handleResize)
 
-    $.handleResize(tag)
+    tag.on('panel-created', function(val) {
+        panel = val
+        panel.on('closed', tag.onPanelClosed)
+        panel.on('opened', tag.onPanelOpend)
+
+        tag.anchor = tag.anchor || 'left'
+        tag.variant = tag.variant || 'temporary'
+        
+        var style = el.computedStyle()
+        el.styles.display = 'block'
+
+        panel.backgroundColor = style.backgroundColor
+        el.styles.backgroundColor = 'transparent'
+
+        tag.width = style.width
+
+        tag.visible = style.display == 'none' ? false : true
+        tag.handleResize()
+
+        tag.trigger('created', tag)
+    })
 
 </script>
 </w-drawer>

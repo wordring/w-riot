@@ -9,6 +9,14 @@
     <title>w-header</title>
     <link rel="stylesheet" href="../../css/w-riot.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script type="riot/tag" src="w-header.tag"></script>
+    <script type="riot/tag" src="../w-button/w-button.tag"></script>
+    <script type="riot/tag" src="../w-icon/w-icon.tag"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
+    <script src="../w-riot.js"></script>
+
     <style>
         body {
             padding: 1em;
@@ -17,26 +25,17 @@
 </head>
 
 <body>
-        <h1>w-header</h1>
+    <h1>w-header</h1>
 
-        <h2>Default</h2>
-        <div data-is="w-header" style="background-color:#D1C4E9;">
-            <div class="left" style="background-color:#F8BBD0;">Left</div>
-            <div class ="fill" style="background-color:#C8E6C9">Fill</div>
-            <div class="right" style="background-color:#B3E5FC;">Right</div>
-        </div>
-
-    <script type="riot/tag" src="w-header.tag"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
-    <script src="../w-riot.js"></script>
+    <h2>Default</h2>
+    <div data-is="w-header" style="background-color:#D1C4E9;">
+        <div class="left" style="background-color:#F8BBD0;">Left</div>
+        <div class="fill" style="background-color:#C8E6C9">Fill</div>
+        <div class="right" style="background-color:#B3E5FC;">Right</div>
+    </div>
 
     <script>
-        riot.mixin('Component', wordring.Component)
-
-        riot.compile(function () {
-            var tags = riot.mount('w-header')
-        })
+        riot.mount('w-header')
     </script>
 </body>
 

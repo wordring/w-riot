@@ -1,19 +1,18 @@
 <w-header>
     <yield/>
 <script>
-    this.component = 'header'
-
-    this.mixin('Component')
-
+    this.mixin('component')
+    
     var tag = this
 
-    var $ = tag.wordring
-    var el = tag.root
+    var $ = tag.$
+    var el = $.element(tag.root)
 
     // height.
-    getHeight() { return $.height(el) }
-    setHeight(val) { $.height(el, val) }
-    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
+    tag.property(
+        'height',
+        function() { return el.height },
+        function(val) { el.height = val })
 
 </script>
 </w-header>

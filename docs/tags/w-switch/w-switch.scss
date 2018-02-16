@@ -7,7 +7,11 @@ w-switch,
     height: 3*$rem;
     width: 4*$rem;
 
-    color: $color-2-500;
+    color: $color-primary-500;
+
+    .secondary {
+        color: $color-secondary-500;
+    }
 
     >[ref="track"] {
         position: absolute;
@@ -22,11 +26,13 @@ w-switch,
     }
 
     >[ref="container"] {
-        position: relative;
+        position: absolute;
         
         height: 3*$rem;
         width: 3*$rem;
+        overflow: hidden;
         
+        border-radius: 50%;
         cursor: pointer;
     }
 
@@ -43,7 +49,7 @@ w-switch,
         box-shadow: $box-shadow;
     }
 
-    &.on {
+    &.checked {
         >[ref="track"] {
             opacity: 0.5;
         }
@@ -52,7 +58,7 @@ w-switch,
         }
     }
 
-    &.off {
+    &:not(.checked) {
         >[ref="track"] {
             background-color: #000;
             opacity: 0.38;
@@ -66,12 +72,10 @@ w-switch,
     }
 
     &.disabled {
+        color: $color-gray-900;
         >[ref="track"] {
             background-color: #000;
             opacity: 0.12;
-        }
-        w-ripple {
-            color: $color-gray-900;
         }
         [ref="thumb"] {
             background-color: $color-gray-400;

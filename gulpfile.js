@@ -32,23 +32,34 @@ gulp.task('w-riot.min.js', function () {
         .pipe(gulp.dest('docs/js/'))
 })
 
-gulp.task('w-riot.all.min.js', function () {
+gulp.task('w-riot+riot.min.js', function () {
     return gulp
         .src(['node_modules/riot/riot.js', 'docs/js/w-riot.js'])
-        .pipe(concat('w-riot.all.min.js'))
+        .pipe(concat('w-riot+riot.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('docs/js/'))
 })
 
-gulp.task('w-riot.css', function(){
+gulp.task('w-riot+riot+route.min.js', function () {
     return gulp
-        .src(['docs/theme.scss', 'docs/tags/**/*.scss'])
+        .src([
+            'node_modules/riot/riot.js',
+            'node_modules/riot-route/dist/route.js',
+            'docs/js/w-riot.js'])
+        .pipe(concat('w-riot+riot+route.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('docs/js/'))
+})
+
+gulp.task('w-riot.css', function () {
+    return gulp
+        .src(['docs/w-riot.scss', 'docs/tags/**/*.scss'])
         .pipe(sass())
         .pipe(concat('w-riot.css'))
         .pipe(gulp.dest('docs/css'))
 })
 
-gulp.task('w-riot.min.css', function(){
+gulp.task('w-riot.min.css', function () {
     return gulp
         .src('docs/css/w-riot.css')
         .pipe(cleanCSS())
@@ -56,24 +67,37 @@ gulp.task('w-riot.min.css', function(){
         .pipe(gulp.dest('docs/css'))
 })
 
+gulp.task('build-demo-js', function() {
+    return gulp
+        .src('docs/demo/*.tag')
+        .pipe(riot())
+        .pipe(concat('w-riot.demo.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('docs/js'))
+})
+
+gulp.task('build-demo-css', function(){
+    return gulp
+        .src('docs/demo/*.scss')
+        .pipe(sass())
+        .pipe(cleanCSS())
+        .pipe(concat('w-riot.demo.min.css'))
+        .pipe(gulp.dest('docs/css'))
+})
+
 gulp.task('build-js', function (callback) {
     runSequence(
-        
-            'w-riot.tags.js',
-            'w-riot.js',
-            'w-riot.min.js',
-            'w-riot.all.min.js'
-        
-    )
+        'w-riot.tags.js',
+        'w-riot.js',
+        'w-riot.min.js',
+        'w-riot+riot.min.js',
+        'w-riot+riot+route.min.js')
 })
 
 gulp.task('build-css', function (callback) {
     runSequence(
-        
-            'w-riot.css',
-            'w-riot.min.css'
-        
-    )
+        'w-riot.css',
+        'w-riot.min.css')
 })
 gulp.task('build', function () {
     gulp.run('build-css')

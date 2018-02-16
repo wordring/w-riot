@@ -10,6 +10,10 @@ w-item,
     margin: 0;
     padding: 0;
 
+    >:not(.icon) {
+        padding: 0 $rem;
+    }
+
     &.vertical {
         flex-direction: column;
     }

@@ -8,33 +8,33 @@ w-panel,
 
     overflow: hidden;
 
-    [ref="holder"] {
+    >[ref="holder"] {
         transform: translateY(0);
         transform: translateX(0);
 
         &.animation {
             transition-property: transform;
-            transition-duration: 0.3s;
+            transition-duration: 0.5s;
         }
     }
 
     &.anchor-left {
         &.close {
-            [ref="holder"] {
+            >[ref="holder"] {
                 transform: translateX(-100%);
             }
         }
     }
     &.anchor-right {
         &.close {
-            [ref="holder"] {
+            >[ref="holder"] {
                 transform: translateX(100%);
             }
         }
     }
     &.anchor-top {
         &.close {
-            [ref="holder"] {
+            >[ref="holder"] {
                 transform: translateY(-100%);
             }
         }
@@ -42,7 +42,7 @@ w-panel,
     }
     &.anchor-bottom {
         &.close {
-            [ref="holder"] {
+            >[ref="holder"] {
                 transform: translateY(100%);
             }
         }

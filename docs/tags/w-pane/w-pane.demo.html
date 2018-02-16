@@ -9,6 +9,11 @@
     <title>w-pane</title>
     <link rel="stylesheet" href="../../css/w-riot.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script type="riot/tag" src="w-pane.tag"></script>
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
+    <script src="../w-riot.js"></script>
+
     <style>
         body {
             padding: 1em;
@@ -46,17 +51,8 @@
         <span style="background-color: #7986CB;">3</span>
     </div>
 
-    <script type="riot/tag" src="w-pane.tag"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
-    <script src="../w-riot.js"></script>
-
     <script>
-        riot.mixin('Component', wordring.Component)
-
-        riot.compile(function () {
-            var tags = riot.mount('w-pane')
-        })
+        riot.mount('w-pane')
     </script>
 </body>
 

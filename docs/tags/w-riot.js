@@ -5,21 +5,156 @@
 (function (self) {
     var wordring = self.wordring || (self.wordring = {})
 
-    Object.assign = function () { throw 'Object.assign' }
+    function classes(el) {
+        var fn = function () { }
+        // の引数が配列あるいは文字列である必要がある。
+        // 文字列は、空白文字で分割する。
+        fn.array = function (val) {
+            return typeof val == 'string' ? val.split(/\s+/) : val
+        }
+        // 引数が配列あるいは文字列である必要がある。
+        // 文字列は、空白文字で分割する。
+        fn.add = function (val) {
+            el.classList.add.apply(el.classList, fn.array(val))
+            return fn
+        }
+        // クラス名に val が含まれている場合、true を返す。
+        fn.contains = function (val) {
+            return el.classList.contains(val)
+        }
+        // val 内で最初に含まれるケラス名を返す。
+        fn.find = function(val) {
+            val = fn.array(val)
+            for(var i = 0; i < val.length; i++) {
+                if(fn.contains(val[i])) return val[i]
+            }
+            return ''
+        }
+        // 引数が配列あるいは文字列である必要がある。
+        // 文字列は、空白文字で分割する。
+        fn.remove = function (val) {
+            val = fn.array(val)
+           for(var i = 0; i < val.length; i++) {
+               el.classList.remove(val[i])
+           }
+           // el.classList.remove.apply(el.classList, fn.array(val)) //ieで異常。
+            return fn
+        }
+        return fn
+    }
+
+    function element(el) {
+        if (typeof el == 'string') el = document.createElement(el)
+        var fn = function () { }
+
+        fn.root = el
+        fn.classes = classes(el)
+        fn.styles = el.style
+
+        Object.defineProperty(fn, 'height', {
+            get: function () {
+                var rect = el.getBoundingClientRect()
+                return rect.bottom - rect.top
+            },
+            set: function (val) {
+                if (typeof val != 'string') val += 'px'
+                el.style.height = val
+            }
+        })
+        Object.defineProperty(fn, 'width', {
+            get: function () {
+                var rect = el.getBoundingClientRect()
+                return rect.right - rect.left
+            },
+            set: function (val) {
+                if (typeof val != 'string') val += 'px'
+                el.style.width = val
+            }
+        })
+
+        fn.append = function (val) {
+            el.appendChild(fn.element(val))
+            return fn
+        }
+
+        fn.computedStyle = function (val) {
+            val = val || ''
+            return window.getComputedStyle(el, val)
+        }
+
+        fn.element = function (val) {
+            var type = typeof val
+            if (type == 'string') val = document.createElement(val)
+            else if (type == 'function') val = val.root
+            return val
+        }
+
+        /* CSSアニメーションの終了を監視し、callbackを呼び出す。 */
+        fn.handleAnimationEnd = function (callback, timeout) {
+            timeout = timeout || 500
+            if (window.AnimationEvent) {
+                var func = function (ev) {
+                    if(ev.target == el) {
+                        callback()
+                        el.removeEventListener('animationend', func, false)
+                    }
+                }
+                el.addEventListener('animationend', func, false)
+            } else setTimeout(callback, timeout)
+        }
+
+        /*
+        自身のサイズ変更の監視を開始する。
+        */
+        fn.handleResize = function (callback) {
+            var width = 0
+            var height = 0
+            window.addEventListener('resize', $.throttle(300, function () {
+                var w = fn.width
+                var h = fn.height
+                if (width != w || height != h) {
+                    width = w
+                    height = h
+                    callback(fn)
+                }
+            }))
+        }
+
+        /* CSSTransitionの終了を監視し、callbackを呼び出す。 */
+        fn.handleTransitionEnd = function (callback, timeout) {
+            timeout = timeout || 500
+            if (typeof el.style.transition != 'undefined') {
+                var func = function (ev) {
+                    if(ev.target == el) { 
+                        callback()
+                        el.removeEventListener('transitionend', func, false)
+                    }
+                }
+                el.addEventListener('transitionend', func, false)
+            } else setTimeout(callback, timeout)
+        }
+
+        fn.on = function (name, callback, capture) {
+            capture = capture || false // undefined の場合 false
+            el.addEventListener(name, callback, capture)
+        }
+
+        fn.off = function (name, callback, capture) {
+            capture = capture || false // undefined の場合 false
+            el.removeEventListener(name, callback, capture)
+        }
+
+        fn.prepend = function (val) {
+            val = fn.element(val)
+            if (el.firstChild) el.insertBefore(val, el.firstChild)
+            else el.appendChild(val)
+            return fn
+        }
+
+        return fn
+    }
 
     var $ = wordring.$ = {
-        addClass: function (el, classes) {
-            classes = classes.split(/\s+/)
-
-            for (var i = 0; i < classes.length; i++) {
-                className = classes[i]
-                if (el.classList) el.classList.add(className)
-                else {
-                    var re = new RegExp('(\\s|^)' + className + '(\\s|$)')
-                    if (!re.test(el.className)) el.className += ' ' + className
-                }
-            }
-        },
         assignObject: function (from) {
             var to = Object(from)
             for (var i = 1; i < arguments.length; i++) {
@@ -34,82 +169,7 @@
             }
             return to
         },
-        defineProperty: function(tag, name, getter, setter) {
-            Object.defineProperty(tag, name, {
-                get: function() { return getter ? getter() : null },
-                set: function(val) { if(setter) setter(val) },
-            })
-        },
-        device: function () {
-            var width = $.width(document.documentElement)
-            if (width < 480) return 'phone'
-            if (width < 840) return 'tablet'
-            if (width <= 1024) return 'desktop'
-            return ''
-        },
-        /* CSSアニメーションの終了を監視し、callbackを呼び出す。 */
-        handleAnimationEnd: function (el, callback) {
-            if (window.AnimationEvent) {
-                var fn = function () {
-                    callback()
-                    el.removeEventListener('animationend', fn, false)
-                }
-                el.addEventListener('animationend', fn, false)
-            } else {
-                setTimeout(callback, 500)
-            }
-        },
-        /*
-        自身のサイズ変更の監視を開始する。
-        変更された場合、'resize'をtriggerする。
-        */
-        handleResize: function (tag) {
-            var width = 0
-            var height = 0
-            window.addEventListener('resize', $.throttle(300, function () {
-                var el = tag.root
-                var w = $.width(el)
-                var h = $.height(el)
-                if (width != w || height != h) {
-                    width = w
-                    height = h
-                    tag.trigger('resize', width, height)
-                }
-            }))
-        },
-        /* CSSTransitionの終了を監視し、callbackを呼び出す。 */
-        handleTransitionEnd: function (el, callback) {
-            if (typeof el.style.transition != 'undefined') {
-                var fn = function () {
-                    callback()
-                    el.removeEventListener('transitionend', fn, false)
-                }
-                el.addEventListener('transitionend', fn, false)
-            } else {
-                setTimeout(callback, 500)
-            }
-        },
-        hasClass: function (el, className) {
-            if (el.classList) {
-                return el.classList.contains(className)
-            }
-            var re = new RegExp('(\\s|^)' + className + '(\\s|$)')
-            return re.test(el.className)
-        },
-        removeClass: function (el, classes) {
-            classes = classes.split(/\s+/)
-
-            for (var i = 0; i < classes.length; i++) {
-                className = classes[i]
-
-                if (el.classList) {
-                    el.classList.remove(className);
-                } else {
-                    var re = new RegExp('(\\s|^)' + className + '(\\s|$)');
-                    el.className = el.className.replace(re, ' ');
-                }
-            }
-        },
+        element: element,
         throttle: function (interval, callback) {
             var last = 0
             var id = 0
@@ -145,83 +205,24 @@
             str = str || ''
             return str.replace(/([A-Z])/g, function (ch) { return '-' + ch.charAt(0).toLowerCase() })
         },
-        left: function (el, val) {
-            if (typeof val != 'undefined') {
-                if (/[-]*[0-9]+$/.test(val)) val += 'px'
-                el.style.left = val
-            }
-            var rect = el.getBoundingClientRect()
-            return rect.left
-        },
-        right: function (el, val) {
-            if (typeof val != 'undefined') {
-                if (/[-]*[0-9]+$/.test(val)) val += 'px'
-                el.style.right = val
-            }
-            var rect = el.getBoundingClientRect()
-            return rect.right
-        },
-        height: function (el, h) {
-            if (typeof h != 'undefined') {
-                if (typeof h != 'string') h = h + 'px'
-                el.style.height = h
-                return
-            }
-            var rect = el.getBoundingClientRect()
-            return rect.bottom - rect.top
-        },
-        actualSize: function (base, val) {
-            if (/px$/.test(val)) return +val.replace(/px$/, '')
-            if (/%$/.test(val)) return (base / 100) * (+val.replace(/%$/, ''))
-            return +val
-        },
-        actualWidth: function (el, w) {
-            el = el || document.documentElement
-            var pw = $.width(el)
-            return $.actualSize(pw, w)
-        },
-        width: function (el, w) {
-            if (typeof w != 'undefined') {
-                if (typeof w != 'string') w = w + 'px'
-                el.style.width = w
-                return
-            }
-            var rect = el.getBoundingClientRect()
-            return rect.right - rect.left
-        },
     }
 
-    // Component data-trigger の初期化。
-    function initDataTrigger(tag) {
-        var observer = tag[tag.opts.dataObserver || 'observer']
-
-        if (tag.opts.dataTrigger && observer) {
-            var triggers = tag.opts.dataTrigger.split(/[\s]+/g)
-            for (i = 0; i < triggers.length; i++) {
-                var tmp = triggers[i].split(/[\s]*:[\s]*/)
-
-                var fn = function (to) {
-                    return function () {
-                        var args = $.toArrayFromArguments(arguments)
-                        observer.trigger.apply(null, Array.prototype.concat(to, args))
-                    }
-                }
-
-                var from = tmp[0]
-                var to = fn(tmp[1])
-                tag.on(from, to)
-                tag.on('unmount', function () { tag.off(tmp[1], to) })
-            }
+    // data-mixin の初期化。
+    function initDataMixin(tag) {
+        if (!tag.opts.dataMixin) return
+        var mixins = tag.opts.dataMixin.split(/[\s]+/g)
+        for (var i = 0; i < mixins.length; i++) {
+            tag.mixin(mixins[i])
         }
     }
 
-    // Component data-on の初期化。
+    // data-on の初期化。
     function initDataOn(tag) {
-        var observer = tag[tag.opts.dataObserver || 'observer']
+        var observer = tag.opts.observer || tag.observer
 
         if (tag.opts.dataOn && observer) {
             var listeners = tag.opts.dataOn.split(/[\s]+/g)
-            for (i = 0; i < listeners.length; i++) {
+            for (var i = 0; i < listeners.length; i++) {
                 var tmp = listeners[i].split(/[\s]*:[\s]*/)
 
                 var fn = function (to) {
@@ -236,19 +237,130 @@
         }
     }
 
-    /*
-    Containerより先にmixinする必要がある。
-    */
-    wordring.Component = {
-        init: function () {
-            var self = this
+    // data-trigger の初期化。
+    function initDataTrigger(tag) {
+        var observer = tag.opts.observer || tag.observer
 
-            this.on('mount', function () { self.trigger('created', self) })
-            this.on('unmount', function () { self.trigger('deleted', self) })
+        if (tag.opts.dataTrigger && observer) {
+            var triggers = tag.opts.dataTrigger.split(/[\s]+/g)
+            for (i = 0; i < triggers.length; i++) {
+                var tmp = triggers[i].split(/[\s]*:[\s]*/)
+                var tagTrigger = tmp[0]
+                var observerTrigger = tmp[1]
+                observerTrigger = observerTrigger || tagTrigger
 
-            initDataTrigger(this)
-            initDataOn(this)
-        },
-        wordring: $,
+                var fn = function (to) {
+                    return function () {
+                        var args = $.toArrayFromArguments(arguments)
+                        observer.trigger.apply(null, Array.prototype.concat(to, args))
+                    }
+                }
+
+                var callback = fn(observerTrigger)
+
+                tag.on(tagTrigger, callback)
+                tag.on('unmount', function () { observer.off(observerTrigger, callback) })
+            }
+        }
     }
+
+    var clickable = function(tag) {
+        var el = $.element(tag.root)
+
+        var onClick = function (ev) {
+            if (tag.disabled) return
+            tag.trigger('clicked', tag)
+        }
+        el.on('click', onClick)
+    }
+
+    wordring.button = {
+        init: function () {
+            clickable(this)
+            $.element(this.root).classes.add('button')
+        },
+    }
+    riot.mixin('button', wordring.button)
+
+    wordring.clickable = {
+        init: function () {
+            clickable(this)
+        },
+    }
+    riot.mixin('clickable', wordring.clickable)
+
+    wordring.component = {
+        $: $,
+        init: function () {
+            var tag = this
+
+            var el = tag.root
+
+            Object.defineProperty(
+                this,
+                'id',
+                {
+                    get: function() { return tag.root.id },
+                    set: function(val) { tag.root.id = val }
+                }
+            )
+            initDataTrigger(tag)
+            initDataOn(tag)
+            initDataMixin(tag)
+
+            tag.on('mount', function() {
+                var manage = false
+                if(tag.init) manage = tag.init()
+                if(!manage) tag.trigger('created', tag)
+            })
+        },
+        id: function() { return this.root.id },
+        property: function (name, getter, setter) {
+            Object.defineProperty(this, name, { get: getter, set: setter })
+        },
+    }
+    riot.mixin('component', wordring.component)
+
+    wordring.link = {
+        init: function() {
+            var tag = this
+            var el = $.element(tag.root)
+            el.classes.add('link')
+            el.on('click', function() { route(tag.opts.dataRoute) })
+        },
+    }
+    riot.mixin('link', wordring.link)
+
+    wordring.ripple = {
+        init: function () {
+            var tag = this
+
+            var effect = $.element('w-ripple-effect')
+            var ripple = $.element('w-ripple-container').append(effect)
+            var el = $.element(tag.root).prepend(ripple)
+
+            var onAnimationEnd = function () { ripple.classes.remove('active') }
+
+            var onMousedown = function (ev) {
+                var h = ripple.height = el.height
+                var w = ripple.width = el.width
+                var dx = Math.max(h, w) * 2
+                effect.height = effect.width = dx
+                var rect = ev.currentTarget.getBoundingClientRect()
+                var x = ev.clientX - rect.left
+                var y = ev.clientY - rect.top
+                effect.root.style.left = (x - dx / 2) + 'px'
+                effect.root.style.top = (y - dx / 2) + 'px'
+
+                effect.root.style.backgroundColor = tag.opts.dataRippleColor || getComputedStyle(el.root, '').color
+
+                effect.handleAnimationEnd(onAnimationEnd, 500)
+                ripple.classes.add('active')
+            }
+
+            el.on('click', onMousedown)
+        },
+    }
+    riot.mixin('ripple', wordring.ripple)
+
 })(this);

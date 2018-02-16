@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>w-switch</title>
+    <title>w-icon</title>
     <link rel="stylesheet" href="../../css/w-riot.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <script type="riot/tag" src="w-switch.tag"></script>
-    <script type="riot/tag" src="../w-component/w-component.tag"></script>
+    <script type="riot/tag" src="w-icon.tag"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
     <script src="../w-riot.js"></script>
 
@@ -23,25 +23,16 @@
 </head>
 
 <body>
-    <h1>w-switch</h1>
+    <h1>w-icon</h1>
 
     <h2>Default</h2>
-    <div data-is="w-switch"></div>
-
-    <h2>Checked</h2>
-    <div data-is="w-switch" class="checked"></div>
+    <div data-is="w-icon">menu</div>
 
     <h2>Color</h2>
-    <div data-is="w-switch" style="color:blue;"></div>
-
-    <h2>Disabled</h2>
-    <div data-is="w-switch" class="disabled"></div>
-
-    <h2>Disabled and Checked</h2>
-    <div data-is="w-switch" class="disabled checked"></div>
+    <div data-is="w-icon" style="color:red;">menu</div>
 
     <script>
-        riot.mount('w-switch')
+        riot.mount('w-icon')
     </script>
 </body>
 

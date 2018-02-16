@@ -45,11 +45,10 @@
             <span class="left">Left</span>
         </li>
     </ul>
-    <script type="riot/tag" src="w-list.tag"></script>
+    <!-- script type="riot/tag" src="w-list.tag"></script -->
     <script type="riot/tag" src="../w-item/w-item.tag"></script>
 
     <script type="riot/tag" src="../w-button/w-button.tag"></script>
-    <script type="riot/tag" src="../w-ripple/w-ripple.tag"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
 
@@ -64,11 +63,10 @@
 
         var ob = new MyObserver
         riot.mixin({ observer: ob })
-        riot.mixin('Component', wordring.Component)
 
 
         riot.compile(function () {
-            var tags = riot.mount('w-list')
+            var tags = riot.mount('w-item')
         })
 
         //debugger

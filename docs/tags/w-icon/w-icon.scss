@@ -9,12 +9,17 @@ w-icon,
     //line-height: 1;
     letter-spacing: normal;
     text-transform: none;
-    display: inline-block;
+    //display: inline-block;
     white-space: nowrap;
     word-wrap: normal;
     direction: ltr;
     font-feature-settings: 'liga';
 
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 0;
     //vertical-align: middle;
 }
 

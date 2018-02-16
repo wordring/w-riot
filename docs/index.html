@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>w-riot</title>
-    
+    <title>W-RIOT</title>
+
     <link rel="stylesheet" href="css/w-riot.min.css" />
-    <script src="js/w-riot.all.min.js"></script>
+    <script src="js/w-riot+riot+route.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         p {
@@ -40,9 +40,9 @@
 
 <body>
     <div class="app-container">
-        <nav data-is="w-drawer" class="persistent" data-trigger="created:left-drawer-created" style="display: block;">
+        <nav data-is="w-drawer" class="persistent" data-trigger="created:left-drawer-created" style="display: none;">
             <div data-is="w-header" class="drawer-header">
-                <span class="fill">メニュー</span>
+                <span class="fill"></span>
                 <w-button class="right" data-trigger="created:left-drawer-button-created">
                     <w-icon>chevron_left</w-icon>
                 </w-button>
@@ -50,11 +50,15 @@
             <div data-is="w-pane" class="vertical">
                 <ul data-is="w-list">
                     <li data-is="w-item">
-                        <span class="fill">Temporary:</span>
-                        <w-switch class="right" data-trigger="created:left-temporary-button-created"></w-switch>
+                        <ul data-is="w-list">
+                            <li data-is="w-header">
+                                <a href="#">Components</a>
+                            </li>
+                            <li data-is="w-item">
+                            </li>
+                        </ul>
                     </li>
                     <li data-is="w-item">
-                        <span>Drawer</span>
                     </li>
                 </ul>
             </div>
@@ -65,13 +69,14 @@
                 <div data-is="w-button" data-ripple-color="white" data-trigger="created:header-left-button-created">
                     <i data-is="w-icon">menu</i>
                 </div>
-                <h1 class="fill">w-riot</h1>
+                <h1 class="fill">W-RIOT</h1>
                 <w-button class="right" data-ripple-color="white" data-trigger="created:header-right-button-created">
                     <div data-is="w-icon">more_vert</div>
                 </w-button>
             </header>
             <main>
                 <h1>Title</h1>
+                <demo></demo>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
                     magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
                     commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
@@ -95,7 +100,7 @@
             <footer></footer>
         </div>
 
-        <w-drawer class="right" data-trigger="created:right-drawer-created" style="display: none;">
+        <nav data-is="w-drawer" class="right" data-trigger="created:right-drawer-created" style="display: none;">
             <div data-is="w-header" class="drawer-header">
                 <w-button class="left" data-ripple-color="white" data-trigger="created:right-drawer-button-created">
                     <w-icon>chevron_right</w-icon>
@@ -125,7 +130,7 @@
                     </li>
                 </ul>
             </div>
-        </w-drawer>
+        </nav>
     </div>
 
     <script>
@@ -173,6 +178,9 @@
         riot.mixin('Component', wordring.Component)
 
         var tags = riot.mount('w-pane, w-drawer')
+
+        route('*', function(name){console.log(name)})
+        route.start(true)
     </script>
 </body>
 

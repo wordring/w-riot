@@ -1,479 +1,351 @@
+riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
+});
 riot.tag2('w-app', '<yield></yield>', '', '', function(opts) {
-    this.component = 'app'
-
-    this.mixin('Component')
-
     var tag = this
-    var $ = tag.wordring
+    var $ = tag.$
     var el = tag.root
-
 });
 
-riot.tag2('w-button', '<w-ripple ref="ripple" class="center middle"></w-ripple> <yield></yield>', '', 'onclick="{onClick}"', function(opts) {
-    this.component = 'button'
-
-    this.mixin('Component')
+riot.tag2('w-header', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
 
     var tag = this
-    var ripple = null
 
-    var $ = tag.wordring
-    var el = tag.root
+    var $ = tag.$
+    var el = $.element(tag.root)
 
-    this.onClick = function(ev) {
-        tag.trigger('clicked')
-    }.bind(this)
-
-    this.onMount = function() {
-        ripple = tag.refs.ripple
-        tag.onUpdate()
-    }.bind(this)
-
-    this.onUpdate = function() {
-        ripple.root.style.color = tag.opts.dataRippleColor
-    }.bind(this)
-
-    tag.on('mount', tag.onMount)
-    tag.on('update', tag.onUpdate)
+    tag.property(
+        'height',
+        function() { return el.height },
+        function(val) { el.height = val })
 
 });
-riot.tag2('w-drawer', '<w-panel ref="panel"> <yield></yield> </w-panel>', '', '', function(opts) {
-    this.component = 'drawer'
-
-    this.mixin('Component')
+riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
 
     var tag = this
+
+    var $ = tag.$
+    var el = $.element(tag.root)
+
+    tag.property(
+        'value',
+        function() { return tag.root.innerText },
+        function(val) { tag.root.innerText = val }
+    )
+
+    tag.property(
+        'visible',
+        function() { return el.styles.display != 'none' },
+        function(val) { el.styles.display = val ? '' : 'none' }
+    )
+
+    function init() {}
+});
+riot.tag2('w-drawer', '<w-panel observer="{this}" data-trigger="created:panel-created"> <yield></yield> </w-panel>', '', '', function(opts) {
+    this.mixin('component')
+
+    var tag = this
+
     var panel = null
 
-    var $ = tag.wordring
-    var el = tag.root
+    var $ = tag.$
+    var doc = $.element(document.body)
+    var el = $.element(tag.root)
 
-    document.body.style.overflowX = 'hidden'
+    var variants = ['temporary', 'persistent']
+    var anchors = ['left', 'right']
 
-    this.getAnchor = function() {
-        if($.hasClass(el, 'left')) return 'left'
-        if($.hasClass(el, 'right')) return 'right'
-        return null
-    }.bind(this)
-    this.setAnchor = function(to) {
-        var ary = ['left', 'right']
-        if(ary.indexOf(to) == -1) throw TypeError
-        $.removeClass(el, to=='left' ? 'left' : 'right')
-        $.addClass(el, to)
-    }.bind(this)
-    $.defineProperty(tag, 'anchor', tag.getAnchor, tag.setAnchor)
+    doc.styles.overflowX = 'hidden'
+    doc.styles.height = '100%'
 
-    this.getContentPane = function() { return panel.tags['w-pane'] }.bind(this)
-    this.setContentPane = function(opts) {
-        var root = null
-        if(tag.contentPane) {
-            root = tag.contentPane.root
-            tag.contentPane.unmount(true)
+    tag.property(
+        'anchor',
+        function() { return el.classes.find(anchors) },
+        function(val) {
+            el.classes.remove(anchors).add(val)
+            panel.anchor = val
         }
-        if(!root) {
-            root = document.createElement('div')
-            el.appendChild(root)
+    )
+
+    tag.property(
+        'contentPane',
+        function() { return panel.tags['w-pane'] },
+        function(opts) {
+    })
+
+    tag.property(
+        'header',
+        function() { return panel.tags['w-header'] },
+        function(opts) {
+    })
+
+    tag.property(
+        'height',
+        function() { return el.height },
+        function(val) {
+            el.height = val
+            panel.height = val
         }
-        riot.mount(root, 'w-pane', opts)
-    }.bind(this)
-    $.defineProperty(tag, 'contentPane', tag.getContentPane, tag.setContentPane)
+    )
 
-    this.getHeader = function() { return panel.tags['w-header'] }.bind(this)
-    this.setHeader = function(opts) {
-        var root = null
-        if(tag.header) {
-            root = tag.header.root
-            tag.header.unmount(true)
+    tag.property(
+        'variant',
+        function() { return el.classes.find(variants) },
+        function(val) {
+            el.classes.remove(variants).add(val)
+            el.styles.minWidth = tag.width || ''
         }
-        if(!root) {
-            root = document.createElement('div')
-            if(el.firstChild) el.insertBefore(root, el.firstChild)
-            else el.appendChild(root)
+    )
+
+    tag.property(
+        'visible',
+        function() { return !el.classes.contains('close') },
+        function(val) {
+            val ? tag.open() : tag.close()
+            el.classes.add(val ? 'open' : 'close')
         }
-        riot.mount(root, 'w-header', opts)
-    }.bind(this)
-    $.defineProperty(tag, 'header', tag.getHeader, tag.setHeader)
+    )
 
-    this.getHeight = function() { return $.height(el) }.bind(this)
-    this.setHeight = function(val) {
-        $.height(el, val)
-        panel.height = val
-    }.bind(this)
-    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
-
-    this.getTemporary = function() { return $.hasClass(el, 'temporary') }.bind(this)
-    this.setTemporary = function(val) {
-        $.removeClass(el, val ? 'persistent' :  'temporary')
-        $.addClass(el, val ? 'temporary' : 'persistent')
-    }.bind(this)
-    $.defineProperty(tag, 'temporary', tag.getTemporary, tag.setTemporary)
-
-    this.getVisible = function() { return !$.hasClass(el, 'close') }.bind(this)
-    this.setVisible = function(val) {
-        if(val) tag.open()
-        else tag.close()
-    }.bind(this)
-    $.defineProperty(tag, 'visible', tag.getVisible, tag.setVisible)
-
-    this.getWidth = function() { return panel.width }.bind(this)
-    this.setWidth = function(val) { panel.width = val }.bind(this)
-    $.defineProperty(tag, 'width', tag.getWidth, tag.setWidth)
+    tag.property(
+        'width',
+        function() { return panel.width },
+        function(val) {
+            el.styles.width = el.styles.minWidth = el.maxWidth = panel.width = val }
+    )
 
     this.close = function() {
-        el.style.display = 'block'
         panel.close()
-        $.removeClass(el, 'open')
+        el.styles.minWidth = ''
+        el.classes.remove('open')
     }.bind(this)
 
     this.open = function() {
         panel.open()
-        $.removeClass(el, 'close')
+        el.classes.remove('close')
     }.bind(this)
 
-    this.toggle = function() { tag.visible = !tag.visible }.bind(this)
+    this.toggle = function() { tag.visible ? tag.close() : tag.open() }.bind(this)
 
-    this.handleResize = function() {
-        var header = tag.header
-        var contentPane = tag.contentPane
-
-        var height = tag.height
-        var headerHeight = header ? header.height : 0
-        var contentPaneHeight = height - headerHeight
-
-        if(contentPane) contentPane.height = contentPaneHeight
-    }.bind(this)
-
-    this.onMount = function() {
-        panel = tag.refs.panel
-        panel.on('closed', tag.onPanelClosed)
-        panel.on('created', tag.onPanelCreated)
-        panel.on('opened', tag.onPanelOpend)
+    this.init = function() {
+        return true
     }.bind(this)
 
     this.onPanelClosed = function() {
-        $.addClass(el, 'close')
-        el.style.minWidth = ''
+        el.classes.add('close')
         tag.trigger('closed', tag)
-    }.bind(this)
-
-    this.onPanelCreated = function() {
-        tag.anchor = tag.anchor || 'left'
-        if(!$.hasClass(el, 'persistent')) tag.temporary = 'temporary'
-
-        var display = el.style.display
-        el.style.display = 'block'
-
-        var style = window.getComputedStyle(el, '')
-        panel.backgroundColor = style.backgroundColor
-        el.style.backgroundColor = 'transparent'
-
-        panel.width = style.width
-        el.style.width = style.width
-
-        if(display == 'none') {
-            tag.close()
-            $.addClass(el, 'close')
-        } else {
-            tag.open()
-            $.addClass(el, 'open')
-        }
-
-        if(!$.hasClass(el, 'right')) panel.anchor = 'left'
-        else panel.anchor = 'right'
-
         tag.handleResize()
     }.bind(this)
 
     this.onPanelOpend = function() {
-        $.addClass(el, 'open')
-        el.style.minWidth = tag.width + 'px'
+        el.classes.add('open')
+        el.styles.minWidth = tag.width + 'px'
         tag.trigger('opened', tag)
         tag.handleResize()
     }.bind(this)
 
-    tag.on('close', tag.close)
-    tag.on('mount', tag.onMount)
-    tag.on('open', tag.open)
-    tag.on('resize', tag.handleResize)
-    tag.on('temporary', tag.temporary)
-    tag.on('toggle', tag.toggle)
+    this.handleResize = function() {
+        var header = tag.header
+        var contentPane = tag.contentPane
+        if(contentPane) contentPane.height = doc.height - (header ? header.height : 0)
+    }.bind(this)
+    el.handleResize(tag.handleResize)
 
-    $.handleResize(tag)
+    tag.on('panel-created', function(val) {
+        panel = val
+        panel.on('closed', tag.onPanelClosed)
+        panel.on('opened', tag.onPanelOpend)
 
-});
-riot.tag2('w-header', '<yield></yield>', '', '', function(opts) {
-    this.component = 'header'
+        tag.anchor = tag.anchor || 'left'
+        tag.variant = tag.variant || 'temporary'
 
-    this.mixin('Component')
+        var style = el.computedStyle()
+        el.styles.display = 'block'
 
-    var tag = this
+        panel.backgroundColor = style.backgroundColor
+        el.styles.backgroundColor = 'transparent'
 
-    var $ = tag.wordring
-    var el = tag.root
+        tag.width = style.width
 
-    this.getHeight = function() { return $.height(el) }.bind(this)
-    this.setHeight = function(val) { $.height(el, val) }.bind(this)
-    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
+        tag.visible = style.display == 'none' ? false : true
+        tag.handleResize()
 
-});
-riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
-    this.component = 'icon'
-
-    this.mixin('Component')
-
-    var tag = this
-
-    var el = tag.root
-
-    tag.on('hide', function() {
-        el.style.display = 'none'
+        tag.trigger('created', tag)
     })
-    tag.on('show', function() {
-        el.style.display = ''
-    })
+
 });
+
 riot.tag2('w-item', '', '', '', function(opts) {
-});
-riot.tag2('w-list', '<yield></yield>', '', '', function(opts) {
-    this.component = 'list'
-
-    this.mixin('Component')
-
-    var tag = this
-    var $ = tag.wordring
-
-    var el = tag.root
-
+    this.mixin('component')
 });
 riot.tag2('w-pane', '<yield></yield>', '', '', function(opts) {
-    this.component = 'pane'
-    this.mixin('Component')
+    this.mixin('component')
 
     var tag = this
 
-    var $ = tag.wordring
-    var el = tag.root
+    var $ = tag.$
+    var el = $.element(tag.root)
 
-    this.getHeight = function() { return $.height(el) }.bind(this)
-    this.setHeight = function(val) { $.height(el, val) }.bind(this)
-    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
+    tag.property(
+        'height',
+        function() { return el.height },
+        function(val) { el.height = val }
+    )
+
+    tag.property(
+        'width',
+        function() { return el.width },
+        function(val) { el.width = val }
+    )
 
 });
 riot.tag2('w-panel', '<div ref="holder"> <yield></yield> </div>', '', '', function(opts) {
-
-    this.component = 'panel'
-
-    this.mixin('Component')
+    this.mixin('component')
 
     var tag = this
+    var $ = tag.$
+    var el = null
+    var holder = null
 
-    var $ = tag.wordring
-    var el = tag.root
+    var anchors = ['anchor-left', 'anchor-right', 'anchor-top', 'anchor-bottom']
 
-    var anchor = ''
-    var transition = false
+    tag.property(
+        'anchor',
+        function() { return el.classes.find(anchors).replace(/^anchor-/, '') },
+        function(val) { if(val) el.classes.remove(anchors).add('anchor-' + val) }
+    )
 
-    this.getAnchor = function() { return anchor }.bind(this)
-    this.setAnchor = function(to) {
-        var ary = ['left', 'right', 'top', 'bottom']
-        if(ary.indexOf(to) == -1) throw TypeError
+    tag.property(
+        'animation',
+        function() { return holder.classes.contains('animation') },
+        function(val) { val ? holder.classes.add('animation') : holder.classes.remove('animation') }
+    )
 
-        anchor = to
+    tag.property(
+        'backgroundColor',
+        function() { return holder.styles.backgroundColor },
+        function(val) { holder.styles.backgroundColor = val }
+    )
 
-        for(var i = 0; i < ary.length; i++) {
-            var atom = 'anchor-' + ary[i]
-            if(to) $.removeClass(el, atom)
-            else if($.hasClass(el, atom)) return ary[i]
-        }
-        if(to) $.addClass(el, 'anchor-' + to)
-    }.bind(this)
-    $.defineProperty(tag, 'anchor', tag.getAnchor, tag.setAnchor)
+    tag.property(
+        'height',
+        function() { return holder.height },
+        function(val) { holder.height = val }
+    )
 
-    this.getBackgroundColor = function() { return tag.refs.holder.style.backgroundColor }.bind(this)
-    this.setBackgroundColor = function(color) {
-        tag.refs.holder.style.backgroundColor = color
-    }.bind(this)
-    $.defineProperty(tag, 'backgroundColor', tag.getBackgroundColor, tag.setBackgroundColor)
+    tag.property(
+        'transition',
+        function() { return el.classes.contains('transition') },
+        function(val) { val ? el.classes.add('transition') : el.classes.remove('transition') }
+    )
 
-    this.getHeight = function() { return $.height(tag.refs.holder) }.bind(this)
-    this.setHeight = function(val) {
-        $.height(tag.refs.holder, val)
-    }.bind(this)
-    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
+    tag.property(
+        'visible',
+        function() { return !el.classes.contains('close') },
+        function(val) { val ? tag.open() : tag.close() }
+    )
 
-    this.getVisible = function() { return !$.hasClass(el, 'close') }.bind(this)
-    this.setVisible = function(val) {
-        if(val) tag.open()
-        else tag.close()
-    }.bind(this)
-    $.defineProperty(tag, 'visible', tag.getVisible, tag.setVisible)
-
-    this.getWidth = function() { return $.width(tag.refs.holder) }.bind(this)
-    this.setWidth = function(val) {
-        $.width(tag.refs.holder, val)
-    }.bind(this)
-    $.defineProperty(tag, 'width', tag.getWidth, tag.setWidth)
+    tag.property(
+        'width',
+        function() { return holder.width },
+        function(val) { holder.width = val }
+    )
 
     this.close = function() {
-        if(transition || !tag.visible) return
-        transition = true
-        $.addClass(el, 'close')
+        if(tag.transition || !tag.visible) return
+        tag.transition = true
+        el.classes.add('close')
 
         function fn() {
-            transition = false
-            tag.refs.holder.style.position = 'absolute'
+            tag.transition = false
+            holder.styles.position = 'absolute'
             tag.trigger('closed', tag)
         }
-        if($.hasClass(tag.refs.holder, 'animation')) $.handleTransitionEnd(tag.refs.holder, fn)
-        else fn()
+        tag.animation ? holder.handleTransitionEnd(fn) : fn()
     }.bind(this)
 
     this.open = function() {
-        if(transition || tag.visible) return
-        transition = true
-        tag.refs.holder.style.position = ''
-        $.removeClass(el, 'close')
+        if(tag.transition || tag.visible) return
+
+        tag.transition = true
+        holder.styles.position = ''
+        el.classes.remove('close')
 
         function fn() {
-            transition = false
+            tag.transition = false
             tag.trigger('opened', tag)
         }
-        if($.hasClass(tag.refs.holder, 'animation')) $.handleTransitionEnd(tag.refs.holder, fn)
-        else fn()
+        tag.animation ? holder.handleTransitionEnd(fn) : fn()
     }.bind(this)
 
     this.toggle = function() {
         tag.visible = !tag.visible
     }.bind(this)
 
-    this.onMount = function() {
-        if(el.style.display == 'none') {
+    this.init = function() {
+        el = $.element(tag.root)
+        holder = $.element(tag.refs.holder)
+        if(el.styles.display == 'none') {
             tag.close()
-            el.style.display = ''
+            el.styles.display = ''
         }
-        $.addClass(tag.refs.holder, 'animation')
+        holder.classes.add('animation')
+        tag.anchor = tag.opts.dataAnchor || (tag.anchor || 'top')
     }.bind(this)
-
-    tag.on('mount', tag.onMount)
-
 });
-riot.tag2('w-ripple', '<span ref="effect"></span>', '', '', function(opts) {
-    this.component = 'ripple'
-
-    this.mixin('Component')
-
-    var $ = this.wordring
+riot.tag2('w-switch', '<div ref="track"></div> <div ref="container" data-mixin="ripple" onclick="{onClick}"> <div ref="thumb"></div> </div>', '', '', function(opts) {
+    this.mixin('component')
 
     var tag = this
+    var container = null
 
-    var el = tag.root
-    var parent = null
-    var effect = null
+    var $ = tag.$
+    var el = $.element(tag.root)
+    var track = null
+    var thumb = null
 
-    this.onMousedown = function(ev) {
-        var dx = Math.max($.width(el), $.height(el)) * 2
-        $.width(effect, dx)
-        $.height(effect, dx)
-        var rect = ev.currentTarget.getBoundingClientRect()
-        var x = ev.clientX - rect.left
-        var y = ev.clientY - rect.top
-        effect.style.left = (x - dx / 2) + 'px'
-        effect.style.top = (y - dx / 2) + 'px'
-
-        if(!$.hasClass(el, 'active') && !$.hasClass(el, 'disabled')) {
-            $.addClass(el, 'active')
-            if(!window.AnimationEvent) setTimeout(tag.onAnimationEnd, 500)
-        }
-    }.bind(this)
-
-    this.onAnimationEnd = function(ev) {
-        $.removeClass(el, 'active')
-    }.bind(this)
-
-    this.onMount = function() {
-        effect = tag.refs.effect
-
-        el.addEventListener('click', tag.onMousedown)
-        if(window.AnimationEvent) {
-            effect.addEventListener('animationend', tag.onAnimationEnd, false)
-        }
-        tag.onUpdate()
-    }.bind(this)
-
-    this.onUpdate = function() {
-        parent = el.parentElement
-
-        $.height(el, $.height(parent))
-        $.width(el, $.width(parent))
-
-        var style = window.getComputedStyle(el, '')
-        effect.style.backgroundColor = style.color
-    }.bind(this)
-
-    tag.on('mount', tag.onMount)
-    tag.on('update', tag.onUpdate)
-
-});
-riot.tag2('w-switch', '<div ref="track"></div> <div ref="container" onclick="{onClick}"> <w-ripple ref="ripple" class="circle"></w-ripple> <div ref="thumb"></div> </div>', '', '', function(opts) {
-    this.component = 'switch'
-
-    this.mixin('Component')
-
-    var tag = this
-
-    var $ = tag.wordring
-    var el = tag.root
-
-    this.getChecked = function() { return tag.value == 'on' }.bind(this)
-    this.setChecked = function(val) { tag.value = val ? 'on' : 'off' }.bind(this)
-    $.defineProperty(tag, 'checked', tag.getChecked, tag.setChecked)
-
-    this.getColor = function() {
-        var style = window.getComputedStyle(el, '')
-        var color = style.color || ''
-        color = tag.checked ? color : ''
-        return tag.disabled ? '' : color
-    }.bind(this)
-    this.setColor = function(val) {
-        tag.refs.track.style.backgroundColor = tag.refs.thumb.style.backgroundColor = val
-    }.bind(this)
-    $.defineProperty(tag, 'color', tag.getColor, tag.setColor)
-
-    this.getDisabled = function() { return $.hasClass(el, 'disabled') }.bind(this)
-    this.setDisabled = function(val) {
-        if(val === true) $.addClass(el, 'disabled')
-        else {
-            $.removeClass(el, 'disabled')
+    tag.property(
+        'checked',
+        function() { return el.classes.contains('checked') },
+        function(val) {
+            el.handleTransitionEnd(tag.handleTransitionEnd)
+            tag.transition = true
+            if(val) el.classes.add('checked')
+            else el.classes.remove('checked')
             tag.color = tag.color
-        }
-    }.bind(this)
-    $.defineProperty(tag, 'disabled', tag.getDisabled, tag.setDisabled)
+    })
 
-    this.getValue = function() { return $.hasClass(el, 'on') ? 'on' : 'off' }.bind(this)
-    this.setValue = function(val) {
-        var ary = ['on', 'off']
-        if(ary.indexOf(val) == -1) throw TypeError
+    tag.property(
+        'color',
+        function() {
+            var style = el.computedStyle()
+            return tag.disabled ? '' : (tag.checked ? (style.color || '') : '')
+        },
+        function(val) { track.styles.backgroundColor = thumb.styles.backgroundColor = val }
+    )
 
-        $.handleTransitionEnd(el, tag.handleTransitionEnd)
-        tag.transition = true
+    tag.property(
+        'disabled',
+        function () { return el.classes.contains('disabled') },
+        function (val) {
+            if(val) el.classes.add('disabled')
+            else {
+                el.classes.remove('disabled')
+                tag.color = tag.color
+            }
+    })
 
-        $.removeClass(el, val == 'on' ? 'off' : 'on')
-        $.addClass(el, val)
-
-        tag.color = tag.color
-    }.bind(this)
-    $.defineProperty(tag, 'value', tag.getValue, tag.setValue)
-
-    this.getTransition = function() { return $.hasClass(el, 'animation') }.bind(this)
-    this.setTransition = function(val) {
-        if(val) $.addClass(el, 'animation')
-        else $.removeClass(el, 'animation')
-    }.bind(this)
-    $.defineProperty(tag, 'transition', tag.getTransition, tag.setTransition)
+    tag.property(
+        'transition',
+        function() { return el.classes.contains('animation') },
+        function(val) {
+            if(val) el.classes.add('animation')
+            else el.classes.remove('animation')
+    })
 
     this.toggle = function() {
-        if(tag.disabled) return
-        tag.checked = !tag.checked
+        if(!tag.disabled) tag.checked = !tag.checked
     }.bind(this)
 
     this.handleTransitionEnd = function() {
@@ -485,11 +357,16 @@ riot.tag2('w-switch', '<div ref="track"></div> <div ref="container" onclick="{on
         tag.trigger('clicked')
     }.bind(this)
 
-    this.onMount = function() {
-        if(!$.hasClass(el, 'on')) $.addClass(el, 'off')
+    this.init = function() {
+        container = riot.mount(tag.refs.container, 'w-component')[0]
+        track = $.element(tag.refs.track)
+        thumb = $.element(container.refs.thumb)
         tag.color = tag.color
     }.bind(this)
 
-    tag.on('mount', tag.onMount)
-
+});
+riot.tag2('w-button', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
+    this.mixin('button')
+    this.mixin('ripple')
 });

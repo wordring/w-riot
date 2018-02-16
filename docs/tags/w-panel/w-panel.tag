@@ -3,110 +3,104 @@
         <yield/>
     </div>
 <script>
-/*
-    trigger
-        closed(tag)
-        opened(tag)
-*/
-    this.component = 'panel'
-
-    this.mixin('Component')
-
+    this.mixin('component')
+    
     var tag = this
+    var $ = tag.$
+    var el = null
+    var holder = null
 
-    var $ = tag.wordring
-    var el = tag.root
-
-    var anchor = ''
-    var transition = false
+    var anchors = ['anchor-left', 'anchor-right', 'anchor-top', 'anchor-bottom']
 
     // anchor.
-    getAnchor() { return anchor }
-    setAnchor(to) {
-        var ary = ['left', 'right', 'top', 'bottom']
-        if(ary.indexOf(to) == -1) throw TypeError
-        
-        anchor = to
+    tag.property(
+        'anchor',
+        function() { return el.classes.find(anchors).replace(/^anchor-/, '') },
+        function(val) { if(val) el.classes.remove(anchors).add('anchor-' + val) }
+    )
 
-        for(var i = 0; i < ary.length; i++) {
-            var atom = 'anchor-' + ary[i]
-            if(to) $.removeClass(el, atom)
-            else if($.hasClass(el, atom)) return ary[i]
-        }
-        if(to) $.addClass(el, 'anchor-' + to)
-    }
-    $.defineProperty(tag, 'anchor', tag.getAnchor, tag.setAnchor)
+    // animation.
+    tag.property(
+        'animation',
+        function() { return holder.classes.contains('animation') },
+        function(val) { val ? holder.classes.add('animation') : holder.classes.remove('animation') }
+    )
 
     // bacgroundColor.
-    getBackgroundColor() { return tag.refs.holder.style.backgroundColor }
-    setBackgroundColor(color) {
-        tag.refs.holder.style.backgroundColor = color
-    }
-    $.defineProperty(tag, 'backgroundColor', tag.getBackgroundColor, tag.setBackgroundColor)
+    tag.property(
+        'backgroundColor',
+        function() { return holder.styles.backgroundColor },
+        function(val) { holder.styles.backgroundColor = val }
+    )
 
     // height.
-    getHeight() { return $.height(tag.refs.holder) }
-    setHeight(val) {
-        $.height(tag.refs.holder, val)
-    }
-    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
+    tag.property(
+        'height',
+        function() { return holder.height },
+        function(val) { holder.height = val }
+    )
+
+    // transition.
+    tag.property(
+        'transition',
+        function() { return el.classes.contains('transition') },
+        function(val) { val ? el.classes.add('transition') : el.classes.remove('transition') }
+    )
 
     // visible.
-    getVisible() { return !$.hasClass(el, 'close') }
-    setVisible(val) {
-        if(val) tag.open()
-        else tag.close()
-    }
-    $.defineProperty(tag, 'visible', tag.getVisible, tag.setVisible)
+    tag.property(
+        'visible',
+        function() { return !el.classes.contains('close') },
+        function(val) { val ? tag.open() : tag.close() }
+    )
 
     // width.
-    getWidth() { return $.width(tag.refs.holder) }
-    setWidth(val) {
-        $.width(tag.refs.holder, val)
-    }
-    $.defineProperty(tag, 'width', tag.getWidth, tag.setWidth)
+    tag.property(
+        'width',
+        function() { return holder.width },
+        function(val) { holder.width = val }
+    )
 
     close() {
-        if(transition || !tag.visible) return
-        transition = true
-        $.addClass(el, 'close')
+        if(tag.transition || !tag.visible) return
+        tag.transition = true
+        el.classes.add('close')
 
         function fn() {
-            transition = false
-            tag.refs.holder.style.position = 'absolute'
+            tag.transition = false
+            holder.styles.position = 'absolute'
             tag.trigger('closed', tag)
         }
-        if($.hasClass(tag.refs.holder, 'animation')) $.handleTransitionEnd(tag.refs.holder, fn)
-        else fn()
+        tag.animation ? holder.handleTransitionEnd(fn) : fn()
     }
 
     open() {
-        if(transition || tag.visible) return
-        transition = true
-        tag.refs.holder.style.position = ''
-        $.removeClass(el, 'close')
+        if(tag.transition || tag.visible) return
+
+        tag.transition = true
+        holder.styles.position = ''
+        el.classes.remove('close')
 
         function fn() {
-            transition = false
+            tag.transition = false
             tag.trigger('opened', tag)
         }
-        if($.hasClass(tag.refs.holder, 'animation')) $.handleTransitionEnd(tag.refs.holder, fn)
-        else fn()
+        tag.animation ? holder.handleTransitionEnd(fn) : fn()
     }
 
     toggle() {
         tag.visible = !tag.visible
     }
 
-    onMount() {
-        if(el.style.display == 'none') {
+    init() {
+        el = $.element(tag.root)
+        holder = $.element(tag.refs.holder)
+        if(el.styles.display == 'none') {
             tag.close()
-            el.style.display = ''
+            el.styles.display = ''
         }
-        $.addClass(tag.refs.holder, 'animation')
+        holder.classes.add('animation')
+        tag.anchor = tag.opts.dataAnchor || (tag.anchor || 'top')
     }
-
-    tag.on('mount', tag.onMount)
-
 </script>
 </w-panel>

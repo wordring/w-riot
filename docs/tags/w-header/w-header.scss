@@ -7,35 +7,25 @@ w-header,
     flex-shrink: 0;
     position: relative;
 
-    height: 3.5*$rem;
+    min-height: 3.5*$rem;
 
     font-size: 0;
     * {
+        margin: 0;
         font-size: $rem;
-    }
-
-    .left {
-        order: -1;
-    }
-    .right {
-        order: 1;
-    }
-    .fill {
-        flex-grow: 1;
-    }
-
-    w-button,
-    [data-is="w-button"] {
-        margin: 4px;
-        height: 3*$rem;
-        width: 3*$rem;
     }
     w-icon,
     [data-is="w-icon"] {
         font-size: 1.5*$rem;
     }
 
-    span {
+    w-button,
+    [data-is="w-button"] {
+        height: 3.5*$rem;
+        width: 3.5*$rem;
+    }
+
+    :not(.icon) {
         padding: 0 $rem;
     }
 }

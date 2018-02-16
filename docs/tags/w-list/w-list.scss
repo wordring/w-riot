@@ -9,7 +9,29 @@ w-list,
 
     list-style-type: none;
 
-    span {
-        padding: 0 $rem;
+    w-header,
+    [data-is="w-header"] {
+        height: 3*$rem;
+    }
+    w-item,
+    [data-is="w-item"] {
+        min-height: 3*$rem;
+    }
+    
+    w-list,
+    [data-is="w-list"] {
+        w-item,
+        [data-is="w-item"] {
+            >:not(w-icon),
+            >:not([data-is="w-icon"]) { padding-left: 2*$rem; }
+        }
+
+        w-list,
+        [data-is="w-list"] {
+            w-item,
+            [data-is="w-item"] {
+                >* { padding-left: 3*$rem; }
+            }
+        }
     }
 }

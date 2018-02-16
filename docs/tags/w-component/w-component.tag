@@ -1,6 +1,6 @@
-<w-item>
-
+<w-component>
+    <yield/>
 <script>
     this.mixin('component')
 </script>
-</w-item>
+</w-component>

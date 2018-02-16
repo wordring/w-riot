@@ -8,7 +8,7 @@ w-drawer,
 
     height: 100%;
 
-    width: 320px;
+    width: 300px;
     min-width: 300px;
     max-width: 400px;
 
@@ -31,7 +31,7 @@ w-drawer,
     }
 
     &.persistent {
-        [ref="panel"] {
+        >w-panel {
             position: fixed;
         }
     }

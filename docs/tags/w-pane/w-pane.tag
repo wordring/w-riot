@@ -1,18 +1,25 @@
 <w-pane>
     <yield/>
 <script>
-    this.component = 'pane'
-    this.mixin('Component')
-
+    this.mixin('component')
+    
     var tag = this
 
-    var $ = tag.wordring
-    var el = tag.root
+    var $ = tag.$
+    var el = $.element(tag.root)
 
     // height.
-    getHeight() { return $.height(el) }
-    setHeight(val) { $.height(el, val) }
-    $.defineProperty(tag, 'height', tag.getHeight, tag.setHeight)
+    tag.property(
+        'height',
+        function() { return el.height },
+        function(val) { el.height = val }
+    )
+    // width.
+    tag.property(
+        'width',
+        function() { return el.width },
+        function(val) { el.width = val }
+    )
 
 </script>
 </w-pane>

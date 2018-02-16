@@ -1,36 +1,31 @@
 @import "../theme.scss";
 
-w-ripple,
-[data-is="w-ripple"] {
-    overflow: hidden;
-    position: absolute;
+w-ripple-container {
     display: inline-block; // block にすると横に広がる。
+    position: absolute;
+    overflow: hidden;
 
-    margin: 0; // !important;
-    padding: 0;// !important;
+    margin: 0;
+    padding: 0;
 
     top: 0;
     left: 0;
-
-    &.circle {
-        border-radius: 50%;
-    }
-
-    >[ref="effect"] {
-        display: inline-block;
-
-        position: absolute;
-        border-radius: 100%;
-        pointer-events: none;
-        transform: scale(0);
-        opacity: 0;
-    }
     
     &.active {
-        >[ref="effect"] {
-            animation: w-ripple-animation 0.5s ease-out;
+        >w-ripple-effect {
+            animation: w-ripple-animation 0.6s ease-out;
         }
     }
+}
+
+w-ripple-effect {
+    display: inline-block;
+
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: scale(0);
+    opacity: 0;
 }
 
 @keyframes w-ripple-animation {
@@ -38,7 +33,7 @@ w-ripple,
         opacity: 0.2;
     }
     to {
-        transform: scale(2);
+        transform: scale(1);
         opacity: 0;
     }
 }
