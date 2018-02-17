@@ -114,7 +114,7 @@
     handleResize() {
         var header = tag.header
         var contentPane = tag.contentPane
-        if(contentPane) contentPane.height = doc.height - (header ? header.height : 0)
+        if(contentPane) contentPane.height = $.window.height - (header ? header.height : 0)
     }
     el.handleResize(tag.handleResize)
 

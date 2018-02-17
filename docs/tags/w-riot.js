@@ -109,7 +109,7 @@
         fn.handleResize = function (callback) {
             var width = 0
             var height = 0
-            window.addEventListener('resize', $.throttle(300, function () {
+            window.addEventListener('resize orientationChange', $.throttle(300, function () {
                 var w = fn.width
                 var h = fn.height
                 if (width != w || height != h) {
@@ -152,6 +152,11 @@
         }
 
         return fn
+    }
+
+    window = {
+        get height() { return document.documentElement.clientHeight },
+        get width() { return document.documentElement.clientWidth },
     }
 
     var $ = wordring.$ = {
@@ -205,7 +210,9 @@
             str = str || ''
             return str.replace(/([A-Z])/g, function (ch) { return '-' + ch.charAt(0).toLowerCase() })
         },
+        window: window,
     }
+
 
     // data-mixin の初期化。
     function initDataMixin(tag) {
