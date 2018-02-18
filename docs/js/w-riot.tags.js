@@ -181,7 +181,6 @@ riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
 riot.tag2('w-item', '', '', '', function(opts) {
     this.mixin('component')
 });
-
 riot.tag2('w-pane', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
 
@@ -203,6 +202,7 @@ riot.tag2('w-pane', '<yield></yield>', '', '', function(opts) {
     )
 
 });
+
 riot.tag2('w-panel', '<div ref="holder"> <yield></yield> </div>', '', '', function(opts) {
     this.mixin('component')
 

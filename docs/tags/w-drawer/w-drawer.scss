@@ -18,6 +18,10 @@ w-drawer,
 
     order: -1;
     left: 0; // for ie11.
+
+    >w-panel {
+        height: 100%;
+    }
     
     &.right {
         order: 1;
