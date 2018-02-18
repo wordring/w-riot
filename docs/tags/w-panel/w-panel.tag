@@ -7,8 +7,11 @@
     
     var tag = this
     var $ = tag.$
-    var el = null
+    var el = $.element(tag.root)
     var holder = null
+
+    var _height = 0
+    var _width = 0
 
     var anchors = ['anchor-left', 'anchor-right', 'anchor-top', 'anchor-bottom']
 
@@ -16,14 +19,17 @@
     tag.property(
         'anchor',
         function() { return el.classes.find(anchors).replace(/^anchor-/, '') },
-        function(val) { if(val) el.classes.remove(anchors).add('anchor-' + val) }
+        function(val) {
+            if(!tag.visible) throw new Error
+            if(val) el.classes.remove(anchors).add('anchor-' + val)
+        }
     )
 
     // animation.
     tag.property(
         'animation',
-        function() { return holder.classes.contains('animation') },
-        function(val) { val ? holder.classes.add('animation') : holder.classes.remove('animation') }
+        function() { return el.classes.contains('animation') },
+        function(val) { val ? el.classes.add('animation') : el.classes.remove('animation') }
     )
 
     // bacgroundColor.
@@ -31,6 +37,17 @@
         'backgroundColor',
         function() { return holder.styles.backgroundColor },
         function(val) { holder.styles.backgroundColor = val }
+    )
+
+    // direction.
+    tag.property(
+        'direction',
+        function() {
+            var anchor = tag.anchor
+            if(anchor == 'top' || anchor == 'bottom') return 'vertical'
+            return 'horizontal'
+        },
+        function() { throw new TypeError }
     )
 
     // height.
@@ -57,35 +74,57 @@
     // width.
     tag.property(
         'width',
-        function() { return holder.width },
-        function(val) { holder.width = val }
+        function() { return el.width },
+        function(val) { el.width = val }
     )
 
     close() {
         if(tag.transition || !tag.visible) return
         tag.transition = true
-        el.classes.add('close')
+
+        if(tag.direction == 'vertical') {
+            el.styles.maxHeight = el.height + 'px'
+            holder.styles.minHeight = holder.height + 'px'
+            setTimeout(function() { el.styles.maxHeight = '0px' }, 0)
+        } else {
+            el.styles.maxWidth = el.width + 'px'
+            holder.styles.minWidth = holder.width + 'px'
+            setTimeout(function() { el.styles.maxWidth = '0px' }, 0)
+        }
 
         function fn() {
             tag.transition = false
-            holder.styles.position = 'absolute'
             tag.trigger('closed', tag)
         }
-        tag.animation ? holder.handleTransitionEnd(fn) : fn()
+        tag.animation ? el.handleTransitionEnd(fn) : fn()
+        
+        el.classes.add('close')
     }
 
     open() {
         if(tag.transition || tag.visible) return
-
         tag.transition = true
-        holder.styles.position = ''
-        el.classes.remove('close')
+
+        if(tag.direction == 'vertical') {
+            el.styles.maxHeight = '0px'
+            el.styles.maxWidth = ''
+            holder.styles.minHeight = ''
+            setTimeout(function() { el.styles.maxHeight = holder.height + 'px' }, 0)
+        } else {
+            el.styles.maxHeight = ''
+            el.styles.maxWidth = '0px'
+            setTimeout(function() { el.styles.maxWidth = holder.width + 'px' }, 0)
+        }
 
         function fn() {
+            holder.styles.minHeight = holder.styles.minWidth = ''
+            el.styles.maxHeight = el.styles.maxWidth = ''
             tag.transition = false
             tag.trigger('opened', tag)
         }
-        tag.animation ? holder.handleTransitionEnd(fn) : fn()
+        tag.animation ? el.handleTransitionEnd(fn) : fn()
+        
+        el.classes.remove('close')
     }
 
     toggle() {
@@ -93,14 +132,15 @@
     }
 
     init() {
-        el = $.element(tag.root)
         holder = $.element(tag.refs.holder)
         if(el.styles.display == 'none') {
             tag.close()
             el.styles.display = ''
         }
-        holder.classes.add('animation')
+        el.classes.add('animation')
         tag.anchor = tag.opts.dataAnchor || (tag.anchor || 'top')
+
+        return false
     }
 </script>
 </w-panel>

@@ -23,6 +23,7 @@ w-header,
     [data-is="w-button"] {
         height: 3.5*$rem;
         width: 3.5*$rem;
+        margin: 0;
     }
 
     :not(.icon) {

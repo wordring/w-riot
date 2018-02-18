@@ -1,7 +1,8 @@
 @import "../theme.scss";
 
-w-drawer,
-[data-is="w-drawer"] {
+w-drawer-2,
+[data-is="w-drawer-2"] {
+    background-color: $color-100;
     display: block;
     position: relative;
 
@@ -11,14 +12,10 @@ w-drawer,
     min-width: 300px;
     max-width: 400px;
 
-    background-color: $color-100;
-    
-    transition-property: all;
-    transition-duration: 0.5s;
-
-    order: -1;
-    left: 0; // for ie11.
-    
+    &.left {
+        order: -1;
+        left: 0; // for ie11.
+    }
     &.right {
         order: 1;
         right: 0;
@@ -28,17 +25,8 @@ w-drawer,
         position: fixed;
         z-index: 160;
         
-        &:not(.close) {
+        &.open {
             box-shadow: $box-shadow;
-        }
-        &.right {
-            &:not(.close) {
-                right: 0;
-                left: auto;
-            }
-            &.close {
-                left: 100%;
-            }
         }
     }
 

@@ -23,10 +23,10 @@
             return el.classList.contains(val)
         }
         // val 内で最初に含まれるケラス名を返す。
-        fn.find = function(val) {
+        fn.find = function (val) {
             val = fn.array(val)
-            for(var i = 0; i < val.length; i++) {
-                if(fn.contains(val[i])) return val[i]
+            for (var i = 0; i < val.length; i++) {
+                if (fn.contains(val[i])) return val[i]
             }
             return ''
         }
@@ -34,10 +34,10 @@
         // 文字列は、空白文字で分割する。
         fn.remove = function (val) {
             val = fn.array(val)
-           for(var i = 0; i < val.length; i++) {
-               el.classList.remove(val[i])
-           }
-           // el.classList.remove.apply(el.classList, fn.array(val)) //ieで異常。
+            for (var i = 0; i < val.length; i++) {
+                el.classList.remove(val[i])
+            }
+            // el.classList.remove.apply(el.classList, fn.array(val)) //ieで異常。
             return fn
         }
         return fn
@@ -94,7 +94,7 @@
             timeout = timeout || 500
             if (window.AnimationEvent) {
                 var func = function (ev) {
-                    if(ev.target == el) {
+                    if (ev.target == el) {
                         callback()
                         el.removeEventListener('animationend', func, false)
                     }
@@ -109,7 +109,7 @@
         fn.handleResize = function (callback) {
             var width = 0
             var height = 0
-            window.addEventListener('resize orientationChange', $.throttle(300, function () {
+            window.addEventListener('resize', $.throttle(300, function () {
                 var w = fn.width
                 var h = fn.height
                 if (width != w || height != h) {
@@ -125,7 +125,7 @@
             timeout = timeout || 500
             if (typeof el.style.transition != 'undefined') {
                 var func = function (ev) {
-                    if(ev.target == el) { 
+                    if (ev.target == el) {
                         callback()
                         el.removeEventListener('transitionend', func, false)
                     }
@@ -154,7 +154,7 @@
         return fn
     }
 
-    window = {
+    var window_ = {
         get height() { return document.documentElement.clientHeight },
         get width() { return document.documentElement.clientWidth },
     }
@@ -210,7 +210,7 @@
             str = str || ''
             return str.replace(/([A-Z])/g, function (ch) { return '-' + ch.charAt(0).toLowerCase() })
         },
-        window: window,
+        window: window_,
     }
 
 
@@ -223,10 +223,15 @@
         }
     }
 
+    function findObserver(tag) {
+        if (typeof tag.opts.dataObserver == 'string') return tag[tag.opts.dataObserver]
+        if (tag.opts.dataObserver) return tag.opts.dataObserver
+        return tag.observer
+    }
+
     // data-on の初期化。
     function initDataOn(tag) {
-        var observer = tag.opts.observer || tag.observer
-
+        var observer = findObserver(tag)
         if (tag.opts.dataOn && observer) {
             var listeners = tag.opts.dataOn.split(/[\s]+/g)
             for (var i = 0; i < listeners.length; i++) {
@@ -246,8 +251,7 @@
 
     // data-trigger の初期化。
     function initDataTrigger(tag) {
-        var observer = tag.opts.observer || tag.observer
-
+        var observer = findObserver(tag)
         if (tag.opts.dataTrigger && observer) {
             var triggers = tag.opts.dataTrigger.split(/[\s]+/g)
             for (i = 0; i < triggers.length; i++) {
@@ -271,7 +275,7 @@
         }
     }
 
-    var clickable = function(tag) {
+    var clickable = function (tag) {
         var el = $.element(tag.root)
 
         var onClick = function (ev) {
@@ -305,23 +309,20 @@
 
             Object.defineProperty(
                 this,
-                'id',
-                {
-                    get: function() { return tag.root.id },
-                    set: function(val) { tag.root.id = val }
+                'id', {
+                    get: function () { return tag.root.id },
+                    set: function (val) { tag.root.id = val }
                 }
             )
             initDataTrigger(tag)
             initDataOn(tag)
             initDataMixin(tag)
 
-            tag.on('mount', function() {
-                var manage = false
-                if(tag.init) manage = tag.init()
-                if(!manage) tag.trigger('created', tag)
+            tag.on('mount', function () {
+                if(!tag.init || (tag.init && !tag.init())) tag.trigger('created', tag)
             })
         },
-        id: function() { return this.root.id },
+        id: function () { return this.root.id },
         property: function (name, getter, setter) {
             Object.defineProperty(this, name, { get: getter, set: setter })
         },
@@ -329,11 +330,11 @@
     riot.mixin('component', wordring.component)
 
     wordring.link = {
-        init: function() {
+        init: function () {
             var tag = this
             var el = $.element(tag.root)
             el.classes.add('link')
-            el.on('click', function() { route(tag.opts.dataRoute) })
+            el.on('click', function () { route(tag.opts.dataRoute) })
         },
     }
     riot.mixin('link', wordring.link)

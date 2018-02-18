@@ -28,51 +28,6 @@ body {
 .fill {
   flex-grow: 1; }
 
-w-drawer,
-[data-is="w-drawer"] {
-  background-color: #CFD8DC;
-  display: block;
-  position: relative;
-  height: 100%;
-  width: 300px;
-  min-width: 300px;
-  max-width: 400px; }
-  w-drawer.left,
-  [data-is="w-drawer"].left {
-    order: -1;
-    left: 0; }
-  w-drawer.right,
-  [data-is="w-drawer"].right {
-    order: 1;
-    right: 0; }
-  w-drawer.temporary,
-  [data-is="w-drawer"].temporary {
-    position: fixed;
-    z-index: 160; }
-    w-drawer.temporary.open,
-    [data-is="w-drawer"].temporary.open {
-      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2); }
-  w-drawer.persistent > w-panel,
-  [data-is="w-drawer"].persistent > w-panel {
-    position: fixed; }
-  w-drawer.close,
-  [data-is="w-drawer"].close {
-    width: 0;
-    min-width: 0;
-    max-width: 0; }
-  w-drawer w-pane,
-  w-drawer [data-is="w-pane"],
-  [data-is="w-drawer"] w-pane,
-  [data-is="w-drawer"] [data-is="w-pane"] {
-    height: 100%;
-    overflow-y: auto;
-    -ms-overflow-style: none; }
-    w-drawer w-pane::-webkit-scrollbar,
-    w-drawer [data-is="w-pane"]::-webkit-scrollbar,
-    [data-is="w-drawer"] w-pane::-webkit-scrollbar,
-    [data-is="w-drawer"] [data-is="w-pane"]::-webkit-scrollbar {
-      display: none; }
-
 @charset "UTF-8";
 w-button,
 [data-is="w-button"] {
@@ -230,32 +185,12 @@ w-button,
       .link.raised.secondary:active {
         background-color: #1976D2; }
 
-w-header,
-[data-is="w-header"] {
+w-app,
+[data-is="w-app"] {
   display: flex;
-  align-items: center;
-  flex-shrink: 0;
   position: relative;
-  min-height: 56px;
-  font-size: 0; }
-  w-header *,
-  [data-is="w-header"] * {
-    margin: 0;
-    font-size: 16px; }
-  w-header w-icon,
-  w-header [data-is="w-icon"],
-  [data-is="w-header"] w-icon,
-  [data-is="w-header"] [data-is="w-icon"] {
-    font-size: 24px; }
-  w-header w-button,
-  w-header [data-is="w-button"],
-  [data-is="w-header"] w-button,
-  [data-is="w-header"] [data-is="w-button"] {
-    height: 56px;
-    width: 56px; }
-  w-header :not(.icon),
-  [data-is="w-header"] :not(.icon) {
-    padding: 0 16px; }
+  width: 100%;
+  height: 100%; }
 
 w-icon,
 [data-is="w-icon"] {
@@ -274,6 +209,103 @@ w-icon,
   align-items: center;
   flex-shrink: 0;
   flex-grow: 0; }
+
+w-drawer,
+[data-is="w-drawer"] {
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 300px;
+  min-width: 300px;
+  max-width: 400px;
+  background-color: #CFD8DC;
+  transition-property: all;
+  transition-duration: 0.5s;
+  order: -1;
+  left: 0; }
+  w-drawer.right,
+  [data-is="w-drawer"].right {
+    order: 1;
+    right: 0; }
+  w-drawer.temporary,
+  [data-is="w-drawer"].temporary {
+    position: fixed;
+    z-index: 160; }
+    w-drawer.temporary:not(.close),
+    [data-is="w-drawer"].temporary:not(.close) {
+      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2); }
+    w-drawer.temporary.right:not(.close),
+    [data-is="w-drawer"].temporary.right:not(.close) {
+      right: 0;
+      left: auto; }
+    w-drawer.temporary.right.close,
+    [data-is="w-drawer"].temporary.right.close {
+      left: 100%; }
+  w-drawer.persistent > w-panel,
+  [data-is="w-drawer"].persistent > w-panel {
+    position: fixed; }
+  w-drawer.close,
+  [data-is="w-drawer"].close {
+    width: 0;
+    min-width: 0;
+    max-width: 0; }
+  w-drawer w-pane,
+  w-drawer [data-is="w-pane"],
+  [data-is="w-drawer"] w-pane,
+  [data-is="w-drawer"] [data-is="w-pane"] {
+    height: 100%;
+    overflow-y: auto;
+    -ms-overflow-style: none; }
+    w-drawer w-pane::-webkit-scrollbar,
+    w-drawer [data-is="w-pane"]::-webkit-scrollbar,
+    [data-is="w-drawer"] w-pane::-webkit-scrollbar,
+    [data-is="w-drawer"] [data-is="w-pane"]::-webkit-scrollbar {
+      display: none; }
+
+w-drawer-2,
+[data-is="w-drawer-2"] {
+  background-color: #CFD8DC;
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 300px;
+  min-width: 300px;
+  max-width: 400px; }
+  w-drawer-2.left,
+  [data-is="w-drawer-2"].left {
+    order: -1;
+    left: 0; }
+  w-drawer-2.right,
+  [data-is="w-drawer-2"].right {
+    order: 1;
+    right: 0; }
+  w-drawer-2.temporary,
+  [data-is="w-drawer-2"].temporary {
+    position: fixed;
+    z-index: 160; }
+    w-drawer-2.temporary.open,
+    [data-is="w-drawer-2"].temporary.open {
+      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2); }
+  w-drawer-2.persistent > w-panel,
+  [data-is="w-drawer-2"].persistent > w-panel {
+    position: fixed; }
+  w-drawer-2.close,
+  [data-is="w-drawer-2"].close {
+    width: 0;
+    min-width: 0;
+    max-width: 0; }
+  w-drawer-2 w-pane,
+  w-drawer-2 [data-is="w-pane"],
+  [data-is="w-drawer-2"] w-pane,
+  [data-is="w-drawer-2"] [data-is="w-pane"] {
+    height: 100%;
+    overflow-y: auto;
+    -ms-overflow-style: none; }
+    w-drawer-2 w-pane::-webkit-scrollbar,
+    w-drawer-2 [data-is="w-pane"]::-webkit-scrollbar,
+    [data-is="w-drawer-2"] w-pane::-webkit-scrollbar,
+    [data-is="w-drawer-2"] [data-is="w-pane"]::-webkit-scrollbar {
+      display: none; }
 
 w-item,
 [data-is="w-item"] {
@@ -350,34 +382,6 @@ w-list,
   [data-is="w-list"] [data-is="w-list"] [data-is="w-list"] [data-is="w-item"] > * {
     padding-left: 48px; }
 
-w-panel,
-[data-is="w-panel"] {
-  display: block;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; }
-  w-panel > [ref="holder"],
-  [data-is="w-panel"] > [ref="holder"] {
-    transform: translateY(0);
-    transform: translateX(0); }
-    w-panel > [ref="holder"].animation,
-    [data-is="w-panel"] > [ref="holder"].animation {
-      transition-property: transform;
-      transition-duration: 0.5s; }
-  w-panel.anchor-left.close > [ref="holder"],
-  [data-is="w-panel"].anchor-left.close > [ref="holder"] {
-    transform: translateX(-100%); }
-  w-panel.anchor-right.close > [ref="holder"],
-  [data-is="w-panel"].anchor-right.close > [ref="holder"] {
-    transform: translateX(100%); }
-  w-panel.anchor-top.close > [ref="holder"],
-  [data-is="w-panel"].anchor-top.close > [ref="holder"] {
-    transform: translateY(-100%); }
-  w-panel.anchor-bottom.close > [ref="holder"],
-  [data-is="w-panel"].anchor-bottom.close > [ref="holder"] {
-    transform: translateY(100%); }
-
 w-pane,
 [data-is="w-pane"] {
   display: flex;
@@ -394,6 +398,35 @@ w-pane,
   w-pane .fill,
   [data-is="w-pane"] .fill {
     flex-grow: 1; }
+
+w-panel,
+[data-is="w-panel"] {
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; }
+  w-panel > [ref="holder"],
+  [data-is="w-panel"] > [ref="holder"] {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    transform: translateY(0);
+    transform: translateX(0); }
+  w-panel.animation,
+  [data-is="w-panel"].animation {
+    transition-property: max-height, max-width;
+    transition-duration: 0.5s; }
+    w-panel.animation > [ref="holder"],
+    [data-is="w-panel"].animation > [ref="holder"] {
+      transition-property: transform, min-height, min-width;
+      transition-duration: 0.5s; }
+  w-panel.anchor-left.close > [ref="holder"],
+  [data-is="w-panel"].anchor-left.close > [ref="holder"] {
+    transform: translateX(-100%); }
+  w-panel.anchor-top.close > [ref="holder"],
+  [data-is="w-panel"].anchor-top.close > [ref="holder"] {
+    transform: translateY(-100%); }
 
 w-ripple-container {
   display: inline-block;
@@ -489,9 +522,30 @@ w-switch,
     transition-property: left;
     transition-duration: 0.3s; }
 
-w-app,
-[data-is="w-app"] {
+w-header,
+[data-is="w-header"] {
   display: flex;
+  align-items: center;
+  flex-shrink: 0;
   position: relative;
-  width: 100%;
-  height: 100%; }
+  min-height: 56px;
+  font-size: 0; }
+  w-header *,
+  [data-is="w-header"] * {
+    margin: 0;
+    font-size: 16px; }
+  w-header w-icon,
+  w-header [data-is="w-icon"],
+  [data-is="w-header"] w-icon,
+  [data-is="w-header"] [data-is="w-icon"] {
+    font-size: 24px; }
+  w-header w-button,
+  w-header [data-is="w-button"],
+  [data-is="w-header"] w-button,
+  [data-is="w-header"] [data-is="w-button"] {
+    height: 56px;
+    width: 56px;
+    margin: 0; }
+  w-header :not(.icon),
+  [data-is="w-header"] :not(.icon) {
+    padding: 0 16px; }

@@ -7,13 +7,20 @@ w-panel,
     padding: 0;
 
     overflow: hidden;
-
+    
     >[ref="holder"] {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
         transform: translateY(0);
         transform: translateX(0);
+    }
 
-        &.animation {
-            transition-property: transform;
+    &.animation {
+        transition-property: max-height, max-width;
+        transition-duration: 0.5s;
+        >[ref="holder"] {
+            transition-property: transform, min-height, min-width;
             transition-duration: 0.5s;
         }
     }
@@ -28,7 +35,6 @@ w-panel,
     &.anchor-right {
         &.close {
             >[ref="holder"] {
-                transform: translateX(100%);
             }
         }
     }
@@ -43,7 +49,6 @@ w-panel,
     &.anchor-bottom {
         &.close {
             >[ref="holder"] {
-                transform: translateY(100%);
             }
         }
     }

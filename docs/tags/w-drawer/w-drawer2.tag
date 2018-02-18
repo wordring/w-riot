@@ -14,6 +14,10 @@
     var variants = ['temporary', 'persistent']
     var anchors = ['left', 'right']
 
+    var _height = 0
+    var _width = 0
+    var _temporary = false
+
     var doc = $.element(document.body)
     doc.styles.overflowX = 'hidden'
     doc.styles.height = '100%'
@@ -21,7 +25,7 @@
     // anchor.
     tag.property(
         'anchor',
-        function() { return panel.anchor },
+        function() { return el.classes.find(anchors) },
         function(val) {
             el.classes.remove(anchors).add(val)
             panel.anchor = val
@@ -33,29 +37,30 @@
         'contentPane',
         function() { return panel.tags['w-pane'] },
         function(opts) {
-        }
-    )
+    })
 
     // header.
     tag.property(
         'header',
         function() { return panel.tags['w-header'] },
         function(opts) {
-        }
-    )
+    })
 
     // height.
     tag.property(
         'height',
-        function() { return panel.height },
-        function(val) { el.height = panel.height = val }
+        function() { return el.height },
+        function(val) { _height = el.height = panel.height = val }
     )
 
     // variant.
     tag.property(
         'variant',
         function() { return el.classes.find(variants) },
-        function(val) { el.classes.remove(variants).add(val) }
+        function(val) {
+            el.classes.remove(variants).add(val)
+            el.styles.minWidth = tag.width || ''
+        }
     )
 
     // visible.
@@ -64,7 +69,7 @@
         function() { return !el.classes.contains('close') },
         function(val) {
             val ? tag.open() : tag.close()
-            if(!val) el.classes.add('close')
+            el.classes.add(val ? 'open' : 'close')
         }
     )
 
@@ -76,20 +81,14 @@
     )
 
     close() {
-        var right = tag.variant == 'temporary' && tag.anchor == 'right'
-        if(right) {
-            el.handleTransitionEnd(function() { el.styles.left = '' })
-            el.styles.left = $.window.width - el.width + 'px'
-        }
-        setTimeout(function() {
-            if(right) el.styles.left = '100%'
-            panel.close()
-            el.classes.add('close')
-        }, 0)
+        panel.close()
+        el.styles.minWidth = el.styles.width = '0px'
+        el.classes.remove('open')
     }
 
     open() {
         panel.open()
+        el.styles.minWidth = el.styles.width = _width
         el.classes.remove('close')
     }
 
@@ -103,20 +102,19 @@
         panel.on('closed', tag.onPanelClosed)
         panel.on('opened', tag.onPanelOpend)
 
-        tag.anchor = el.classes.contains('right') ? 'right' : 'left' 
+        tag.anchor = tag.anchor || 'left'
         tag.variant = tag.variant || 'temporary'
         
         var style = el.computedStyle()
-
-        //_height = style.height
-        //_width = style.width
+        _height = style.height
+        _width = style.width
 
         el.styles.display = 'block'
 
         panel.backgroundColor = style.backgroundColor
         el.styles.backgroundColor = 'transparent'
 
-        panel.width = style.width
+        tag.width = style.width
 
         tag.visible = style.display == 'none' ? false : true
         tag.handleResize()
@@ -126,11 +124,13 @@
 
     onPanelClosed() {
         el.classes.add('close')
+        tag.handleResize()
         tag.trigger('closed', tag)
     }
 
     onPanelOpend() {
         el.classes.add('open')
+        tag.handleResize()
         tag.trigger('opened', tag)
     }
 
