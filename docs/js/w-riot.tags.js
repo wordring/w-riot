@@ -1,38 +1,16 @@
-riot.tag2('w-button', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
-    this.mixin('button')
-    this.mixin('ripple')
-});
 riot.tag2('w-app', '<yield></yield>', '', '', function(opts) {
     var tag = this
     var $ = tag.$
     var el = tag.root
 });
 
+riot.tag2('w-button', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
+    this.mixin('button')
+    this.mixin('ripple')
+});
 riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
-});
-riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
-
-    var tag = this
-
-    var $ = tag.$
-    var el = $.element(tag.root)
-
-    tag.property(
-        'value',
-        function() { return tag.root.innerText },
-        function(val) { tag.root.innerText = val }
-    )
-
-    tag.property(
-        'visible',
-        function() { return el.styles.display != 'none' },
-        function(val) { el.styles.display = val ? '' : 'none' }
-    )
-
-    function init() {}
 });
 riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:panel-created"> <yield></yield> </w-panel>', '', '', function(opts) {
     this.mixin('component')
@@ -47,7 +25,6 @@ riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:pan
     var anchors = ['left', 'right']
 
     var doc = $.element(document.body)
-    doc.styles.overflowX = 'hidden'
     doc.styles.height = '100%'
 
     tag.property(
@@ -132,7 +109,6 @@ riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:pan
         tag.variant = tag.variant || 'temporary'
 
         var style = el.computedStyle()
-
         el.styles.display = 'block'
 
         panel.backgroundColor = style.backgroundColor
@@ -166,143 +142,44 @@ riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:pan
     tag.on('panel-created', tag.onPanelCreated)
 
 });
-riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:panel-created"> <yield></yield> </w-panel>', '', '', function(opts) {
+riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
 
     var tag = this
-    var panel = null
 
     var $ = tag.$
     var el = $.element(tag.root)
 
-    var variants = ['temporary', 'persistent']
-    var anchors = ['left', 'right']
-
-    var _height = 0
-    var _width = 0
-    var _temporary = false
-
-    var doc = $.element(document.body)
-    doc.styles.overflowX = 'hidden'
-    doc.styles.height = '100%'
-
     tag.property(
-        'anchor',
-        function() { return el.classes.find(anchors) },
-        function(val) {
-            el.classes.remove(anchors).add(val)
-            panel.anchor = val
-        }
-    )
-
-    tag.property(
-        'contentPane',
-        function() { return panel.tags['w-pane'] },
-        function(opts) {
-    })
-
-    tag.property(
-        'header',
-        function() { return panel.tags['w-header'] },
-        function(opts) {
-    })
-
-    tag.property(
-        'height',
-        function() { return el.height },
-        function(val) { _height = el.height = panel.height = val }
-    )
-
-    tag.property(
-        'variant',
-        function() { return el.classes.find(variants) },
-        function(val) {
-            el.classes.remove(variants).add(val)
-            el.styles.minWidth = tag.width || ''
-        }
+        'value',
+        function() { return tag.root.innerText },
+        function(val) { tag.root.innerText = val }
     )
 
     tag.property(
         'visible',
-        function() { return !el.classes.contains('close') },
-        function(val) {
-            val ? tag.open() : tag.close()
-            el.classes.add(val ? 'open' : 'close')
-        }
+        function() { return el.styles.display != 'none' },
+        function(val) { el.styles.display = val ? '' : 'none' }
     )
 
-    tag.property(
-        'width',
-        function() { return panel.width },
-        function(val) { _width = panel.width = val }
-    )
-
-    this.close = function() {
-        panel.close()
-        el.styles.minWidth = el.styles.width = '0px'
-        el.classes.remove('open')
-    }.bind(this)
-
-    this.open = function() {
-        panel.open()
-        el.styles.minWidth = el.styles.width = _width
-        el.classes.remove('close')
-    }.bind(this)
-
-    this.toggle = function() { tag.visible ? tag.close() : tag.open() }.bind(this)
-
-    this.init = function() { return true }.bind(this)
-
-    this.onPanelCreated = function() {
-        panel = tag.tags['w-panel']
-
-        panel.on('closed', tag.onPanelClosed)
-        panel.on('opened', tag.onPanelOpend)
-
-        tag.anchor = tag.anchor || 'left'
-        tag.variant = tag.variant || 'temporary'
-
-        var style = el.computedStyle()
-        _height = style.height
-        _width = style.width
-
-        el.styles.display = 'block'
-
-        panel.backgroundColor = style.backgroundColor
-        el.styles.backgroundColor = 'transparent'
-
-        tag.width = style.width
-
-        tag.visible = style.display == 'none' ? false : true
-        tag.handleResize()
-
-        tag.trigger('created', tag)
-    }.bind(this)
-
-    this.onPanelClosed = function() {
-        el.classes.add('close')
-        tag.handleResize()
-        tag.trigger('closed', tag)
-    }.bind(this)
-
-    this.onPanelOpend = function() {
-        el.classes.add('open')
-        tag.handleResize()
-        tag.trigger('opened', tag)
-    }.bind(this)
-
-    this.handleResize = function() {
-        var header = tag.header
-        var contentPane = tag.contentPane
-        if(contentPane) contentPane.height = $.window.height - (header ? header.height : 0)
-    }.bind(this)
-    el.handleResize(tag.handleResize)
-
-    tag.on('panel-created', tag.onPanelCreated)
-
+    function init() {}
 });
 riot.tag2('w-item', '', '', '', function(opts) {
     this.mixin('component')
+});
+riot.tag2('w-header', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
+
+    var tag = this
+
+    var $ = tag.$
+    var el = $.element(tag.root)
+
+    tag.property(
+        'height',
+        function() { return el.height },
+        function(val) { el.height = val })
+
 });
 
 riot.tag2('w-pane', '<yield></yield>', '', '', function(opts) {
@@ -333,9 +210,6 @@ riot.tag2('w-panel', '<div ref="holder"> <yield></yield> </div>', '', '', functi
     var $ = tag.$
     var el = $.element(tag.root)
     var holder = null
-
-    var _height = 0
-    var _width = 0
 
     var anchors = ['anchor-left', 'anchor-right', 'anchor-top', 'anchor-bottom']
 
@@ -528,19 +402,5 @@ riot.tag2('w-switch', '<div ref="track"></div> <div ref="container" data-mixin="
         thumb = $.element(container.refs.thumb)
         tag.color = tag.color
     }.bind(this)
-
-});
-riot.tag2('w-header', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
-
-    var tag = this
-
-    var $ = tag.$
-    var el = $.element(tag.root)
-
-    tag.property(
-        'height',
-        function() { return el.height },
-        function(val) { el.height = val })
 
 });

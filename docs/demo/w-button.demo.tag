@@ -22,23 +22,23 @@
     </table>
 
     <h2>Icon Button</h2>
-    <w-button class="icon">
-        <w-icon>menu</w-icon>
-    </w-button>
-
-    <h3>Primary</h3>
-    <w-button class="icon primary">
-        <w-icon>menu</w-icon>
-    </w-button>
-
-    <h3>Secondary</h3>
-    <w-button class="icon secondary">
-        <w-icon>menu</w-icon>
-    </w-button>
-
-    <h3>Disabled</h3>
-    <w-button class="icon" disabled>
-        <w-icon>menu</w-icon>
-    </w-button>
-
+    <table class="icon">
+        <tr>
+        <td>Default</td>
+        <td>Primary</td>
+        <td>Secondary</td>
+        <td>Disabled</td>
+        </tr>
+        <tr>
+        <td><w-button class="icon"><w-icon>menu</w-icon></w-button></td>
+        <td><w-button class="icon primary"><w-icon>menu</w-icon></w-button></td>
+        <td><w-button class="icon secondary"><w-icon>menu</w-icon></w-button></td>
+        <td><w-button class="icon" disabled><w-icon>menu</w-icon></w-button></td>
+        </tr>
+    </table>
+<style>
+    .icon td {
+        padding: 0 1em;
+    }
+</style>
 </w-button-demo>

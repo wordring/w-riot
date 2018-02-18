@@ -15,7 +15,6 @@
     var anchors = ['left', 'right']
 
     var doc = $.element(document.body)
-    doc.styles.overflowX = 'hidden'
     doc.styles.height = '100%'
 
     // anchor.
@@ -107,10 +106,6 @@
         tag.variant = tag.variant || 'temporary'
         
         var style = el.computedStyle()
-
-        //_height = style.height
-        //_width = style.width
-
         el.styles.display = 'block'
 
         panel.backgroundColor = style.backgroundColor

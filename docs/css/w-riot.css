@@ -28,6 +28,13 @@ body {
 .fill {
   flex-grow: 1; }
 
+w-app,
+[data-is="w-app"] {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
 @charset "UTF-8";
 w-button,
 [data-is="w-button"] {
@@ -185,31 +192,6 @@ w-button,
       .link.raised.secondary:active {
         background-color: #1976D2; }
 
-w-app,
-[data-is="w-app"] {
-  display: flex;
-  position: relative;
-  width: 100%;
-  height: 100%; }
-
-w-icon,
-[data-is="w-icon"] {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  letter-spacing: normal;
-  text-transform: none;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  font-feature-settings: 'liga';
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  flex-grow: 0; }
-
 w-drawer,
 [data-is="w-drawer"] {
   display: block;
@@ -262,50 +244,23 @@ w-drawer,
     [data-is="w-drawer"] [data-is="w-pane"]::-webkit-scrollbar {
       display: none; }
 
-w-drawer-2,
-[data-is="w-drawer-2"] {
-  background-color: #CFD8DC;
-  display: block;
-  position: relative;
-  height: 100%;
-  width: 300px;
-  min-width: 300px;
-  max-width: 400px; }
-  w-drawer-2.left,
-  [data-is="w-drawer-2"].left {
-    order: -1;
-    left: 0; }
-  w-drawer-2.right,
-  [data-is="w-drawer-2"].right {
-    order: 1;
-    right: 0; }
-  w-drawer-2.temporary,
-  [data-is="w-drawer-2"].temporary {
-    position: fixed;
-    z-index: 160; }
-    w-drawer-2.temporary.open,
-    [data-is="w-drawer-2"].temporary.open {
-      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2); }
-  w-drawer-2.persistent > w-panel,
-  [data-is="w-drawer-2"].persistent > w-panel {
-    position: fixed; }
-  w-drawer-2.close,
-  [data-is="w-drawer-2"].close {
-    width: 0;
-    min-width: 0;
-    max-width: 0; }
-  w-drawer-2 w-pane,
-  w-drawer-2 [data-is="w-pane"],
-  [data-is="w-drawer-2"] w-pane,
-  [data-is="w-drawer-2"] [data-is="w-pane"] {
-    height: 100%;
-    overflow-y: auto;
-    -ms-overflow-style: none; }
-    w-drawer-2 w-pane::-webkit-scrollbar,
-    w-drawer-2 [data-is="w-pane"]::-webkit-scrollbar,
-    [data-is="w-drawer-2"] w-pane::-webkit-scrollbar,
-    [data-is="w-drawer-2"] [data-is="w-pane"]::-webkit-scrollbar {
-      display: none; }
+w-icon,
+[data-is="w-icon"] {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  flex-grow: 0; }
 
 w-item,
 [data-is="w-item"] {
@@ -330,6 +285,34 @@ w-item,
   w-item .fill,
   [data-is="w-item"] .fill {
     flex-grow: 1; }
+
+w-header,
+[data-is="w-header"] {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+  min-height: 56px;
+  font-size: 0; }
+  w-header *,
+  [data-is="w-header"] * {
+    margin: 0;
+    font-size: 16px; }
+  w-header w-icon,
+  w-header [data-is="w-icon"],
+  [data-is="w-header"] w-icon,
+  [data-is="w-header"] [data-is="w-icon"] {
+    font-size: 24px; }
+  w-header w-button,
+  w-header [data-is="w-button"],
+  [data-is="w-header"] w-button,
+  [data-is="w-header"] [data-is="w-button"] {
+    height: 56px;
+    width: 56px;
+    margin: 0; }
+  w-header :not(.icon),
+  [data-is="w-header"] :not(.icon) {
+    padding: 0 16px; }
 
 w-list,
 [data-is="w-list"] {
@@ -521,31 +504,3 @@ w-switch,
   [data-is="w-switch"].animation > [ref="container"] {
     transition-property: left;
     transition-duration: 0.3s; }
-
-w-header,
-[data-is="w-header"] {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  position: relative;
-  min-height: 56px;
-  font-size: 0; }
-  w-header *,
-  [data-is="w-header"] * {
-    margin: 0;
-    font-size: 16px; }
-  w-header w-icon,
-  w-header [data-is="w-icon"],
-  [data-is="w-header"] w-icon,
-  [data-is="w-header"] [data-is="w-icon"] {
-    font-size: 24px; }
-  w-header w-button,
-  w-header [data-is="w-button"],
-  [data-is="w-header"] w-button,
-  [data-is="w-header"] [data-is="w-button"] {
-    height: 56px;
-    width: 56px;
-    margin: 0; }
-  w-header :not(.icon),
-  [data-is="w-header"] :not(.icon) {
-    padding: 0 16px; }

@@ -10,9 +10,6 @@
     var el = $.element(tag.root)
     var holder = null
 
-    var _height = 0
-    var _width = 0
-
     var anchors = ['anchor-left', 'anchor-right', 'anchor-top', 'anchor-bottom']
 
     // anchor.
