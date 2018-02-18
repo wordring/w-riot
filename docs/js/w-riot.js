@@ -384,6 +384,9 @@ riot.tag2('w-button', '<yield></yield>', '', '', function(opts) {
     this.mixin('button')
     this.mixin('ripple')
 });
+riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
+});
 riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:panel-created"> <yield></yield> </w-panel>', '', '', function(opts) {
     this.mixin('component')
 
@@ -514,23 +517,6 @@ riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:pan
     tag.on('panel-created', tag.onPanelCreated)
 
 });
-riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
-});
-riot.tag2('w-header', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
-
-    var tag = this
-
-    var $ = tag.$
-    var el = $.element(tag.root)
-
-    tag.property(
-        'height',
-        function() { return el.height },
-        function(val) { el.height = val })
-
-});
 riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
 
@@ -553,9 +539,24 @@ riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
 
     function init() {}
 });
+riot.tag2('w-header', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
+
+    var tag = this
+
+    var $ = tag.$
+    var el = $.element(tag.root)
+
+    tag.property(
+        'height',
+        function() { return el.height },
+        function(val) { el.height = val })
+
+});
 riot.tag2('w-item', '', '', '', function(opts) {
     this.mixin('component')
 });
+
 riot.tag2('w-pane', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
 
@@ -577,7 +578,6 @@ riot.tag2('w-pane', '<yield></yield>', '', '', function(opts) {
     )
 
 });
-
 riot.tag2('w-panel', '<div ref="holder"> <yield></yield> </div>', '', '', function(opts) {
     this.mixin('component')
 
