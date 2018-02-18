@@ -9,9 +9,6 @@ riot.tag2('w-button', '<yield></yield>', '', '', function(opts) {
     this.mixin('button')
     this.mixin('ripple')
 });
-riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
-});
 riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:panel-created"> <yield></yield> </w-panel>', '', '', function(opts) {
     this.mixin('component')
 
@@ -141,6 +138,9 @@ riot.tag2('w-drawer', '<w-panel data-observer="{this}" data-trigger="created:pan
 
     tag.on('panel-created', tag.onPanelCreated)
 
+});
+riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
 });
 riot.tag2('w-header', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')

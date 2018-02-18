@@ -19,6 +19,11 @@ body {
   color: rgba(0, 0, 0, 0.87);
   background-color: #ECEFF1; }
 
+body {
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent; }
+
 .left {
   order: -1; }
 
