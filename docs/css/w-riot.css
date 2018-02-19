@@ -200,63 +200,6 @@ w-button,
       .link.raised.secondary:active {
         background-color: #1976D2; }
 
-w-drawer,
-[data-is="w-drawer"] {
-  display: block;
-  position: relative;
-  height: 100%;
-  width: 300px;
-  min-width: 300px;
-  max-width: 400px;
-  background-color: #CFD8DC;
-  order: -1;
-  left: 0; }
-  w-drawer > w-panel,
-  [data-is="w-drawer"] > w-panel {
-    height: 100%; }
-  w-drawer.animation,
-  [data-is="w-drawer"].animation {
-    transition-property: all;
-    transition-duration: 0.5s; }
-  w-drawer.right,
-  [data-is="w-drawer"].right {
-    order: 1;
-    right: 0; }
-  w-drawer.temporary,
-  [data-is="w-drawer"].temporary {
-    position: fixed;
-    z-index: 160; }
-    w-drawer.temporary:not(.close),
-    [data-is="w-drawer"].temporary:not(.close) {
-      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2); }
-    w-drawer.temporary.right:not(.close),
-    [data-is="w-drawer"].temporary.right:not(.close) {
-      right: 0;
-      left: auto; }
-    w-drawer.temporary.right.close,
-    [data-is="w-drawer"].temporary.right.close {
-      left: 100%; }
-  w-drawer.persistent > w-panel,
-  [data-is="w-drawer"].persistent > w-panel {
-    position: fixed; }
-  w-drawer.close,
-  [data-is="w-drawer"].close {
-    width: 0;
-    min-width: 0;
-    max-width: 0; }
-  w-drawer w-pane,
-  w-drawer [data-is="w-pane"],
-  [data-is="w-drawer"] w-pane,
-  [data-is="w-drawer"] [data-is="w-pane"] {
-    height: 100%;
-    overflow-y: auto;
-    -ms-overflow-style: none; }
-    w-drawer w-pane::-webkit-scrollbar,
-    w-drawer [data-is="w-pane"]::-webkit-scrollbar,
-    [data-is="w-drawer"] w-pane::-webkit-scrollbar,
-    [data-is="w-drawer"] [data-is="w-pane"]::-webkit-scrollbar {
-      display: none; }
-
 w-header,
 [data-is="w-header"] {
   display: flex;
@@ -281,8 +224,8 @@ w-header,
     height: 56px;
     width: 56px;
     margin: 0; }
-  w-header :not(.icon),
-  [data-is="w-header"] :not(.icon) {
+  w-header > :not(.icon),
+  [data-is="w-header"] > :not(.icon) {
     padding: 0 16px; }
 
 w-icon,
@@ -302,30 +245,6 @@ w-icon,
   align-items: center;
   flex-shrink: 0;
   flex-grow: 0; }
-
-w-item,
-[data-is="w-item"] {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  position: relative;
-  margin: 0;
-  padding: 0; }
-  w-item > :not(.icon),
-  [data-is="w-item"] > :not(.icon) {
-    padding: 0 16px; }
-  w-item.vertical,
-  [data-is="w-item"].vertical {
-    flex-direction: column; }
-  w-item .left,
-  [data-is="w-item"] .left {
-    order: -1; }
-  w-item .right,
-  [data-is="w-item"] .right {
-    order: 1; }
-  w-item .fill,
-  [data-is="w-item"] .fill {
-    flex-grow: 1; }
 
 w-list,
 [data-is="w-list"] {
@@ -378,16 +297,20 @@ w-list,
   [data-is="w-list"] [data-is="w-list"] [data-is="w-list"] [data-is="w-item"] > * {
     padding-left: 48px; }
 
-w-modal-mask,
-[data-is="w-modal-mask"] {
-  display: block;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.2); }
-
-body > w-modal-mask,
-body > [data-is="w-modal-mask"] {
-  position: absolute; }
+w-item,
+[data-is="w-item"] {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+  margin: 0;
+  padding: 0; }
+  w-item > :not(.icon),
+  [data-is="w-item"] > :not(.icon) {
+    padding: 0 16px; }
+  w-item.vertical,
+  [data-is="w-item"].vertical {
+    flex-direction: column; }
 
 w-pane,
 [data-is="w-pane"] {
@@ -434,32 +357,6 @@ w-panel,
   w-panel.anchor-top.close > [ref="holder"],
   [data-is="w-panel"].anchor-top.close > [ref="holder"] {
     transform: translateY(-100%); }
-
-w-ripple-container {
-  display: inline-block;
-  position: absolute;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  top: 0;
-  left: 0; }
-  w-ripple-container.active > w-ripple-effect {
-    animation: w-ripple-animation 0.6s ease-out; }
-
-w-ripple-effect {
-  display: inline-block;
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: scale(0);
-  opacity: 0; }
-
-@keyframes w-ripple-animation {
-  from {
-    opacity: 0.2; }
-  to {
-    transform: scale(1);
-    opacity: 0; } }
 
 w-switch,
 [data-is="w-switch"] {
@@ -528,3 +425,86 @@ w-switch,
   [data-is="w-switch"].animation > [ref="container"] {
     transition-property: left;
     transition-duration: 0.3s; }
+
+w-ripple-container {
+  display: inline-block;
+  position: absolute;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0; }
+  w-ripple-container.active > w-ripple-effect {
+    animation: w-ripple-animation 0.6s ease-out; }
+
+w-ripple-effect {
+  display: inline-block;
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: scale(0);
+  opacity: 0; }
+
+@keyframes w-ripple-animation {
+  from {
+    opacity: 0.2; }
+  to {
+    transform: scale(1);
+    opacity: 0; } }
+
+w-drawer,
+[data-is="w-drawer"] {
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 300px;
+  min-width: 300px;
+  max-width: 400px;
+  background-color: #CFD8DC;
+  order: -1;
+  left: 0; }
+  w-drawer > w-panel,
+  [data-is="w-drawer"] > w-panel {
+    height: 100%; }
+  w-drawer.animation,
+  [data-is="w-drawer"].animation {
+    transition-property: all;
+    transition-duration: 0.5s; }
+  w-drawer.right,
+  [data-is="w-drawer"].right {
+    order: 1;
+    right: 0; }
+  w-drawer.temporary,
+  [data-is="w-drawer"].temporary {
+    position: fixed;
+    z-index: 160; }
+    w-drawer.temporary:not(.close),
+    [data-is="w-drawer"].temporary:not(.close) {
+      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2); }
+    w-drawer.temporary.right:not(.close),
+    [data-is="w-drawer"].temporary.right:not(.close) {
+      right: 0;
+      left: auto; }
+    w-drawer.temporary.right.close,
+    [data-is="w-drawer"].temporary.right.close {
+      left: 100%; }
+  w-drawer.persistent > w-panel,
+  [data-is="w-drawer"].persistent > w-panel {
+    position: fixed; }
+  w-drawer.close,
+  [data-is="w-drawer"].close {
+    width: 0;
+    min-width: 0;
+    max-width: 0; }
+  w-drawer w-pane,
+  w-drawer [data-is="w-pane"],
+  [data-is="w-drawer"] w-pane,
+  [data-is="w-drawer"] [data-is="w-pane"] {
+    height: 100%;
+    overflow-y: auto;
+    -ms-overflow-style: none; }
+    w-drawer w-pane::-webkit-scrollbar,
+    w-drawer [data-is="w-pane"]::-webkit-scrollbar,
+    [data-is="w-drawer"] w-pane::-webkit-scrollbar,
+    [data-is="w-drawer"] [data-is="w-pane"]::-webkit-scrollbar {
+      display: none; }

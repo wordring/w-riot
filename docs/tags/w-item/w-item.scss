@@ -17,13 +17,4 @@ w-item,
     &.vertical {
         flex-direction: column;
     }
-    .left {
-        order: -1;
-    }
-    .right {
-        order: 1;
-    }
-    .fill {
-        flex-grow: 1;
-    }
 }

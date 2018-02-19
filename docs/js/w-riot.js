@@ -404,173 +404,6 @@ riot.tag2('w-button', '<yield></yield>', '', '', function(opts) {
 riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
 });
-riot.tag2('w-drawer', '<w-panel riot-style="display:{display};" data-anchor="{anchor}" data-observer="{this}" data-trigger="created:panel-created"> <yield></yield> </w-panel>', '', '', function(opts) {
-    this.mixin('component')
-
-    var tag = this
-    var panel = null
-
-    var $ = tag.$
-    var el = $.element(tag.root)
-    var mask = $.window.mask
-
-    var variants = ['temporary', 'persistent']
-    var anchors = ['left', 'right']
-
-    var doc = $.element(document.body)
-
-    var handleResize, handleTemporary, onTemporaryClick, onPanelCreated, onPanelClosed, onPanelOpend
-
-    tag.property(
-        'anchor',
-        function() { return el.classes.contains('right') ? 'right' : 'left' },
-        function(val) {
-            el.classes.remove(anchors).add(val)
-            panel.anchor = val
-        }
-    )
-
-    tag.property(
-        'animation',
-        function() { return el.classes.contains('animation') },
-        function(val) {
-            val ? el.classes.add('animation') : el.classes.remove('animation')
-            panel.animation = val
-        }
-    )
-
-    tag.property(
-        'contentPane',
-        function() { return panel.tags['w-pane'] },
-        function(opts) {
-        }
-    )
-
-    tag.property(
-        'display',
-        function() { return el.computedStyle().display },
-        function(val) {el.styles.display = val }
-    )
-
-    tag.property(
-        'header',
-        function() { return panel.tags['w-header'] },
-        function(opts) {
-        }
-    )
-
-    tag.property(
-        'height',
-        function() { return panel.height },
-        function(val) { el.height = panel.height = val }
-    )
-
-    tag.property(
-        'variant',
-        function() { return el.classes.find(variants) },
-        function(val) {
-            el.classes.remove(variants).add(val)
-            handleTemporary(val == 'temporary' && tag.visible)
-        }
-    )
-
-    tag.property(
-        'visible',
-        function() { return !el.classes.contains('close') },
-        function(val) { val ? tag.open() : tag.close() }
-    )
-
-    tag.property(
-        'width',
-        function() { return panel.width },
-        function(val) { panel.width = val }
-    )
-
-    this.close = function() {
-        handleTemporary(false)
-        var animation = tag.animation
-        var right = tag.variant == 'temporary' && tag.anchor == 'right'
-        if(right) {
-            if(animation) el.handleTransitionEnd(function() { el.styles.left = '' })
-            el.styles.left = $.window.width - el.width + 'px'
-        }
-        var fn = function() {
-            if(right) el.styles.left = animation ? '100%' : ''
-            panel.close()
-            el.classes.add('close')
-        }
-        animation ? setTimeout(fn, 0) : fn()
-    }.bind(this)
-
-    this.open = function() {
-        panel.open()
-        el.classes.remove('close')
-    }.bind(this)
-
-    this.toggle = function() { tag.visible ? tag.close() : tag.open() }.bind(this)
-
-    this.init = function() {
-        if(tag.animation) {
-            tag.opts.dataAnimation = true
-            el.classes.remove('animation')
-        }
-        return true
-    }.bind(this)
-
-    onTemporaryClick = function() { tag.close() }
-
-    handleTemporary = function(val) {
-        mask.visible = val
-        if(val) mask.on('click', onTemporaryClick)
-        else mask.off('click', onTemporaryClick)
-    }
-
-    onPanelCreated = function() {
-        panel = tag.tags['w-panel']
-
-        panel.on('closed', onPanelClosed)
-        panel.on('opened', onPanelOpend)
-
-        tag.variant = tag.variant || 'temporary'
-
-        var style = el.computedStyle()
-
-        panel.backgroundColor = style.backgroundColor
-        panel.width = style.width
-
-        el.styles.backgroundColor = 'transparent'
-
-        tag.visible = !(style.display == 'none')
-        el.styles.display = 'block'
-
-        tag.animation = tag.opts.dataAnimation
-
-        handleResize()
-
-        tag.trigger('created', tag)
-    }
-
-    onPanelClosed = function() {
-        el.classes.add('close')
-        tag.trigger('closed', tag)
-    }
-
-    onPanelOpend = function() {
-        if(tag.variant == 'temporary') handleTemporary(true)
-        el.classes.add('open')
-        tag.trigger('opened', tag)
-    }
-
-    handleResize = function() {
-        var header = tag.header
-        var contentPane = tag.contentPane
-        if(contentPane) contentPane.height = $.window.height - (header ? header.height : 0)
-    }
-    el.handleResize(handleResize)
-
-    tag.on('panel-created', onPanelCreated)
-
-});
 riot.tag2('w-header', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
 
@@ -607,17 +440,9 @@ riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
 
     function init() {}
 });
+
 riot.tag2('w-item', '', '', '', function(opts) {
     this.mixin('component')
-});
-
-riot.tag2('w-modal-mask', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
-
-    var tag = this
-
-    var $ = tag.$
-    var el = $.element(tag.root)
 });
 riot.tag2('w-pane', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
@@ -842,5 +667,172 @@ riot.tag2('w-switch', '<div ref="track"></div> <div ref="container" data-mixin="
         thumb = $.element(container.refs.thumb)
         tag.color = tag.color
     }.bind(this)
+
+});
+riot.tag2('w-drawer', '<w-panel riot-style="display:{display};" data-anchor="{anchor}" data-observer="{this}" data-trigger="created:panel-created"> <yield></yield> </w-panel>', '', '', function(opts) {
+    this.mixin('component')
+
+    var tag = this
+    var panel = null
+
+    var $ = tag.$
+    var el = $.element(tag.root)
+    var mask = $.window.mask
+
+    var variants = ['temporary', 'persistent']
+    var anchors = ['left', 'right']
+
+    var doc = $.element(document.body)
+
+    var handleResize, handleTemporary, onTemporaryClick, onPanelCreated, onPanelClosed, onPanelOpend
+
+    tag.property(
+        'anchor',
+        function() { return el.classes.contains('right') ? 'right' : 'left' },
+        function(val) {
+            el.classes.remove(anchors).add(val)
+            panel.anchor = val
+        }
+    )
+
+    tag.property(
+        'animation',
+        function() { return el.classes.contains('animation') },
+        function(val) {
+            val ? el.classes.add('animation') : el.classes.remove('animation')
+            panel.animation = val
+        }
+    )
+
+    tag.property(
+        'contentPane',
+        function() { return panel.tags['w-pane'] },
+        function(opts) {
+        }
+    )
+
+    tag.property(
+        'display',
+        function() { return el.computedStyle().display },
+        function(val) {el.styles.display = val }
+    )
+
+    tag.property(
+        'header',
+        function() { return panel.tags['w-header'] },
+        function(opts) {
+        }
+    )
+
+    tag.property(
+        'height',
+        function() { return panel.height },
+        function(val) { el.height = panel.height = val }
+    )
+
+    tag.property(
+        'variant',
+        function() { return el.classes.find(variants) },
+        function(val) {
+            el.classes.remove(variants).add(val)
+            handleTemporary(val == 'temporary' && tag.visible)
+        }
+    )
+
+    tag.property(
+        'visible',
+        function() { return !el.classes.contains('close') },
+        function(val) { val ? tag.open() : tag.close() }
+    )
+
+    tag.property(
+        'width',
+        function() { return panel.width },
+        function(val) { panel.width = val }
+    )
+
+    this.close = function() {
+        handleTemporary(false)
+        var animation = tag.animation
+        var right = tag.variant == 'temporary' && tag.anchor == 'right'
+        if(right) {
+            if(animation) el.handleTransitionEnd(function() { el.styles.left = '' })
+            el.styles.left = $.window.width - el.width + 'px'
+        }
+        var fn = function() {
+            if(right) el.styles.left = animation ? '100%' : ''
+            panel.close()
+            el.classes.add('close')
+        }
+        animation ? setTimeout(fn, 0) : fn()
+    }.bind(this)
+
+    this.open = function() {
+        panel.open()
+        el.classes.remove('close')
+    }.bind(this)
+
+    this.toggle = function() { tag.visible ? tag.close() : tag.open() }.bind(this)
+
+    this.init = function() {
+        if(tag.animation) {
+            tag.opts.dataAnimation = true
+            el.classes.remove('animation')
+        }
+        return true
+    }.bind(this)
+
+    onTemporaryClick = function() { tag.close() }
+
+    handleTemporary = function(val) {
+        mask.visible = val
+        if(val) mask.on('click', onTemporaryClick)
+        else mask.off('click', onTemporaryClick)
+    }
+
+    onPanelCreated = function() {
+        panel = tag.tags['w-panel']
+
+        panel.on('closed', onPanelClosed)
+        panel.on('opened', onPanelOpend)
+
+        tag.variant = tag.variant || 'temporary'
+
+        var style = el.computedStyle()
+
+        panel.backgroundColor = style.backgroundColor
+        panel.width = style.width
+
+        el.styles.backgroundColor = 'transparent'
+
+        tag.visible = !(style.display == 'none')
+        el.styles.display = 'block'
+
+        tag.animation = tag.opts.dataAnimation
+
+        handleResize()
+
+        tag.trigger('created', tag)
+    }
+
+    onPanelClosed = function() {
+        el.classes.add('close')
+        tag.trigger('closed', tag)
+    }
+
+    onPanelOpend = function() {
+        if(tag.variant == 'temporary') handleTemporary(true)
+        el.classes.add('open')
+        tag.trigger('opened', tag)
+    }
+
+    handleResize = function() {
+        var header = tag.header
+        var contentPane = tag.contentPane
+        if(contentPane) contentPane.height = $.window.height - (header ? header.height : 0)
+    }
+    el.handleResize(handleResize)
+
+    tag.on('panel-created', onPanelCreated)
 
 });

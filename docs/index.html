@@ -29,7 +29,9 @@
         }
 
         @media all and (max-width: 900px) {
-            #drawer { display: none; }
+            #drawer {
+                display: none;
+            }
         }
 
         .drawer-header {
@@ -39,6 +41,11 @@
         .app-header {
             color: rgba(255, 255, 255, 0.7);
             background-color: #607D8B;
+        }
+
+        #logo {
+            text-decoration: none;
+            color: inherit;
         }
     </style>
 </head>
@@ -80,6 +87,29 @@
                             </li>
                         </ul>
                     </li>
+                    <li data-is="w-item" id="mixins-button" class="button" data-mixin="button ripple" data-trigger="created">
+                        <span class="fill">Mixins</span>
+                        <div data-is="w-icon" id="mixins-icon" class="right" data-trigger="created">expand_less</div>
+                    </li>
+                    <li data-is="w-panel" id="mixins-panel" class="animation" data-mixin="clickable" data-trigger="created">
+                        <ul data-is="w-list">
+                            <li data-is="w-item" data-mixin="link ripple" data-route="button">
+                                <span>Button</span>
+                            </li>
+                            <li data-is="w-item" data-mixin="link ripple" data-route="clickable">
+                                <span>Clickable</span>
+                            </li>
+                            <li data-is="w-item" data-mixin="link ripple" data-route="component">
+                                <span>Component</span>
+                            </li>
+                            <li data-is="w-item" data-mixin="link ripple" data-route="link">
+                                <span>Link</span>
+                            </li>
+                            <li data-is="w-item" data-mixin="link ripple" data-route="ripple">
+                                <span>Ripple</span>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -89,7 +119,9 @@
                 <div data-is="w-button" id="menu-button" class="icon" data-trigger="created">
                     <i data-is="w-icon" id="menu-icon" data-trigger="created">menu</i>
                 </div>
-                <h1 class="fill">W-RIOT</h1>
+                <h1 class="fill">
+                    <a href="/" id="logo">W-RIOT</a>
+                </h1>
             </header>
             <main>
                 <div id="demo">Riot の練習</div>
@@ -106,7 +138,8 @@
             var drawer, drawerButton,
                 componentsButton, componentsIcon, componentsPanel,
                 pane,
-                menuButton, menuIcon
+                menuButton, menuIcon,
+                mixinsButton, mixinsIcon, mixinsPanel
 
             // resize.
             function handleResize() {
@@ -129,6 +162,7 @@
                             drawer.toggle()
                         })
                         break
+                    // ----------------------------------------------------------------
                     case 'components-button':
                         componentsButton = tag
                         tag.on('clicked', function () {
@@ -156,6 +190,21 @@
                         break
                     case 'menu-icon':
                         menuIcon = tag
+                        break
+                    // ----------------------------------------------------------------
+                    case 'mixins-button':
+                        mixinsButton = tag
+                        tag.on('clicked', function () {
+                            mixinsIcon.value =
+                                mixinsIcon.value == 'expand_more' ? 'expand_less' : 'expand_more'
+                            mixinsPanel.toggle()
+                        })
+                        break
+                    case 'mixins-icon':
+                        mixinsIcon = tag
+                        break
+                    case 'mixins-panel':
+                        mixinsPanel = tag
                         break
                 }
             })
