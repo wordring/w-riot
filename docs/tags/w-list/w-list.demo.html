@@ -9,7 +9,12 @@
     <title>w-list</title>
     <link rel="stylesheet" href="../../css/w-riot.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
+
+    <script type="riot/tag" src="../w-item/w-item.tag"></script>
+    <script type="riot/tag" src="../w-button/w-button.tag"></script>
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
+    <script src="../w-riot.js"></script>
+<style>
         body {
             padding: 1em;
         }
@@ -40,29 +45,9 @@
             <span class="left">Left</span>
         </li>
     </ul>
-    <script type="riot/tag" src="../w-item/w-item.tag"></script>
-
-    <script type="riot/tag" src="../w-button/w-button.tag"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
-
-    <script src="../w-riot.js"></script>
 
     <script>
-        function MyObserver() {
-            riot.observable(this)
-            var self = this
-
-        }
-
-        var ob = new MyObserver
-        riot.mixin({ observer: ob })
-
-        riot.compile(function () {
-            var tags = riot.mount('w-item')
-        })
-
-        //debugger
+        riot.mount('w-item')
     </script>
 </body>
 

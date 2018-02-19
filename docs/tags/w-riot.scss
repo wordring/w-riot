@@ -34,3 +34,20 @@ body {
 .left { order: -1; }
 .right { order: 1; }
 .fill { flex-grow: 1; }
+
+#w-window-mask {
+    display: none;
+    position: absolute;
+
+    height: 100%;
+    width: 100%;
+
+    z-index: 1;
+
+    background-color: rgba(0,0,0, 0.2);
+
+    &.active {
+        display: block;
+        position: fixed;
+    }
+}

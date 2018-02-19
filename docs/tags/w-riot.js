@@ -61,6 +61,10 @@
                 el.style.height = val
             }
         })
+        Object.defineProperty(fn, 'id', {
+            get: function () { return el.id },
+            set: function (val) { el.id = val }
+        })
         Object.defineProperty(fn, 'width', {
             get: function () {
                 var rect = el.getBoundingClientRect()
@@ -137,6 +141,7 @@
         fn.on = function (name, callback, capture) {
             capture = capture || false // undefined の場合 false
             el.addEventListener(name, callback, capture)
+            return fn
         }
 
         fn.off = function (name, callback, capture) {
@@ -154,9 +159,27 @@
         return fn
     }
 
+    var mask_ = element('div')
+    window.addEventListener('load', function () {
+        mask_.id = 'w-window-mask'
+        element(document.body).prepend(mask_)
+        //riot.observable(mask_)
+    }, false)
+
     var window_ = {
         get height() { return document.documentElement.clientHeight },
         get width() { return document.documentElement.clientWidth },
+        mask: {
+            get depth() { return mask_.styles.zIndex },
+            set depth(val) { mask_.styles.zIndex = val },
+
+            get visible() { return mask_.classes.contains('active') },
+            set visible(val) { val ? mask_.classes.add('active') : mask_.classes.remove('active') },
+
+            off: function(name, callback, capture) { mask_.off(name, callback, capture) },
+            on: function(name, callback, capture) { mask_.on(name, callback, capture) },
+
+        },
     }
 
     var $ = wordring.$ = {
@@ -319,7 +342,7 @@
             initDataMixin(tag)
 
             tag.on('mount', function () {
-                if(!tag.init || (tag.init && !tag.init())) tag.trigger('created', tag)
+                if (!tag.init || (tag.init && !tag.init())) tag.trigger('created', tag)
             })
         },
         id: function () { return this.root.id },

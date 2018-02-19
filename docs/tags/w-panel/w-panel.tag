@@ -72,12 +72,13 @@
     tag.property(
         'width',
         function() { return el.width },
-        function(val) { el.width = val }
+        function(val) { holder.width = val }
     )
 
     close() {
         if(tag.transition || !tag.visible) return
         tag.transition = true
+        var animation = tag.animation
 
         if(tag.direction == 'vertical') {
             el.styles.maxHeight = el.height + 'px'
@@ -93,8 +94,8 @@
             tag.transition = false
             tag.trigger('closed', tag)
         }
-        tag.animation ? el.handleTransitionEnd(fn) : fn()
-        
+        animation ? el.handleTransitionEnd(fn) : fn()
+   
         el.classes.add('close')
     }
 
@@ -130,14 +131,16 @@
 
     init() {
         holder = $.element(tag.refs.holder)
-        if(el.styles.display == 'none') {
-            tag.close()
-            el.styles.display = ''
-        }
-        el.classes.add('animation')
+
+        var animation = tag.animation
+        var visible = el.styles.display != 'none'
+
+        tag.animation = false
         tag.anchor = tag.opts.dataAnchor || (tag.anchor || 'top')
 
-        return false
+        tag.visible = visible
+        tag.animation = animation
+        el.styles.display = ''
     }
 </script>
 </w-panel>

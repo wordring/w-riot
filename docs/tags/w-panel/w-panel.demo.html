@@ -28,14 +28,15 @@
 
 <body>
     <h1>w-panel</h1>
-    <div data-is="w-panel" data-trigger="created:panel-created">
+
+    <h2>Animation</h2>
+    <div data-is="w-panel" class="animation" data-trigger="created:panel-created" style="display:none;">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
             aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
             sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
     </div>
-    test
     <table>
         <tr>
             <td>Anchor:</td>
@@ -70,31 +71,59 @@
         </tr>
     </table>
 
+    <h2>Closed</h2>
+    <div data-is="w-panel" class="animation" data-trigger="created:closed-panel-created" style="display:none;">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+            sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+    </div>
+    <table>
+    <tr>
+        <td>Toggle:</td>
+        <td>
+            <button data-is="w-button" data-trigger="clicked:closed-toggle-button-clicked">
+                <w-icon>sync</w-icon>
+            </button>
+        </td>
+    </tr>
+    </table>
+
     <script>
         function MyObserver() {
             riot.observable(this)
 
             var self = this
-            var panel = null
+            var animationPanel = null
+            var closedPanel = null
 
             this.on('panel-created', function (tag) {
-                panel = tag
+                animationPanel = tag
             })
             this.on('left-button-created', function (button) {
-                button.on('clicked', function () { panel.anchor = 'left' })
+                button.on('clicked', function () { animationPanel.anchor = 'left' })
             })
             this.on('right-button-created', function (button) {
-                button.on('clicked', function () { panel.anchor = 'right' })
+                button.on('clicked', function () { animationPanel.anchor = 'right' })
             })
             this.on('top-button-created', function (button) {
-                button.on('clicked', function () { panel.anchor = 'top' })
+                button.on('clicked', function () { animationPanel.anchor = 'top' })
             })
             this.on('bottom-button-created', function (button) {
-                button.on('clicked', function () { panel.anchor = 'bottom' })
+                button.on('clicked', function () { animationPanel.anchor = 'bottom' })
             })
             this.on('toggle-button-clicked', function () {
-                panel.toggle()
+                animationPanel.toggle()
             })
+
+            this.on('closed-panel-created', function (tag) {
+                closedPanel = tag
+            })
+            this.on('closed-toggle-button-clicked', function () {
+                closedPanel.toggle()
+            })
+
         }
 
         riot.mixin({ observer: new MyObserver })

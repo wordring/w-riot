@@ -102,5 +102,7 @@ gulp.task('build-css', function (callback) {
 gulp.task('build', function () {
     gulp.run('build-css')
     gulp.run('build-js')
+    gulp.run('build-demo-js')
+    gulp.run('build-demo-css')
 })
 

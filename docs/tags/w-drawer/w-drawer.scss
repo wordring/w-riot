@@ -12,15 +12,17 @@ w-drawer,
     max-width: 400px;
 
     background-color: $color-100;
-    
-    transition-property: all;
-    transition-duration: 0.5s;
 
     order: -1;
     left: 0; // for ie11.
 
     >w-panel {
         height: 100%;
+    }
+
+    &.animation {
+        transition-property: all;
+        transition-duration: 0.5s;
     }
     
     &.right {

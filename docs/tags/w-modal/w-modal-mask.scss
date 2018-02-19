@@ -1,0 +1,15 @@
+w-modal-mask,
+[data-is="w-modal-mask"] {
+    display: block;
+    height: 100%;
+    width: 100%;
+
+    background-color: rgba(0,0,0, 0.2);
+}
+
+body {
+    >w-modal-mask,
+    >[data-is="w-modal-mask"] {
+        position: absolute;
+    }
+}

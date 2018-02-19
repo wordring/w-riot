@@ -1,12 +1,13 @@
 <w-panel-demo>
     <h1>w-panel</h1>
     <h2>Default</h2>
-    <w-panel ref="panel">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    <w-panel id="default" class="animation" ref="panel">
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
             aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
             sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        
+        </P>
     </w-panel>
     <br/>
     <table>
@@ -49,4 +50,12 @@
     top() { this.refs.panel.anchor='top' }
     bottom() { this.refs.panel.anchor='bottom' }
 </script>
+<style>
+    #default {
+        background-color: #BBDEFB;
+    }
+    #default>p {
+        padding: 1rem;
+    }
+</style>
 </w-panel-demo>

@@ -28,6 +28,10 @@
             height: 100%;
         }
 
+        @media all and (max-width: 900px) {
+            #drawer { display: none; }
+        }
+
         .drawer-header {
             background-color: #B0BEC5;
         }
@@ -41,7 +45,7 @@
 
 <body>
     <div data-is="w-component" class="app-container">
-        <nav data-is="w-drawer" id="drawer" class="persistent" data-trigger="created" style="display: block;">
+        <nav data-is="w-drawer" id="drawer" class="persistent animation" data-trigger="created">
             <div data-is="w-header" class="drawer-header">
                 <span class="fill"></span>
                 <w-button id="drawer-button" class="right icon" data-trigger="created">
@@ -54,7 +58,7 @@
                         <span class="fill">Components</span>
                         <div data-is="w-icon" id="components-icon" class="right" data-trigger="created">expand_less</div>
                     </li>
-                    <li data-is="w-panel" id="components-panel" data-mixin="clickable" data-trigger="created">
+                    <li data-is="w-panel" id="components-panel" class="animation" data-mixin="clickable" data-trigger="created">
                         <ul data-is="w-list">
                             <li data-is="w-item" data-mixin="link ripple" data-route="w-button">
                                 <span>Button</span>
@@ -107,11 +111,8 @@
             // resize.
             function handleResize() {
                 var w = doc.width
-                if (doc.width - drawer.width < 600) {
-                    drawer.variant = 'temporary'
-                } else {
-                    drawer.variant = 'persistent'
-                }
+                if (doc.width < 900) drawer.variant = 'temporary'
+                else drawer.variant = 'persistent'
             }
             doc.handleResize(handleResize)
 
@@ -123,7 +124,10 @@
                         break
                     case 'drawer-button':
                         drawerButton = tag
-                        tag.on('clicked', function () { drawer.toggle() })
+                        tag.on('clicked', function () {
+                            handleResize()
+                            drawer.toggle()
+                        })
                         break
                     case 'components-button':
                         componentsButton = tag
@@ -145,15 +149,18 @@
                         break
                     case 'menu-button':
                         menuButton = tag
-                        tag.on('clicked', function () { drawer.toggle() })
+                        tag.on('clicked', function () {
+                            handleResize()
+                            drawer.toggle()
+                        })
                         break
                     case 'menu-icon':
                         menuIcon = tag
                         break
                 }
             })
-            this.on('clicked', function(tag) {
-                switch(tag.id) {
+            this.on('clicked', function (tag) {
+                switch (tag.id) {
                     case 'w-drawer':
                         window.open('demo/w-drawer.demo.html', '_blank')
                 }
