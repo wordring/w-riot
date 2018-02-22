@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>w-drawer</title>
     <link rel="stylesheet" href="../../css/w-riot.css" />
@@ -17,7 +17,6 @@
     <script type="riot/tag" src="../w-header/w-header.tag"></script>
     <script type="riot/tag" src="../w-icon/w-icon.tag"></script>
     <script type="riot/tag" src="../w-item/w-item.tag"></script>
-    <script type="riot/tag" src="../w-modal/w-modal-mask.tag"></script>
     <script type="riot/tag" src="../w-pane/w-pane.tag"></script>
     <script type="riot/tag" src="../w-panel/w-panel.tag"></script>
     <script type="riot/tag" src="../w-switch/w-switch.tag"></script>
@@ -26,7 +25,16 @@
 
     <script src="../w-riot.js"></script>
 
-    <style>
+    <style>@-ms-viewport
+            {
+                width: auto;
+                initial-scale: 1;
+            }
+            @viewport
+            {
+                width: device-width;
+                initial-scale: 1;
+            }
         p {
             margin: 1em;
         }
@@ -78,7 +86,7 @@
         </nav>
 
         <div data-is="w-pane" class="vertical">
-            <header data-is="w-header" class="app-header">
+            <header data-is="w-header" class="app-header fixed fill">
                 <div data-is="w-button" class="icon" data-trigger="created:header-left-button-created">
                     <i data-is="w-icon">menu</i>
                 </div>

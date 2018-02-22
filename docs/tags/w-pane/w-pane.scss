@@ -3,12 +3,14 @@
 w-pane,
 [data-is="w-pane"] {
     display: flex;
+    flex-direction: row;
+
+    position: relative;
 
     width: 100%; // for ie11.
 
-    &.vertical {
-        flex-direction: column;
-    }
+    overflow-x: hidden;
+
     .left {
         order: -1;
     }

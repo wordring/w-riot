@@ -9,83 +9,64 @@ w-switch,
 
     color: $color-primary-500;
 
-    .secondary {
-        color: $color-secondary-500;
-    }
+    &.secondary { color: $color-secondary-500; }
 
-    >[ref="track"] {
-        position: absolute;
-
-        height: 0.75*$rem;
-        width: 2*$rem;
-
-        top: 1.125*$rem;
-        left: $rem;
-
-        border-radius: 0.375*$rem;
-    }
-
-    >[ref="container"] {
-        position: absolute;
-        
-        height: 3*$rem;
-        width: 3*$rem;
-        overflow: hidden;
-        
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    [ref="thumb"] {
-        position: relative;
-        height: $rem;
-        width: $rem;
-
-        left: $rem;
-        top: $rem;
-
-        pointer-events: none;
-        border-radius: 50%;
-        box-shadow: $box-shadow;
-    }
-
-    &.checked {
-        >[ref="track"] {
-            opacity: 0.5;
-        }
-        >[ref="container"] {
-            left: 16px;
-        }
-    }
-
-    &:not(.checked) {
-        >[ref="track"] {
-            background-color: #000;
-            opacity: 0.38;
-        }
-        >[ref="container"] {
-            left: 0;
-        }
-        [ref="thumb"] {
-            background-color: $color-gray-50;
-        }
-    }
-
-    &.disabled {
-        color: $color-gray-900;
-        >[ref="track"] {
-            background-color: #000;
-            opacity: 0.12;
-        }
-        [ref="thumb"] {
-            background-color: $color-gray-400;
-            box-shadow: none;
-        }
-    }
-
-    &.animation>[ref="container"] {
-        transition-property: left;
-        transition-duration: 0.3s;
-    }
+    &.disabled { color: $color-gray-900; }
 }
 
+
+w-switch-track {
+    position: absolute;
+
+    height: 0.75*$rem;
+    width: 2*$rem;
+
+    top: 1.125*$rem;
+    left: $rem;
+
+    border-radius: 0.375*$rem;   
+}
+:not(.checked)>w-switch-track {
+    background-color: #000;
+    opacity: 0.38;
+}
+.checked>w-switch-track { opacity: 0.5; }
+.disabled>w-switch-track {
+        background-color: #000;
+        opacity: 0.12;
+}
+
+w-switch-container {
+    position: absolute;
+    
+    height: 3*$rem;
+    width: 3*$rem;
+    overflow: hidden;
+    
+    border-radius: 50%;
+    cursor: pointer;
+    
+    transition-property: left;
+    transition-duration: 0.3s;
+}
+:not(.checked)>w-switch-container { left: 0; }
+.checked>w-switch-container { left: 16px; }
+
+w-switch-thumb {
+    display: inline-block;
+    position: relative;
+    min-height: $rem;
+    min-width: $rem;
+
+    left: $rem;
+    top: $rem;
+
+    pointer-events: none;
+    border-radius: 50%;
+    box-shadow: $box-shadow;
+}
+:not(.checked)>w-switch-container>w-switch-thumb { background-color: $color-gray-50; }
+.disabled>w-switch-container>w-switch-thumb {
+    background-color: $color-gray-400;
+    box-shadow: none;
+}

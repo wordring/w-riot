@@ -129,7 +129,7 @@
         tag.visible = !tag.visible
     }
 
-    init() {
+    mounted() {
         holder = $.element(tag.refs.holder)
 
         var animation = tag.animation

@@ -11,7 +11,7 @@
 
     tag.on('mount', function() {
         button = tag.refs.button
-        button.on('clicked', function() {
+        button.on('click', function() {
             button.root.innerText = 'Clicked!'
             setTimeout(function() {
                 button.root.innerText = 'Button'

@@ -37,6 +37,9 @@
         </tr>
     </table>
 <style>
+    :scope {
+        overflow-x: hidden
+    }
     .icon td {
         padding: 0 1em;
     }

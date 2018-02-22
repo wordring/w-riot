@@ -6,62 +6,45 @@ w-drawer,
     position: relative;
 
     height: 100%;
-
-    width: 300px;
-    min-width: 300px;
+    width: 320px;
     max-width: 400px;
-
-    background-color: $color-100;
+    min-width: 300px;
 
     order: -1;
     left: 0; // for ie11.
 
-    >w-panel {
-        height: 100%;
-    }
-
-    &.animation {
-        transition-property: all;
-        transition-duration: 0.5s;
-    }
-    
     &.right {
         order: 1;
         right: 0;
     }
-
-    &.temporary {
-        position: fixed;
-        z-index: 160;
-        
-        &:not(.close) {
-            box-shadow: $box-shadow;
-        }
-        &.right {
-            &:not(.close) {
-                right: 0;
-                left: auto;
-            }
-            &.close {
-                left: 100%;
-            }
-        }
+    
+    &.animation {
+        transition-property: width, min-width;
+        transition-duration: 0.5s;
     }
 
-    &.persistent {
-        >w-panel {
-            position: fixed;
-        }
-    }
-
+    &.temporary,
     &.close {
         width: 0;
-        min-width: 0;
-        max-width: 0;
     }
+}
 
-    w-pane,
-    [data-is="w-pane"] {
+w-drawer-holder {
+    display: block;
+    position: fixed;
+
+    height: 100%;
+    width: 300px;
+
+    top: 0;
+
+    z-index: 145;
+
+    background-color: $color-100;
+
+    >w-pane,
+    >[data-is="w-pane"] {
+        flex-direction: column;
         height: 100%;
         overflow-y: auto;
         -ms-overflow-style: none;
@@ -70,3 +53,18 @@ w-drawer,
         }
     }
 }
+
+.temporary>w-drawer-holder { z-index: 160; }
+
+.animation>w-drawer-holder {
+    transition-property: all;
+    transition-duration: 0.5s;
+}
+
+.temporary:not(.close)>w-drawer-holder { box-shadow: $box-shadow; }
+
+:not(.right):not(.close)>w-drawer-holder { left: 0; }
+
+:not(.right).close>w-drawer-holder { right: 100%; }
+
+.right:not(.close)>w-drawer-holder { right: 0; }

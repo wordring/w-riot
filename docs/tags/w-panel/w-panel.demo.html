@@ -20,6 +20,7 @@
         body {
             padding: 1em;
         }
+
         [data-is="w-panel"] {
             background-color: slategray;
         }
@@ -30,7 +31,7 @@
     <h1>w-panel</h1>
 
     <h2>Animation</h2>
-    <div data-is="w-panel" class="animation" data-trigger="created:panel-created" style="display:none;">
+    <div data-is="w-panel" class="animation" id="animation-panel" data-trigger="mounted">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
             aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
@@ -41,22 +42,22 @@
         <tr>
             <td>Anchor:</td>
             <td>
-                <button data-is="w-button" data-trigger="created:left-button-created">
+                <button data-is="w-button" id="animation-left-button" data-trigger="click">
                     <w-icon>chevron_left</w-icon>
                 </button>
             </td>
             <td>
-                <button data-is="w-button" data-trigger="created:right-button-created">
+                <button data-is="w-button" id="animation-right-button" data-trigger="click">
                     <w-icon>chevron_right</w-icon>
                 </button>
             </td>
             <td>
-                <button data-is="w-button" data-trigger="created:top-button-created">
+                <button data-is="w-button" id="animation-top-button" data-trigger="click">
                     <w-icon>expand_less</w-icon>
                 </button>
             </td>
             <td>
-                <button data-is="w-button" data-trigger="created:bottom-button-created">
+                <button data-is="w-button" id="animation-buttom-button" data-trigger="click">
                     <w-icon>expand_more</w-icon>
                 </button>
             </td>
@@ -64,7 +65,7 @@
         <tr>
             <td>Toggle:</td>
             <td>
-                <button data-is="w-button" data-trigger="clicked:toggle-button-clicked">
+                <button data-is="w-button" id="animation-toggle-button" data-trigger="click">
                     <w-icon>sync</w-icon>
                 </button>
             </td>
@@ -72,7 +73,7 @@
     </table>
 
     <h2>Closed</h2>
-    <div data-is="w-panel" class="animation" data-trigger="created:closed-panel-created" style="display:none;">
+    <div data-is="w-panel" id="closed-panel" class="animation" data-trigger="mounted" style="display:none;">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
             aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
@@ -80,14 +81,14 @@
         </p>
     </div>
     <table>
-    <tr>
-        <td>Toggle:</td>
-        <td>
-            <button data-is="w-button" data-trigger="clicked:closed-toggle-button-clicked">
-                <w-icon>sync</w-icon>
-            </button>
-        </td>
-    </tr>
+        <tr>
+            <td>Toggle:</td>
+            <td>
+                <button data-is="w-button" id="closed-toggle-button" data-trigger="click">
+                    <w-icon>sync</w-icon>
+                </button>
+            </td>
+        </tr>
     </table>
 
     <script>
@@ -98,32 +99,39 @@
             var animationPanel = null
             var closedPanel = null
 
-            this.on('panel-created', function (tag) {
-                animationPanel = tag
+            this.on('mounted', function (tag) {
+                switch (tag.id) {
+                    case 'animation-panel':
+                        animationPanel = tag
+                        break
+                    case 'closed-panel':
+                        closedPanel = tag
+                        break
+                }
             })
-            this.on('left-button-created', function (button) {
-                button.on('clicked', function () { animationPanel.anchor = 'left' })
-            })
-            this.on('right-button-created', function (button) {
-                button.on('clicked', function () { animationPanel.anchor = 'right' })
-            })
-            this.on('top-button-created', function (button) {
-                button.on('clicked', function () { animationPanel.anchor = 'top' })
-            })
-            this.on('bottom-button-created', function (button) {
-                button.on('clicked', function () { animationPanel.anchor = 'bottom' })
-            })
-            this.on('toggle-button-clicked', function () {
-                animationPanel.toggle()
-            })
+            this.on('click', function (tag) {
+                switch (tag.id) {
+                    case 'animation-left-button':
+                        animationPanel.anchor = 'left'
+                        break
+                    case 'animation-right-button':
+                        animationPanel.anchor = 'right'
+                        break
+                    case 'animation-top-button':
+                        animationPanel.anchor = 'top'
+                        break
+                    case 'animation-bottom-button':
+                        animationPanel.anchor = 'bottom'
+                        break
+                    case 'animation-toggle-button':
+                        animationPanel.toggle()
+                        break
 
-            this.on('closed-panel-created', function (tag) {
-                closedPanel = tag
+                    case 'closed-toggle-button':
+                        closedPanel.toggle()
+                        break
+                }
             })
-            this.on('closed-toggle-button-clicked', function () {
-                closedPanel.toggle()
-            })
-
         }
 
         riot.mixin({ observer: new MyObserver })

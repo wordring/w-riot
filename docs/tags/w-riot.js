@@ -110,16 +110,17 @@
         /*
         自身のサイズ変更の監視を開始する。
         */
-        fn.handleResize = function (callback) {
+        fn.handleResize = function (callback, wait) {
+            wait = wait || 300
             var width = 0
             var height = 0
-            window.addEventListener('resize', $.throttle(300, function () {
+            window.addEventListener('resize', $.throttle(wait, function () {
                 var w = fn.width
                 var h = fn.height
                 if (width != w || height != h) {
+                    callback(w - height, w - width)
                     width = w
                     height = h
-                    callback(fn)
                 }
             }))
         }
@@ -165,22 +166,6 @@
         element(document.body).prepend(mask_)
         //riot.observable(mask_)
     }, false)
-
-    var window_ = {
-        get height() { return document.documentElement.clientHeight },
-        get width() { return document.documentElement.clientWidth },
-        mask: {
-            get depth() { return mask_.styles.zIndex },
-            set depth(val) { mask_.styles.zIndex = val },
-
-            get visible() { return mask_.classes.contains('active') },
-            set visible(val) { val ? mask_.classes.add('active') : mask_.classes.remove('active') },
-
-            off: function(name, callback, capture) { mask_.off(name, callback, capture) },
-            on: function(name, callback, capture) { mask_.on(name, callback, capture) },
-
-        },
-    }
 
     var $ = wordring.$ = {
         assignObject: function (from) {
@@ -233,9 +218,7 @@
             str = str || ''
             return str.replace(/([A-Z])/g, function (ch) { return '-' + ch.charAt(0).toLowerCase() })
         },
-        window: window_,
     }
-
 
     // data-mixin の初期化。
     function initDataMixin(tag) {
@@ -303,7 +286,7 @@
 
         var onClick = function (ev) {
             if (tag.disabled) return
-            tag.trigger('clicked', tag)
+            tag.trigger('click', tag)
         }
         el.on('click', onClick)
     }
@@ -341,13 +324,37 @@
             initDataOn(tag)
             initDataMixin(tag)
 
-            tag.on('mount', function () {
-                if (!tag.init || (tag.init && !tag.init())) tag.trigger('created', tag)
-            })
+            var mount = function() {
+                var mounted = function() {
+                    if(tag.mounted) tag.mounted()
+                    tag.trigger('mounted', tag)
+                    tag.off('mount', mount)
+                }
+
+                var creating = tag.children().filter(function (val) { return val.$ })
+                if(creating.length == 0) mounted()
+                for (var i = 0; i < creating.length; i++) {
+                    creating[i].on('mounted', function(child) {
+                        creating = creating.filter(function(val) { return child != val })
+                        if(creating.length == 0) mounted()
+                    })
+                }
+            }
+            tag.on('mount', mount)
         },
-        id: function () { return this.root.id },
+        children: function() {
+            var tag = this
+            var result = []
+            var tags = Object.keys(tag.tags).map(function (key) {return tag.tags[key]})
+            for(var i = 0; i < tags.length; i++) {
+                Array.prototype.push.apply(result, Array.isArray(tags[i]) ? tags[i] : [tags[i]])
+            }
+            return result
+        },
         property: function (name, getter, setter) {
-            Object.defineProperty(this, name, { get: getter, set: setter })
+            val = { get: getter }
+            if(setter) val.set = setter
+            Object.defineProperty(this, name, val)
         },
     }
     riot.mixin('component', wordring.component)
@@ -367,14 +374,19 @@
             var tag = this
 
             var effect = $.element('w-ripple-effect')
-            var ripple = $.element('w-ripple-container').append(effect)
+            var ripple = $.element('w-ripple').prepend(effect)
             var el = $.element(tag.root).prepend(ripple)
 
-            var onAnimationEnd = function () { ripple.classes.remove('active') }
+            var onAnimationEnd = function () {
+                ripple.classes.remove('active')
+                ripple.styles.height = ripple.styles.maxWidth = '0px'
+            }
 
-            var onMousedown = function (ev) {
-                var h = ripple.height = el.height
-                var w = ripple.width = el.width
+            var onClick = function (ev) {
+                var h = el.height
+                var w = el.width
+                ripple.styles.height = h + 'px'
+                ripple.styles.maxWidth = w + 'px'
                 var dx = Math.max(h, w) * 2
                 effect.height = effect.width = dx
                 var rect = ev.currentTarget.getBoundingClientRect()
@@ -383,13 +395,12 @@
                 effect.root.style.left = (x - dx / 2) + 'px'
                 effect.root.style.top = (y - dx / 2) + 'px'
 
-                effect.root.style.backgroundColor = tag.opts.dataRippleColor || getComputedStyle(el.root, '').color
-
-                effect.handleAnimationEnd(onAnimationEnd, 500)
                 ripple.classes.add('active')
+                effect.root.style.backgroundColor = tag.opts.dataRippleColor || getComputedStyle(el.root, '').color
+                effect.handleAnimationEnd(onAnimationEnd, 500)
             }
 
-            el.on('click', onMousedown)
+            el.on('click', onClick)
         },
     }
     riot.mixin('ripple', wordring.ripple)

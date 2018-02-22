@@ -7,6 +7,9 @@ w-header,
     flex-shrink: 0;
     position: relative;
 
+    padding: 0;
+    margin: 0;
+
     min-height: 3.5*$rem;
 
     font-size: 0;
@@ -14,6 +17,19 @@ w-header,
         margin: 0;
         font-size: $rem;
     }
+
+    &.fixed {
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 140;
+
+        &.animation {
+            transition-property: margin;
+            transition-duration: 0.5s;
+        }
+    }
+
     w-icon,
     [data-is="w-icon"] {
         font-size: 1.5*$rem;

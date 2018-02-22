@@ -9,11 +9,11 @@
 
     tag.on('mount', function() {
         pane = tag.refs.pane
-        pane.on('clicked', function() {
+        pane.on('click', function() {
             pane.root.innerText = 'Clicked!'
             pane.root.style.backgroundColor = '#F8BBD0'
             setTimeout(function() {
-                pane.root.innerText = 'Click you.'
+                pane.root.innerText = 'Click me.'
                 pane.root.style.backgroundColor = '#CFD8DC'
             }, 3000)
         })

@@ -1,21 +1,17 @@
 @import "../theme.scss";
 
-w-ripple-container {
-    display: inline-block; // block にすると横に広がる。
+w-ripple {
+    display: block; // block にすると横に広がる。
     position: absolute;
     overflow: hidden;
+
+    width: 100%;
 
     margin: 0;
     padding: 0;
 
     top: 0;
     left: 0;
-    
-    &.active {
-        >w-ripple-effect {
-            animation: w-ripple-animation 0.6s ease-out;
-        }
-    }
 }
 
 w-ripple-effect {
@@ -26,6 +22,10 @@ w-ripple-effect {
     pointer-events: none;
     transform: scale(0);
     opacity: 0;
+}
+
+.active>w-ripple-effect {
+    animation: w-ripple-animation 0.6s ease-out;
 }
 
 @keyframes w-ripple-animation {

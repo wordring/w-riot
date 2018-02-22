@@ -21,6 +21,9 @@
         body {
             padding: 1em;
         }
+        .container {
+            position: relative;
+        }
     </style>
 </head>
 
@@ -33,6 +36,18 @@
         <div class="fill" style="background-color:#C8E6C9">Fill</div>
         <div class="right" style="background-color:#B3E5FC;">Right</div>
     </div>
+
+    <h2>Fixed</h2>
+    <div class="container">
+        <div data-is="w-header" class="fixed">
+            <div class="fill">Fixed</div>
+        </div>
+    </div>
+
+    <p>p</p>
+    <p>p</p>
+    <p>p</p>
+    <p>p</p>
 
     <script>
         riot.mount('w-header')
