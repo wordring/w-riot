@@ -414,6 +414,63 @@ riot.tag2('w-button', '<yield></yield>', '', '', function(opts) {
 
     var tag = this
 });
+riot.tag2('w-checkbox', '<w-icon data-value="{face}"></w-icon>', '', 'onclick="{onClick}"', function(opts) {
+    this.mixin('component')
+    this.mixin('ripple')
+
+    var tag = this
+
+    var $ = tag.$
+    var el = $.element(tag.root)
+
+    tag.property(
+        'checked',
+        function() { return el.classes.contains('checked') },
+        function(val) {
+            val ? el.classes.add('checked') : el.classes.remove('checked')
+            tag.update()
+            tag.trigger('change', tag)
+        }
+    )
+
+    tag.property(
+        'color',
+        function() {
+            var style = el.computedStyle()
+            return tag.disabled ? '' : (tag.checked ? (style.color || '') : '')
+        },
+        function(val) {
+            el.styles.backgroundColor = val
+            tag.update()
+        }
+    )
+
+    tag.property(
+        'disabled',
+        function () { return el.classes.contains('disabled') },
+        function (val) {
+            val ? el.classes.add('disabled') : el.classes.remove('disabled')
+            tag.update()
+        }
+    )
+
+    tag.property(
+        'face',
+        function () { return tag.checked ? 'check_box' : 'check_box_outline_blank' }
+    )
+
+    this.toggle = function() { if(!tag.disabled) tag.checked = !tag.checked }.bind(this)
+
+    this.onClick = function(ev) {
+        tag.toggle()
+        tag.trigger('click')
+    }.bind(this)
+
+    this.mounted = function() {
+        tag.checked = tag.checked
+    }.bind(this)
+
+});
 riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
 });
@@ -765,7 +822,8 @@ riot.tag2('w-icon', '<yield></yield>', '', '', function(opts) {
         function(val) { el.styles.display = val ? '' : 'none' }
     )
 
-    function init() {}
+    tag.on('update', function() { if(tag.opts.dataValue) tag.value = tag.opts.dataValue })
+    tag.on('mount', function() { if(tag.opts.dataValue) tag.value = tag.opts.dataValue })
 });
 riot.tag2('w-item', '', '', '', function(opts) {
     this.mixin('component')
@@ -962,6 +1020,65 @@ riot.tag2('w-panel', '<div ref="holder"> <yield></yield> </div>', '', '', functi
         tag.animation = animation
         el.styles.display = ''
     }.bind(this)
+});
+riot.tag2('w-radio', '<w-icon data-value="{face}"></w-icon>', '', 'onclick="{onClick}"', function(opts) {
+    this.mixin('component')
+    this.mixin('ripple')
+
+    var tag = this
+    var $ = tag.$
+    var el = $.element(tag.root)
+
+    tag.property(
+        'checked',
+        function() { return el.classes.contains('checked') },
+        function(val) {
+            val ? el.classes.add('checked') : el.classes.remove('checked')
+            tag.update()
+            tag.trigger('change', tag)
+        }
+    )
+
+    tag.property(
+        'color',
+        function() {
+            var style = el.computedStyle()
+            return tag.disabled ? '' : (tag.checked ? (style.color || '') : '')
+        },
+        function(val) {
+            el.styles.backgroundColor = val
+            tag.update()
+        }
+    )
+
+    tag.property(
+        'disabled',
+        function () { return el.classes.contains('disabled') },
+        function (val) {
+            val ? el.classes.add('disabled') : el.classes.remove('disabled')
+            tag.update()
+        }
+    )
+
+    tag.property(
+        'face',
+        function () {
+             return (tag.checked && !tag.disabled) ? 'radio_button_checked' : 'radio_button_unchecked' }
+    )
+
+    this.toggle = function() { if(!tag.disabled) tag.checked = !tag.checked }.bind(this)
+
+    this.onClick = function(ev) {
+        tag.toggle()
+        tag.trigger('click')
+    }.bind(this)
+
+    this.mounted = function() {
+        tag.checked = tag.checked
+    }.bind(this)
+
+    tag.on('update', function() { })
+
 });
 
 riot.tag2('w-switch-track', '', '', '', function(opts) {

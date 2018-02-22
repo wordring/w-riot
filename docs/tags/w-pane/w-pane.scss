@@ -20,4 +20,7 @@ w-pane,
     .fill {
         flex-grow: 1;
     }
+    .vertical {
+        flex-direction: column;
+    }
 }

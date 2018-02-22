@@ -20,7 +20,7 @@
         function(val) { el.styles.display = val ? '' : 'none' }
     )
     
-
-    function init() {}
+    tag.on('update', function() { if(tag.opts.dataValue) tag.value = tag.opts.dataValue })
+    tag.on('mount', function() { if(tag.opts.dataValue) tag.value = tag.opts.dataValue })
 </script>
 </w-icon>

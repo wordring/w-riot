@@ -1,0 +1,33 @@
+@import "../theme.scss";
+
+w-radio,
+[data-is="w-radio"] {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    
+    width: 3*$rem;
+    height: 3*$rem;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+    cursor: pointer;
+
+    &.checked {
+        &.primary {
+            color: $color-primary-500;
+        }
+        &.secondary {
+            color: $color-secondary-500;
+        }
+    }
+    &:not(.checked) {
+        color: rgba(#000, 0.54);
+    }
+    &.disabled {
+        color: rgba(#000, 0.26);
+    }
+}
