@@ -99,7 +99,7 @@
 
             if(val == 'temporary' && tag.visible) tag.modal.visible = true
             else tag.modal.visible = false
-            
+
             tag.update()
             tag.trigger('variant', tag, val)
         }

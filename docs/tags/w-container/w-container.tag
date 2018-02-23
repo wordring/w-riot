@@ -11,8 +11,6 @@
     var drawer = { left: null, right: null, primary: null, secondary: null }
     var resize = { min: 0, max: 0 }
 
-    var update = null
-
     tag.property(
         'animation',
         function() { return el.classes.contains('animation') },
@@ -96,7 +94,7 @@
         }
     }
 
-    update = function() {
+    var update = function() {
         var header = tag.header
         var pane = tag.pane
         var footer = tag.footer
@@ -116,11 +114,6 @@
     var toArray = function(val) { return Array.isArray(val) ? val : [val] }
 
     tag.on('mount', function() {
-        if(2 < toArray(tag.tags['w-drawer']).length) throw new Error
-        if(1 < toArray(tag.tags['w-header']).length) throw new Error
-        if(1 < toArray(tag.tags['w-pane']).length) throw new Error
-        if(1 < toArray(tag.tags['w-footer']).length) throw new Error
-
         animation = tag.animation
         tag.animation = false
     })
@@ -164,6 +157,13 @@
         if(resize.min || resize.max) {
             handleResize()
             el.handleResize(handleResize)
+        }
+
+        if(drawer.left && drawer.right) {
+            drawer.left.on('visible', function(sender, val) {
+                if(val && drawer.variant == 'temporary') drawer.right.visible = false })
+            drawer.right.on('visible', function(sender, val) {
+                if(val && drawer.variant == 'temporary') drawer.left.visible = false })
         }
     }
     tag.on('update', update)
