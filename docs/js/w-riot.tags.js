@@ -62,9 +62,6 @@ riot.tag2('w-checkbox', '<w-icon data-value="{face}"></w-icon>', '', 'onclick="{
     }.bind(this)
 
 });
-riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
-});
 riot.tag2('w-container', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
     var tag = this
@@ -234,6 +231,9 @@ riot.tag2('w-container', '<yield></yield>', '', '', function(opts) {
     tag.on('update', update)
 
 });
+riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
+});
 riot.tag2('w-drawer-holder', '', '', '', function(opts) {
     this.mixin('component')
 
@@ -287,6 +287,23 @@ riot.tag2('w-drawer', '<w-drawer-holder ref="holder" anchor="{anchor}" display="
     )
 
     tag.property(
+        'header',
+        function() {
+            var result = tag.tags['w-drawer-holder'].tags['w-header']
+            result = Array.isArray(result) ? result[0] : result
+            return result
+        }
+    )
+
+    tag.property(
+        'pane',
+        function() {
+            var result = tag.tags['w-drawer-holder'].tags['w-pane']
+            return Array.isArray(result) ? result[0] : result
+        }
+    )
+
+    tag.property(
         'priority',
         function() {
             if(el.classes.contains('primary')) return 'primary'
@@ -326,6 +343,18 @@ riot.tag2('w-drawer', '<w-drawer-holder ref="holder" anchor="{anchor}" display="
 
     this.toggle = function() { tag.visible = !tag.visible }.bind(this)
 
+    var update = function() {
+        el.styles.minWidth = (tag.visible && tag.variant == 'persistent') ? holder.width() + 'px' : '0px'
+        el.styles.width = el.styles.minWidth
+
+        var header = tag.header
+        var pane = tag.pane
+
+        if(header && pane) pane.height = el.height - header.height
+
+        tag.trigger('change', tag)
+    }
+
     tag.on('mount', function() {
         holder = tag.refs.holder
 
@@ -334,11 +363,9 @@ riot.tag2('w-drawer', '<w-drawer-holder ref="holder" anchor="{anchor}" display="
         tag.update()
     })
 
-    tag.on('update', function() {
-        el.styles.minWidth = (tag.visible && tag.variant == 'persistent') ? holder.width() + 'px' : '0px'
-        el.styles.width = el.styles.minWidth
-        tag.trigger('change', tag)
-    })
+    tag.on('update', update)
+
+    el.handleResize(update)
 });
 riot.tag2('w-footer', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
@@ -625,6 +652,7 @@ riot.tag2('w-radio', '<w-icon data-value="{face}"></w-icon>', '', 'onclick="{onC
         function() { return el.classes.contains('checked') },
         function(val) {
             val ? el.classes.add('checked') : el.classes.remove('checked')
+            if(tag.group && val) tag.group.trigger('checked', tag, val)
             tag.update()
             tag.trigger('change', tag)
         }
@@ -660,16 +688,23 @@ riot.tag2('w-radio', '<w-icon data-value="{face}"></w-icon>', '', 'onclick="{onC
     this.toggle = function() { if(!tag.disabled) tag.checked = !tag.checked }.bind(this)
 
     this.onClick = function(ev) {
-        tag.toggle()
+        if(tag.group) {
+            if(!tag.checked) tag.checked = true
+        }
+        else tag.toggle()
         tag.trigger('click')
     }.bind(this)
 
-    this.mounted = function() {
-        tag.checked = tag.checked
-    }.bind(this)
+    this.mounted = function() { tag.checked = tag.checked }.bind(this)
 
     tag.on('update', function() { })
 
+    var handleGroup = function(sender, val) {
+        if(sender == tag) return
+        if(val) tag.checked = !val
+    }
+
+    if(tag.group) tag.group.add('checked', handleGroup)
 });
 
 riot.tag2('w-switch-track', '', '', '', function(opts) {

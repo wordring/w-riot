@@ -13,6 +13,7 @@
         function() { return el.classes.contains('checked') },
         function(val) {
             val ? el.classes.add('checked') : el.classes.remove('checked')
+            if(tag.group && val) tag.group.trigger('checked', tag, val)
             tag.update()
             tag.trigger('change', tag)
         }
@@ -48,15 +49,22 @@
     toggle() { if(!tag.disabled) tag.checked = !tag.checked }
 
     onClick(ev) {
-        tag.toggle()
+        if(tag.group) {
+            if(!tag.checked) tag.checked = true
+        }
+        else tag.toggle()
         tag.trigger('click')
     }
 
-    mounted() {
-        tag.checked = tag.checked
-    }
+    mounted() { tag.checked = tag.checked }
 
     tag.on('update', function() { })
-    
+
+    var handleGroup = function(sender, val) {
+        if(sender == tag) return
+        if(val) tag.checked = !val
+    }
+
+    if(tag.group) tag.group.add('checked', handleGroup)
 </script>
 </w-radio>

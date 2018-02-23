@@ -168,6 +168,7 @@
     }, false)
 
     var $ = wordring.$ = {
+        group: {},
         assignObject: function (from) {
             var to = Object(from)
             for (var i = 1; i < arguments.length; i++) {
@@ -281,6 +282,23 @@
         }
     }
 
+    // data-group の初期化。
+    function initDataGroup(tag) {
+        if (!tag.opts.dataGroup) return
+        var group = $.group[tag.opts.dataGroup]
+        if (!group) {
+            group = function () { }
+            group.id = tag.opts.dataGroup
+            riot.observable(group)
+            $.group[tag.opts.dataGroup] = group
+        }
+        group.add = function (name, callback) {
+            group.on(name, callback)
+            tag.on('unmount', function () { group.off(name, callback) })
+        }
+        tag.group = group
+    }
+
     var clickable = function (tag) {
         var el = $.element(tag.root)
 
@@ -313,47 +331,48 @@
 
             var el = tag.root
 
-            Object.defineProperty(
-                this,
-                'id', {
-                    get: function () { return tag.root.id },
-                    set: function (val) { tag.root.id = val }
-                }
+            this.property(
+                'id',
+                function () { return tag.root.id },
+                function (val) { tag.root.id = val }
             )
+
             initDataTrigger(tag)
             initDataOn(tag)
             initDataMixin(tag)
+            initDataGroup(tag)
 
-            var mount = function() {
-                var mounted = function() {
-                    if(tag.mounted) tag.mounted()
+            var mount = function () {
+                var mounted = function () {
+                    if (tag.mounted) tag.mounted()
                     tag.trigger('mounted', tag)
                     tag.off('mount', mount)
                 }
 
                 var creating = tag.children().filter(function (val) { return val.$ })
-                if(creating.length == 0) mounted()
+                if (creating.length == 0) mounted()
                 for (var i = 0; i < creating.length; i++) {
-                    creating[i].on('mounted', function(child) {
-                        creating = creating.filter(function(val) { return child != val })
-                        if(creating.length == 0) mounted()
+                    creating[i].on('mounted', function (child) {
+                        creating = creating.filter(function (val) { return child != val })
+                        if (creating.length == 0) mounted()
                     })
                 }
             }
             tag.on('mount', mount)
         },
-        children: function() {
+        children: function () {
             var tag = this
             var result = []
-            var tags = Object.keys(tag.tags).map(function (key) {return tag.tags[key]})
-            for(var i = 0; i < tags.length; i++) {
+            var tags = Object.keys(tag.tags).map(function (key) { return tag.tags[key] })
+            for (var i = 0; i < tags.length; i++) {
                 Array.prototype.push.apply(result, Array.isArray(tags[i]) ? tags[i] : [tags[i]])
             }
             return result
         },
         property: function (name, getter, setter) {
+            if (this.hasOwnProperty(name)) return
             val = { get: getter }
-            if(setter) val.set = setter
+            if (setter) val.set = setter
             Object.defineProperty(this, name, val)
         },
     }

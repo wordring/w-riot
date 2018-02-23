@@ -63,6 +63,23 @@
     )
 
     tag.property(
+        'header',
+        function() {
+            var result = tag.tags['w-drawer-holder'].tags['w-header']
+            result = Array.isArray(result) ? result[0] : result
+            return result
+        } 
+    )
+
+    tag.property(
+        'pane',
+        function() {
+            var result = tag.tags['w-drawer-holder'].tags['w-pane']
+            return Array.isArray(result) ? result[0] : result
+        } 
+    )
+
+    tag.property(
         'priority',
         function() {
             if(el.classes.contains('primary')) return 'primary'
@@ -102,6 +119,18 @@
 
     toggle() { tag.visible = !tag.visible }
 
+    var update = function() {
+        el.styles.minWidth = (tag.visible && tag.variant == 'persistent') ? holder.width() + 'px' : '0px'
+        el.styles.width = el.styles.minWidth
+
+        var header = tag.header
+        var pane = tag.pane
+
+        if(header && pane) pane.height = el.height - header.height
+
+        tag.trigger('change', tag)
+    }
+
     tag.on('mount', function() {
         holder = tag.refs.holder
 
@@ -110,10 +139,8 @@
         tag.update()
     })
 
-    tag.on('update', function() {
-        el.styles.minWidth = (tag.visible && tag.variant == 'persistent') ? holder.width() + 'px' : '0px'
-        el.styles.width = el.styles.minWidth
-        tag.trigger('change', tag)
-    })
+    tag.on('update', update)
+
+    el.handleResize(update)
 </script>
 </w-drawer>

@@ -168,6 +168,7 @@
     }, false)
 
     var $ = wordring.$ = {
+        group: {},
         assignObject: function (from) {
             var to = Object(from)
             for (var i = 1; i < arguments.length; i++) {
@@ -281,6 +282,23 @@
         }
     }
 
+    // data-group の初期化。
+    function initDataGroup(tag) {
+        if (!tag.opts.dataGroup) return
+        var group = $.group[tag.opts.dataGroup]
+        if (!group) {
+            group = function () { }
+            group.id = tag.opts.dataGroup
+            riot.observable(group)
+            $.group[tag.opts.dataGroup] = group
+        }
+        group.add = function (name, callback) {
+            group.on(name, callback)
+            tag.on('unmount', function () { group.off(name, callback) })
+        }
+        tag.group = group
+    }
+
     var clickable = function (tag) {
         var el = $.element(tag.root)
 
@@ -313,47 +331,48 @@
 
             var el = tag.root
 
-            Object.defineProperty(
-                this,
-                'id', {
-                    get: function () { return tag.root.id },
-                    set: function (val) { tag.root.id = val }
-                }
+            this.property(
+                'id',
+                function () { return tag.root.id },
+                function (val) { tag.root.id = val }
             )
+
             initDataTrigger(tag)
             initDataOn(tag)
             initDataMixin(tag)
+            initDataGroup(tag)
 
-            var mount = function() {
-                var mounted = function() {
-                    if(tag.mounted) tag.mounted()
+            var mount = function () {
+                var mounted = function () {
+                    if (tag.mounted) tag.mounted()
                     tag.trigger('mounted', tag)
                     tag.off('mount', mount)
                 }
 
                 var creating = tag.children().filter(function (val) { return val.$ })
-                if(creating.length == 0) mounted()
+                if (creating.length == 0) mounted()
                 for (var i = 0; i < creating.length; i++) {
-                    creating[i].on('mounted', function(child) {
-                        creating = creating.filter(function(val) { return child != val })
-                        if(creating.length == 0) mounted()
+                    creating[i].on('mounted', function (child) {
+                        creating = creating.filter(function (val) { return child != val })
+                        if (creating.length == 0) mounted()
                     })
                 }
             }
             tag.on('mount', mount)
         },
-        children: function() {
+        children: function () {
             var tag = this
             var result = []
-            var tags = Object.keys(tag.tags).map(function (key) {return tag.tags[key]})
-            for(var i = 0; i < tags.length; i++) {
+            var tags = Object.keys(tag.tags).map(function (key) { return tag.tags[key] })
+            for (var i = 0; i < tags.length; i++) {
                 Array.prototype.push.apply(result, Array.isArray(tags[i]) ? tags[i] : [tags[i]])
             }
             return result
         },
         property: function (name, getter, setter) {
+            if (this.hasOwnProperty(name)) return
             val = { get: getter }
-            if(setter) val.set = setter
+            if (setter) val.set = setter
             Object.defineProperty(this, name, val)
         },
     }
@@ -470,9 +489,6 @@ riot.tag2('w-checkbox', '<w-icon data-value="{face}"></w-icon>', '', 'onclick="{
         tag.checked = tag.checked
     }.bind(this)
 
-});
-riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
-    this.mixin('component')
 });
 riot.tag2('w-container', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
@@ -643,6 +659,9 @@ riot.tag2('w-container', '<yield></yield>', '', '', function(opts) {
     tag.on('update', update)
 
 });
+riot.tag2('w-component', '<yield></yield>', '', '', function(opts) {
+    this.mixin('component')
+});
 riot.tag2('w-drawer-holder', '', '', '', function(opts) {
     this.mixin('component')
 
@@ -696,6 +715,23 @@ riot.tag2('w-drawer', '<w-drawer-holder ref="holder" anchor="{anchor}" display="
     )
 
     tag.property(
+        'header',
+        function() {
+            var result = tag.tags['w-drawer-holder'].tags['w-header']
+            result = Array.isArray(result) ? result[0] : result
+            return result
+        }
+    )
+
+    tag.property(
+        'pane',
+        function() {
+            var result = tag.tags['w-drawer-holder'].tags['w-pane']
+            return Array.isArray(result) ? result[0] : result
+        }
+    )
+
+    tag.property(
         'priority',
         function() {
             if(el.classes.contains('primary')) return 'primary'
@@ -735,6 +771,18 @@ riot.tag2('w-drawer', '<w-drawer-holder ref="holder" anchor="{anchor}" display="
 
     this.toggle = function() { tag.visible = !tag.visible }.bind(this)
 
+    var update = function() {
+        el.styles.minWidth = (tag.visible && tag.variant == 'persistent') ? holder.width() + 'px' : '0px'
+        el.styles.width = el.styles.minWidth
+
+        var header = tag.header
+        var pane = tag.pane
+
+        if(header && pane) pane.height = el.height - header.height
+
+        tag.trigger('change', tag)
+    }
+
     tag.on('mount', function() {
         holder = tag.refs.holder
 
@@ -743,11 +791,9 @@ riot.tag2('w-drawer', '<w-drawer-holder ref="holder" anchor="{anchor}" display="
         tag.update()
     })
 
-    tag.on('update', function() {
-        el.styles.minWidth = (tag.visible && tag.variant == 'persistent') ? holder.width() + 'px' : '0px'
-        el.styles.width = el.styles.minWidth
-        tag.trigger('change', tag)
-    })
+    tag.on('update', update)
+
+    el.handleResize(update)
 });
 riot.tag2('w-footer', '<yield></yield>', '', '', function(opts) {
     this.mixin('component')
@@ -1034,6 +1080,7 @@ riot.tag2('w-radio', '<w-icon data-value="{face}"></w-icon>', '', 'onclick="{onC
         function() { return el.classes.contains('checked') },
         function(val) {
             val ? el.classes.add('checked') : el.classes.remove('checked')
+            if(tag.group && val) tag.group.trigger('checked', tag, val)
             tag.update()
             tag.trigger('change', tag)
         }
@@ -1069,16 +1116,23 @@ riot.tag2('w-radio', '<w-icon data-value="{face}"></w-icon>', '', 'onclick="{onC
     this.toggle = function() { if(!tag.disabled) tag.checked = !tag.checked }.bind(this)
 
     this.onClick = function(ev) {
-        tag.toggle()
+        if(tag.group) {
+            if(!tag.checked) tag.checked = true
+        }
+        else tag.toggle()
         tag.trigger('click')
     }.bind(this)
 
-    this.mounted = function() {
-        tag.checked = tag.checked
-    }.bind(this)
+    this.mounted = function() { tag.checked = tag.checked }.bind(this)
 
     tag.on('update', function() { })
 
+    var handleGroup = function(sender, val) {
+        if(sender == tag) return
+        if(val) tag.checked = !val
+    }
+
+    if(tag.group) tag.group.add('checked', handleGroup)
 });
 
 riot.tag2('w-switch-track', '', '', '', function(opts) {
