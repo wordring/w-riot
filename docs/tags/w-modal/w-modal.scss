@@ -1,0 +1,23 @@
+@import "../theme.scss";
+
+w-modal,
+[data-is="w-modal"] {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    z-index: 150;
+
+    transition-property: background-color;
+    transition-duration: 0.5s;
+
+    background-color: rgba(0,0,0, 0);
+
+    &:not(.close) {
+        display: block;
+        background-color: rgba(0,0,0, 0.2);
+    }
+}

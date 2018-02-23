@@ -36,10 +36,11 @@
     </w-drawer-holder>
 <script>
     this.mixin('component')
+    this.mixin('modal')
 
     var tag = this
     var holder = null
-
+    
     var $ = tag.$
     var el = $.element(tag.root)
 
@@ -93,8 +94,14 @@
         function() { return el.classes.contains('temporary') ? 'temporary' : 'persistent' },
         function(val) {
             if(tag.variant == val) return
+
             el.classes.remove(persistents).add(val)
+
+            if(val == 'temporary' && tag.visible) tag.modal.visible = true
+            else tag.modal.visible = false
+            
             tag.update()
+            tag.trigger('variant', tag, val)
         }
     )
 
@@ -103,8 +110,14 @@
         function() { return !el.classes.contains('close') },
         function(val) {
             if(tag.visible == val) return
+
             val ? el.classes.remove('close') : el.classes.add('close')
+            
+            if(val && tag.variant == 'temporary') tag.modal.visible = true
+            if(!val) tag.modal.visible = false
+
             tag.update()
+            tag.trigger('visible', tag, val)
         }
     )
 
@@ -123,12 +136,7 @@
         el.styles.minWidth = (tag.visible && tag.variant == 'persistent') ? holder.width() + 'px' : '0px'
         el.styles.width = el.styles.minWidth
 
-        var header = tag.header
-        var pane = tag.pane
-
-        if(header && pane) pane.height = el.height - header.height
-
-        tag.trigger('change', tag)
+        if(tag.header && tag.pane) tag.pane.height = el.height - tag.header.height
     }
 
     tag.on('mount', function() {
@@ -136,11 +144,14 @@
 
         if(tag.display == 'none') tag.visible = false
         el.styles.display = 'block'
+
         tag.update()
     })
 
     tag.on('update', update)
 
     el.handleResize(update)
+
+    tag.modal.on('click', function() { tag.visible = false })
 </script>
 </w-drawer>

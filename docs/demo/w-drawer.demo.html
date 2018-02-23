@@ -17,10 +17,12 @@
         .drawer-header {
             background-color: #B0BEC5;
         }
-
         .app-header {
             color: rgba(255, 255, 255, 0.7);
             background-color: #607D8B;
+        }
+        #content {
+            padding: 1em;
         }
     </style>
 </head>
@@ -50,10 +52,22 @@
                 <span data-is="w-icon" class="right">more_vert</span>
             </button>
         </div>
-        <div data-is="w-pane">
-            <p></p>
-            <p></p>
-            <p></p>
+        <div data-is="w-pane" id="content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
         </div>
 
         <nav data-is="w-drawer" id="right-drawer" class="right primary" style="display:none;" data-trigger="mounted">
@@ -83,13 +97,13 @@
                 switch (tag.id) {
                     case 'left-drawer':
                         drawer.left = tag
-                        tag.on('change', function() {
+                        tag.on('change', function () {
                             switch_.left.checked = (drawer.left.variant == 'temporary')
                         })
                         break
                     case 'right-drawer':
                         drawer.right = tag
-                        tag.on('change', function() {
+                        tag.on('change', function () {
                             switch_.right.checked = drawer.right.variant == 'temporary'
                         })
                         break
@@ -107,11 +121,11 @@
                         break
                     case 'left-switch':
                         switch_.left = tag
-                        tag.on('click', function() { drawer.left.variant = tag.checked ? 'temporary' : 'persistent' })
+                        tag.on('click', function () { drawer.left.variant = tag.checked ? 'temporary' : 'persistent' })
                         break
                     case 'right-switch':
                         switch_.right = tag
-                        tag.on('click', function() { drawer.right.variant = tag.checked ? 'temporary' : 'persistent' })
+                        tag.on('click', function () { drawer.right.variant = tag.checked ? 'temporary' : 'persistent' })
                         break
                 }
             })

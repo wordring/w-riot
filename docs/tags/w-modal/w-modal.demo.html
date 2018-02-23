@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>w-modal</title>
+    <link rel="stylesheet" href="../../css/w-riot.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script type="riot/tag" src="w-modal.tag"></script>
+    <script type="riot/tag" src="../w-button/w-button.tag"></script>
+    <script src="https://cdn.jsdelivr.net/npm/riot@3.8/riot+compiler.min.js"></script>
+    <script src="../w-riot.js"></script>
+
+    <style>
+        body {
+            padding: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>w-modal</h1>
+
+    <h2>Default</h2>
+    <div data-is="w-modal" class="close" data-trigger="mounted click:modal-clicked"></div>
+    <button data-is="w-button" class="raised primary" data-trigger="click">
+        Click.
+    </button>
+
+    <script>
+        function Observer() {
+            riot.observable(this)
+            var modal = null
+
+            this.on('click', function () { modal.visible = true })
+            this.on('mounted', function (tag) { modal = tag })
+            this.on('modal-clicked', function() { modal.visible = false })
+        }
+        riot.mixin({ observer: new Observer })
+        riot.mount('w-button, w-modal')
+    </script>
+</body>
+
+</html>

@@ -31,17 +31,6 @@ body {
 .fill {
   flex-grow: 1; }
 
-#w-window-mask {
-  display: none;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-  background-color: rgba(0, 0, 0, 0.2); }
-  #w-window-mask.active {
-    display: block;
-    position: fixed; }
-
 @charset "UTF-8";
 w-button,
 [data-is="w-button"] {
@@ -224,27 +213,6 @@ w-checkbox,
   [data-is="w-checkbox"].disabled {
     color: rgba(0, 0, 0, 0.26); }
 
-w-container,
-[data-is="w-container"] {
-  display: flex;
-  justify-content: center;
-  flex-shrink: 0;
-  flex-grow: 0;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0; }
-  w-container.animation,
-  [data-is="w-container"].animation {
-    transition-property: all;
-    transition-duration: 0.5s; }
-  w-container > w-pane,
-  w-container > [data-is="w-pane"],
-  [data-is="w-container"] > w-pane,
-  [data-is="w-container"] > [data-is="w-pane"] {
-    display: block; }
-
 w-drawer,
 [data-is="w-drawer"] {
   display: block;
@@ -364,21 +332,6 @@ w-icon,
   flex-shrink: 0;
   flex-grow: 0; }
 
-w-item,
-[data-is="w-item"] {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  position: relative;
-  margin: 0;
-  padding: 0; }
-  w-item > :not(.icon),
-  [data-is="w-item"] > :not(.icon) {
-    padding: 0 16px; }
-  w-item.vertical,
-  [data-is="w-item"].vertical {
-    flex-direction: column; }
-
 w-list,
 [data-is="w-list"] {
   display: block;
@@ -430,24 +383,19 @@ w-list,
   [data-is="w-list"] [data-is="w-list"] [data-is="w-list"] [data-is="w-item"] > * {
     padding-left: 48px; }
 
-w-pane,
-[data-is="w-pane"] {
+w-item,
+[data-is="w-item"] {
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  flex-shrink: 0;
   position: relative;
-  width: 100%;
-  overflow-x: hidden; }
-  w-pane .left,
-  [data-is="w-pane"] .left {
-    order: -1; }
-  w-pane .right,
-  [data-is="w-pane"] .right {
-    order: 1; }
-  w-pane .fill,
-  [data-is="w-pane"] .fill {
-    flex-grow: 1; }
-  w-pane .vertical,
-  [data-is="w-pane"] .vertical {
+  margin: 0;
+  padding: 0; }
+  w-item > :not(.icon),
+  [data-is="w-item"] > :not(.icon) {
+    padding: 0 16px; }
+  w-item.vertical,
+  [data-is="w-item"].vertical {
     flex-direction: column; }
 
 w-panel,
@@ -479,6 +427,43 @@ w-panel,
   [data-is="w-panel"].anchor-top.close > [ref="holder"] {
     transform: translateY(-100%); }
 
+w-pane,
+[data-is="w-pane"] {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+  overflow-x: hidden; }
+  w-pane .left,
+  [data-is="w-pane"] .left {
+    order: -1; }
+  w-pane .right,
+  [data-is="w-pane"] .right {
+    order: 1; }
+  w-pane .fill,
+  [data-is="w-pane"] .fill {
+    flex-grow: 1; }
+  w-pane .vertical,
+  [data-is="w-pane"] .vertical {
+    flex-direction: column; }
+
+w-modal,
+[data-is="w-modal"] {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 150;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+  background-color: transparent; }
+  w-modal:not(.close),
+  [data-is="w-modal"]:not(.close) {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.2); }
+
 w-radio,
 [data-is="w-radio"] {
   display: inline-flex;
@@ -502,34 +487,6 @@ w-radio,
   w-radio.disabled,
   [data-is="w-radio"].disabled {
     color: rgba(0, 0, 0, 0.26); }
-
-w-ripple {
-  display: block;
-  position: absolute;
-  overflow: hidden;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  top: 0;
-  left: 0; }
-
-w-ripple-effect {
-  display: inline-block;
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: scale(0);
-  opacity: 0; }
-
-.active > w-ripple-effect {
-  animation: w-ripple-animation 0.6s ease-out; }
-
-@keyframes w-ripple-animation {
-  from {
-    opacity: 0.2; }
-  to {
-    transform: scale(1);
-    opacity: 0; } }
 
 w-switch,
 [data-is="w-switch"] {
@@ -597,3 +554,53 @@ w-switch-thumb {
 .disabled > w-switch-container > w-switch-thumb {
   background-color: #BDBDBD;
   box-shadow: none; }
+
+w-ripple {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0; }
+
+w-ripple-effect {
+  display: inline-block;
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: scale(0);
+  opacity: 0; }
+
+.active > w-ripple-effect {
+  animation: w-ripple-animation 0.6s ease-out; }
+
+@keyframes w-ripple-animation {
+  from {
+    opacity: 0.2; }
+  to {
+    transform: scale(1);
+    opacity: 0; } }
+
+w-container,
+[data-is="w-container"] {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  flex-grow: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0; }
+  w-container.animation,
+  [data-is="w-container"].animation {
+    transition-property: all;
+    transition-duration: 0.5s; }
+  w-container > w-pane,
+  w-container > [data-is="w-pane"],
+  [data-is="w-container"] > w-pane,
+  [data-is="w-container"] > [data-is="w-pane"] {
+    display: block;
+    overflow-x: initial; }

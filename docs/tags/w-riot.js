@@ -131,8 +131,9 @@
             if (typeof el.style.transition != 'undefined') {
                 var func = function (ev) {
                     if (ev.target == el) {
-                        callback()
+                        //callback()
                         el.removeEventListener('transitionend', func, false)
+                        callback()
                     }
                 }
                 el.addEventListener('transitionend', func, false)
@@ -159,13 +160,6 @@
 
         return fn
     }
-
-    var mask_ = element('div')
-    window.addEventListener('load', function () {
-        mask_.id = 'w-window-mask'
-        element(document.body).prepend(mask_)
-        //riot.observable(mask_)
-    }, false)
 
     var $ = wordring.$ = {
         group: {},
@@ -387,6 +381,19 @@
         },
     }
     riot.mixin('link', wordring.link)
+
+    wordring.modal = {
+        modal: null,
+        init: function () {
+            var tag = this
+
+            var el = $.element(tag.root)
+            var modal = $.element('div')
+            $.element(document.body).prepend(modal)
+            tag.modal = riot.mount(modal.root, 'w-modal')[0]
+        }
+    }
+    riot.mixin('modal', wordring.modal)
 
     wordring.ripple = {
         init: function () {

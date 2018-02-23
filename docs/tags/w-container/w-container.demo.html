@@ -17,6 +17,7 @@
     <script type="riot/tag" src="../w-header/w-header.tag"></script>
     <script type="riot/tag" src="../w-icon/w-icon.tag"></script>
     <script type="riot/tag" src="../w-item/w-item.tag"></script>
+    <script type="riot/tag" src="../w-modal/w-modal.tag"></script>
     <script type="riot/tag" src="../w-pane/w-pane.tag"></script>
     <script type="riot/tag" src="../w-switch/w-switch.tag"></script>
 
@@ -28,10 +29,12 @@
         .drawer-header {
             background-color: #B0BEC5;
         }
-
         .app-header {
             color: rgba(255, 255, 255, 0.7);
             background-color: #607D8B;
+        }
+        #content {
+            padding: 1em;
         }
     </style>
 </head>
@@ -61,7 +64,7 @@
                 <span data-is="w-icon" class="right">more_vert</span>
             </button>
         </div>
-        <div data-is="w-pane" data-handle-resize="min: 600px; max: 600px;">
+        <div data-is="w-pane" id="content" data-handle-resize="min:400 max:500">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
                 magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                 consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -79,7 +82,7 @@
             </p>
         </div>
 
-        <!-- nav data-is="w-drawer" id="right-drawer" class="right primary" style="display:block;" data-trigger="mounted">
+        <nav data-is="w-drawer" id="right-drawer" class="right primary" style="display:block;" data-trigger="mounted">
             <header data-is="w-header" class="drawer-header">
                 <button data-is="w-button" id="chevron-right" class="icon" data-trigger="mounted">
                     <span data-is="w-icon">chevron_right</span>
@@ -92,7 +95,7 @@
                     <div data-is="w-switch" id="right-switch" data-trigger="mounted"></div>
                 </div>
             </div>
-        </nav -->
+        </nav>
     </div>
 
     <script>
@@ -106,14 +109,14 @@
                 switch (tag.id) {
                     case 'left-drawer':
                         drawer.left = tag
-                        tag.on('change', function() {
-                            switch_.left.checked = (drawer.left.variant == 'temporary')
+                        tag.on('variant', function(tag, val) {
+                            switch_.left.checked = (val == 'temporary')
                         })
                         break
                     case 'right-drawer':
                         drawer.right = tag
-                        tag.on('change', function() {
-                            switch_.right.checked = drawer.right.variant == 'temporary'
+                        tag.on('variant', function(tag, val) {
+                            switch_.right.checked = val == 'temporary'
                         })
                         break
                     case 'chevron-left':

@@ -20,5 +20,6 @@ w-container,
     >w-pane,
     >[data-is="w-pane"] {
         display: block; // for ie11.
+        overflow-x: initial;
     }
 }

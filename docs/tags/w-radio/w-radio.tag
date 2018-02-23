@@ -58,8 +58,6 @@
 
     mounted() { tag.checked = tag.checked }
 
-    tag.on('update', function() { })
-
     var handleGroup = function(sender, val) {
         if(sender == tag) return
         if(val) tag.checked = !val
