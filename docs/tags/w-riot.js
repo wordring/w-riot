@@ -278,19 +278,30 @@
 
     // data-group の初期化。
     function initDataGroup(tag) {
-        if (!tag.opts.dataGroup) return
-        var group = $.group[tag.opts.dataGroup]
-        if (!group) {
-            group = function () { }
-            group.id = tag.opts.dataGroup
-            riot.observable(group)
-            $.group[tag.opts.dataGroup] = group
+        var name = tag.opts.dataGroup
+        if (!name) return
+
+        var group = $.group[name]
+        if (!(name in $.group)) $.group[name] = group = { id: name, tags: [] }
+
+        var tags = group.tags
+        tags.push(tag)
+
+        var observer = function() {}
+        riot.observable(observer)
+        tag.group = { observer: observer }
+
+        tag.group.on = function() { observer.on.apply(null, [].slice.call(arguments)) }
+
+        tag.group.trigger = function() {
+            for(var i = 0; i < tags.length; i++) {
+                if(tags[i] != tag) tags[i].group.observer.trigger.apply(null, [].slice.call(arguments))
+            }
         }
-        group.add = function (name, callback) {
-            group.on(name, callback)
-            tag.on('unmount', function () { group.off(name, callback) })
-        }
-        tag.group = group
+
+        tag.on('unmount', function() {
+            for(var i = 0; i < tags.length; i++) { if(tags[i] != tag) tags.splice(i, 1) }
+        })
     }
 
     var clickable = function (tag) {

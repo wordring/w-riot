@@ -11,44 +11,36 @@
     </w-panel>
     <br/>
     <table>
-        <tr>
-            <td>Anchor:</td>
-            <td>
-                <w-button onclick={left}>
-                    <w-icon>chevron_left</w-icon>
-                </w-button>
-            </td>
-            <td>
-                <w-button onclick={right}>
-                    <w-icon>chevron_right</w-icon>
-                </w-button>
-            </td>
-            <td>
-                <w-button onclick={top}>
-                    <w-icon>expand_less</w-icon>
-                </w-button>
-            </td>
-            <td>
-                <w-button onclick={bottom}>
-                    <w-icon>expand_more</w-icon>
-                </w-button>
-            </td>
-        </tr>
-        <tr>
-            <td>Toggle:</td>
-            <td>
-                <w-button  onclick={refs.panel.toggle}>
-                    <w-icon>sync</w-icon>
-                </w-button>
-            </td>
-        </tr>
-    </table>
+        <tr><td>Anchor</td><td><w-radio ref="left" class="primary" data-group="default"></w-radio></td><td>Left</td></tr>
+        <tr><td></td><td><w-radio ref="right" class="primary" data-group="default"></w-radio></td><td>Right</td></tr>
+        <tr><td></td><td><w-radio ref="top" class="primary checked" data-group="default"></w-radio></td><td>Top</td></tr>
+        <tr><td></td><td><w-radio ref="bottom" class="primary" data-group="default"></w-radio></td><td>Bottom</td></tr>
 
+        <tr><td>Toggle</td><td><w-button ref="toggle"><w-icon>sync</w-icon></w-button></td><td></td></tr>
+    </table>
 <script>
-    left() { this.refs.panel.anchor='left' }
-    right() { this.refs.panel.anchor='right' }
-    top() { this.refs.panel.anchor='top' }
-    bottom() { this.refs.panel.anchor='bottom' }
+    var tag = this
+
+    tag.on('mount', function() {
+        var panel = tag.refs.panel
+        var left = tag.refs.left
+        var right = tag.refs.right
+        var top = tag.refs.top
+        var bottom = tag.refs.bottom
+
+        left.on('checked', function(val) { if(val) panel.anchor = 'left' })
+        right.on('checked', function(val) { if(val) panel.anchor = 'right' })
+        top.on('checked', function(val) { if(val) panel.anchor = 'top' })
+        bottom.on('checked', function(val) { if(val) panel.anchor = 'bottom' })
+
+        tag.refs.toggle.on('click', function() {
+            panel.toggle()
+            left.disabled = !panel.visible
+            right.disabled = !panel.visible
+            top.disabled = !panel.visible
+            bottom.disabled = !panel.visible
+        })
+    })
 </script>
 <style>
     #default {
@@ -56,6 +48,12 @@
     }
     #default>p {
         padding: 1rem;
+    }
+    w-button {
+        min-width: 48px;
+        height: 48px;
+        margin: 0;
+        padding: 0;
     }
 </style>
 </w-panel-demo>

@@ -8,26 +8,22 @@
     var $ = tag.$
     var el = $.element(tag.root)
 
+    var face = { checked: 'radio_button_checked', unchecked: 'radio_button_unchecked' }
+
     tag.property(
         'checked',
         function() { return el.classes.contains('checked') },
-        function(val) {
-            val ? el.classes.add('checked') : el.classes.remove('checked')
-            if(tag.group && val) tag.group.trigger('checked', tag, val)
-            tag.update()
-            tag.trigger('change', tag)
-        }
+        function(val) { checked(val) }
     )
 
     tag.property(
         'color',
         function() {
-            var style = el.computedStyle()
-            return tag.disabled ? '' : (tag.checked ? (style.color || '') : '')
+            return tag.disabled ? '' : (tag.checked ? (el.computedStyle().color || '') : '')
         },
         function(val) {
-            el.styles.backgroundColor = val
-            tag.update()
+            el.styles.color = val
+            update()
         }
     )
 
@@ -36,33 +32,34 @@
         function () { return el.classes.contains('disabled') },
         function (val) {
             val ? el.classes.add('disabled') : el.classes.remove('disabled')
-            tag.update()
+            update()
         }
     )
 
     tag.property(
         'face',
-        function () {
-             return (tag.checked && !tag.disabled) ? 'radio_button_checked' : 'radio_button_unchecked' }
+        function () { return tag.checked ? face.checked : face.unchecked }
     )
 
-    toggle() { if(!tag.disabled) tag.checked = !tag.checked }
+    toggle() { tag.checked = !tag.checked }
 
     onClick(ev) {
-        if(tag.group) {
-            if(!tag.checked) tag.checked = true
-        }
-        else tag.toggle()
+        ev.preventUpdate = true
+        tag.toggle()
         tag.trigger('click')
     }
 
-    mounted() { tag.checked = tag.checked }
-
-    var handleGroup = function(sender, val) {
-        if(sender == tag) return
-        if(val) tag.checked = !val
+    var checked = function(val, force) {
+        if(tag.checked == val || tag.disabled) return
+        if(tag.group && !val && tag.checked && !force) return
+        if(tag.group) tag.group.trigger('checked', val)
+        val ? el.classes.add('checked') : el.classes.remove('checked')
+        tag.trigger('checked', val)
+        update()
     }
 
-    if(tag.group) tag.group.add('checked', handleGroup)
+    var update = function() { tag.tags['w-icon'].update() }
+
+    if(tag.group) tag.group.on('checked', function(val) { checked(false, true) })
 </script>
 </w-radio>

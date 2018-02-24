@@ -100,8 +100,14 @@
                             <li data-is="w-item" data-mixin="link ripple" data-route="component">
                                 <span>Component</span>
                             </li>
+                            <li data-is="w-item" data-mixin="link ripple" data-route="group">
+                                <span>Group</span>
+                            </li>
                             <li data-is="w-item" data-mixin="link ripple" data-route="link">
                                 <span>Link</span>
+                            </li>
+                            <li data-is="w-item" data-mixin="link ripple" data-route="modal">
+                                <span>Modal</span>
                             </li>
                             <li data-is="w-item" data-mixin="link ripple" data-route="ripple">
                                 <span>Ripple</span>
@@ -124,7 +130,9 @@
             <main>
                 <div id="demo">
                     <h1 style="font-size:24px;">
-                        <a href="https://github.com/riot"><img src="img/riot60x.png" style="vertical-align: middle;" /></a> の練習
+                        <a href="https://github.com/riot" style="text-decoration: none;">
+                            <img src="img/riot60x.png" style="vertical-align: middle;" />
+                        </a> の練習
                     </h1>
                 </div>
             </main>
@@ -132,7 +140,7 @@
     </div>
 
     <script>
-        function MyObserver() {
+        function Observer() {
             riot.observable(this)
             var self = this
             var doc = wordring.$.element(document.body)
@@ -206,7 +214,7 @@
             })
         }
 
-        riot.mixin({ observer: new MyObserver })
+        riot.mixin({ observer: new Observer })
         var tags = riot.mount('w-container')
 
         var demo = null

@@ -47,7 +47,7 @@ gulp.task('w-riot+riot+route.min.js', function () {
             'node_modules/riot-route/dist/route.js',
             'docs/js/w-riot.js'])
         .pipe(concat('w-riot+riot+route.min.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('docs/js/'))
 })
 
@@ -72,7 +72,7 @@ gulp.task('build-demo-js', function() {
         .src('docs/demo/*.tag')
         .pipe(riot())
         .pipe(concat('w-riot.demo.min.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('docs/js'))
 })
 
